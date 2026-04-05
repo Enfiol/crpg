@@ -88,4 +88,9 @@ public enum ErrorCode
     PersonalItemAlreadyExist,
     SettingNotFound,
     TerrainNotFound,
+    UserQuestNotFound,
+    QuestRewardAlreadyClaimed,
+    QuestExpired,
+    QuestDefinitionNotFound,
+    QuestNotCompleted,
 }

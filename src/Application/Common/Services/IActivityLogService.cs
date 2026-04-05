@@ -41,6 +41,8 @@ internal interface IActivityLogService
     ActivityLog CreateRespondToBattleMercenaryApplicationLog(int battleId, int applicationId, int userId, bool accept);
     ActivityLog CreateBattleParticipantLeavedLog(int battleId, int userId);
     ActivityLog CreateBattleParticipantKickedLog(int battleId, int userId, int actorUserId);
+    ActivityLog CreateQuestRewardClaimedLog(int userId, int userQuestId, int gold, int experience);
+    ActivityLog CreateQuestRerolledLog(int userId, int oldUserQuestId, int newUserQuestId, int goldCost);
 }
 
 internal class ActivityLogService : IActivityLogService
@@ -316,6 +318,24 @@ internal class ActivityLogService : IActivityLogService
             new("userId", userId.ToString()),
             new("actorUserId", actorUserId.ToString()),
       ]);
+    }
+
+    public ActivityLog CreateQuestRewardClaimedLog(int userId, int userQuestId, int gold, int experience)
+    {
+        return CreateLog(ActivityLogType.QuestRewardClaimed, userId, [
+            new("userQuestId", userQuestId.ToString()),
+            new("gold", gold.ToString()),
+            new("experience", experience.ToString()),
+        ]);
+    }
+
+    public ActivityLog CreateQuestRerolledLog(int userId, int oldUserQuestId, int newUserQuestId, int goldCost)
+    {
+        return CreateLog(ActivityLogType.QuestRerolled, userId, [
+            new("oldUserQuestId", oldUserQuestId.ToString()),
+            new("newUserQuestId", newUserQuestId.ToString()),
+            new("goldCost", goldCost.ToString()),
+        ]);
     }
 
     private static ActivityLog CreateLog(ActivityLogType type, int userId, params ActivityLogMetadata[] metadata)

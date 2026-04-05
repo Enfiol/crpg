@@ -2,6 +2,7 @@ using Crpg.Application.Common.Exceptions;
 using Crpg.Application.Common.Interfaces;
 using Crpg.Domain.Common;
 using Crpg.Domain.Entities.ActivityLogs;
+using Crpg.Domain.Entities.BattleEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -9,6 +10,7 @@ using Crpg.Domain.Entities.Items;
 using Crpg.Domain.Entities.Limitations;
 using Crpg.Domain.Entities.Notifications;
 using Crpg.Domain.Entities.Parties;
+using Crpg.Domain.Entities.Quests;
 using Crpg.Domain.Entities.Restrictions;
 using Crpg.Domain.Entities.Settings;
 using Crpg.Domain.Entities.Settlements;
@@ -64,11 +66,14 @@ public class CrpgDbContext : DbContext, ICrpgDbContext
     public DbSet<BattleParticipant> BattleParticipants { get; set; } = default!;
     public DbSet<BattleMercenaryApplication> BattleMercenaryApplications { get; set; } = default!;
     public DbSet<ActivityLog> ActivityLogs { get; set; } = default!;
+    public DbSet<CrpgGameEvent> BattleEvents { get; set; } = default!;
     public DbSet<ActivityLogMetadata> ActivityLogMetadata { get; set; } = default!;
     public DbSet<UserNotification> UserNotifications { get; set; } = default!;
     public DbSet<UserNotificationMetadata> UserNotificationMetadata { get; set; } = default!;
     public DbSet<Terrain> Terrains { get; set; } = default!;
     public DbSet<Setting> Settings { get; set; } = default!;
+    public DbSet<QuestDefinition> QuestDefinitions { get; set; } = default!;
+    public DbSet<UserQuest> UserQuests { get; set; } = default!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

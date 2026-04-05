@@ -19,6 +19,8 @@ internal interface IUserNotificationService
     UserNotification CreateCharacterRewardedToUserNotification(int userId, int characterId, int experience);
     UserNotification CreateBattleMercenaryApplicationRespondedNotification(int userId, int battleId, bool status);
     UserNotification CreateBattleParticipantKickedToExParticipantNotification(int userId, int battleId);
+    UserNotification CreateQuestRewardClaimedToUserNotification(int userId, int userQuestId, int gold, int experience);
+    UserNotification CreateQuestRerolledToUserNotification(int userId, int oldUserQuestId, int newUserQuestId, int goldCost);
 }
 
 internal class UserNotificationService : IUserNotificationService
@@ -132,6 +134,24 @@ internal class UserNotificationService : IUserNotificationService
     {
         return CreateNotification(NotificationType.BattleParticipantKickedToExParticipant, userId, [
                 new("battleId", battleId.ToString()),
+            ]);
+    }
+
+    public UserNotification CreateQuestRewardClaimedToUserNotification(int userId, int userQuestId, int gold, int experience)
+    {
+        return CreateNotification(NotificationType.QuestRewardClaimedToUser, userId, [
+                new("userQuestId", userQuestId.ToString()),
+                new("gold", gold.ToString()),
+                new("experience", experience.ToString()),
+            ]);
+    }
+
+    public UserNotification CreateQuestRerolledToUserNotification(int userId, int oldUserQuestId, int newUserQuestId, int goldCost)
+    {
+        return CreateNotification(NotificationType.QuestRerolledToUser, userId, [
+                new("oldUserQuestId", oldUserQuestId.ToString()),
+                new("newUserQuestId", newUserQuestId.ToString()),
+                new("goldCost", goldCost.ToString()),
             ]);
     }
 

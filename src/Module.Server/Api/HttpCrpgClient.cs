@@ -4,6 +4,7 @@ using System.Text;
 using Crpg.Module.Api.Exceptions;
 using Crpg.Module.Api.Models;
 using Crpg.Module.Api.Models.ActivityLogs;
+using Crpg.Domain.Entities.BattleEvents;
 using Crpg.Module.Api.Models.Clans;
 using Crpg.Module.Api.Models.Restrictions;
 using Crpg.Module.Api.Models.Users;
@@ -108,6 +109,11 @@ internal class HttpCrpgClient : ICrpgClient
     public Task<CrpgResult<CrpgRestriction>> RestrictUserAsync(CrpgRestrictionRequest req, CancellationToken cancellationToken = default)
     {
         return Post<CrpgRestrictionRequest, CrpgRestriction>("games/restrictions", req, cancellationToken);
+    }
+
+    public Task CreateBattleEventsAsync(IList<CrpgGameEvent> battleEvents, CancellationToken cancellationToken = default)
+    {
+        return Post<IList<CrpgGameEvent>, object>("games/game-events", battleEvents, cancellationToken);
     }
 
     public void Dispose() => _httpClient.Dispose();

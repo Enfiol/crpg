@@ -24,6 +24,7 @@ public class SeedDataCommandTest : TestBase
     private static readonly Mock<IUserNotificationService> UserNotificationsService = new() { DefaultValue = DefaultValue.Mock };
     private static readonly ICharacterService CharacterService = Mock.Of<ICharacterService>();
     private static readonly ICampaignMap CampaignMap = Mock.Of<ICampaignMap>();
+    private static readonly IQuestSource QuestSource = Mock.Of<IQuestSource>();
 
     [Test]
     public async Task ShouldInsertItemsFromItemSource()
@@ -45,7 +46,8 @@ public class SeedDataCommandTest : TestBase
             CampaignMap,
             Mock.Of<ISettlementsSource>(),
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await seedDataCommandHandler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var items = await AssertDb.Items.ToArrayAsync();
@@ -85,7 +87,8 @@ public class SeedDataCommandTest : TestBase
             CampaignMap,
             Mock.Of<ISettlementsSource>(),
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await seedDataCommandHandler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var items = await AssertDb.Items.ToArrayAsync();
@@ -115,7 +118,8 @@ public class SeedDataCommandTest : TestBase
             CampaignMap,
             Mock.Of<ISettlementsSource>(),
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await seedDataCommandHandler.Handle(new SeedDataCommand(), CancellationToken.None);
         var items = await AssertDb.Items.ToArrayAsync();
         Assert.That(items.Length, Is.EqualTo(2));
@@ -180,7 +184,8 @@ public class SeedDataCommandTest : TestBase
             CampaignMap,
             Mock.Of<ISettlementsSource>(),
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await seedDataCommandHandler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var items = await AssertDb.Items.ToArrayAsync();
@@ -213,7 +218,8 @@ public class SeedDataCommandTest : TestBase
             campaignMapMock.Object,
             settlementsSource.Object,
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await handler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var settlements = await AssertDb.Settlements.ToArrayAsync();
@@ -307,7 +313,8 @@ public class SeedDataCommandTest : TestBase
             campaignMapMock.Object,
             settlementsSource.Object,
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await handler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var settlements = await AssertDb.Settlements.ToArrayAsync();
@@ -351,7 +358,8 @@ public class SeedDataCommandTest : TestBase
             CampaignMap,
             settlementsSource.Object,
             ActivityLogService.Object,
-            UserNotificationsService.Object);
+            UserNotificationsService.Object,
+            QuestSource);
         await handler.Handle(new SeedDataCommand(), CancellationToken.None);
 
         var settlements = await AssertDb.Settlements.ToArrayAsync();

@@ -4,6 +4,7 @@ using Crpg.Application.Common.Files;
 using Crpg.Application.Common.Interfaces;
 using Crpg.Application.Common.Services;
 using Crpg.Application.Parties.Services;
+using Crpg.Application.Quests.Services;
 using Crpg.Sdk.Abstractions;
 using FluentValidation;
 using MaxMind.GeoIP2;
@@ -52,8 +53,11 @@ public static class DependencyInjection
             .AddSingleton<IBattleParticipantDistributionModel, BattleParticipantUniformDistributionModel>()
             .AddSingleton(constants)
             .AddSingleton<IItemsSource, FileItemsSource>()
+            .AddSingleton<IQuestSource, FileQuestSource>()
             .AddSingleton<ISettlementsSource, FileSettlementsSource>()
             .AddScoped<IPartyTransferOfferValidationService, PartyTransferOfferValidationService>()
+            .AddScoped<IQuestAssignmentService, QuestAssignmentService>()
+            .AddScoped<IQuestEvaluationService, QuestEvaluationService>()
             .AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
 
         return services;
