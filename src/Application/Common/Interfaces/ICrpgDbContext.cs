@@ -1,4 +1,5 @@
 using Crpg.Domain.Entities.ActivityLogs;
+using Crpg.Domain.Entities.BattleEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -6,6 +7,7 @@ using Crpg.Domain.Entities.Items;
 using Crpg.Domain.Entities.Limitations;
 using Crpg.Domain.Entities.Notifications;
 using Crpg.Domain.Entities.Parties;
+using Crpg.Domain.Entities.Quests;
 using Crpg.Domain.Entities.Restrictions;
 using Crpg.Domain.Entities.Settings;
 using Crpg.Domain.Entities.Settlements;
@@ -46,11 +48,15 @@ public interface ICrpgDbContext
     DbSet<BattleParticipant> BattleParticipants { get; }
     DbSet<BattleMercenaryApplication> BattleMercenaryApplications { get; }
     DbSet<ActivityLog> ActivityLogs { get; set; }
+    DbSet<CrpgGameEvent> BattleEvents { get; set; }
     DbSet<ActivityLogMetadata> ActivityLogMetadata { get; set; }
     DbSet<UserNotification> UserNotifications { get; set; }
     DbSet<Terrain> Terrains { get; }
     DbSet<UserNotificationMetadata> UserNotificationMetadata { get; set; }
     DbSet<Setting> Settings { get; set; }
+    DbSet<QuestDefinition> QuestDefinitions { get; set; }
+    DbSet<UserQuest> UserQuests { get; set; }
+
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

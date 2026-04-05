@@ -6,6 +6,7 @@ using Crpg.Domain.Entities.Clans;
 using Crpg.Domain.Entities.Items;
 using Crpg.Domain.Entities.Notifications;
 using Crpg.Domain.Entities.Parties;
+using Crpg.Domain.Entities.Quests;
 using Crpg.Domain.Entities.Restrictions;
 using Crpg.Domain.Entities.Servers;
 using Crpg.Domain.Entities.Settlements;
@@ -56,6 +57,7 @@ public class CrpgDbContextFactory : IDesignTimeDbContextFactory<CrpgDbContext>
                         .MapEnum<ActivityLogType>()
                         .MapEnum<NotificationState>()
                         .MapEnum<NotificationType>()
+                        .MapEnum<QuestAggregationType>()
                         .MapEnum<TerrainType>())
             .UseSnakeCaseNamingConvention()
             .Options;

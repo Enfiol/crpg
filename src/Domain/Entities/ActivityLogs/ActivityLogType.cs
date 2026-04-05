@@ -42,4 +42,6 @@ public enum ActivityLogType
     BattleMercenaryApplicationAccepted,
     BattleParticipantLeaved,
     BattleParticipantKicked,
+    QuestRewardClaimed,
+    QuestRerolled,
 }

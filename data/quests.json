@@ -1,0 +1,65 @@
+﻿[
+  {
+    "id": 1,
+    "name":
+    {
+      "en": "Damage",
+      "ru": "Урон"
+    },
+    "description":
+    {
+      "en": "Deal damage to enemy",
+      "ru": "Нанесите урон противнику"
+    },
+    "eventType": "Hit",
+    "eventFiltersJson": [{}],
+    "aggregationType": "Sum",
+    "sumField": "Damage",
+    "requiredValue": 100,
+    "rewardGold": 1000,
+    "rewardExperience": 10000,
+    "isActive": true
+  },
+  {
+    "id": 2,
+    "name":
+    {
+      "en": "Damage with 1H sword",
+      "ru": "Урон одноручным мечом"
+    },
+    "description":
+    {
+      "en": "Deal damage to enemy with one-handed sword",
+      "ru": "Нанесите урон противнику одноручным мечом"
+    },
+    "eventType": "Hit",
+    "eventFiltersJson": [{"WeaponType":"OneHandedSword"}],
+    "aggregationType": "Sum",
+    "sumField": "Damage",
+    "requiredValue": 100,
+    "rewardGold": 1000,
+    "rewardExperience": 10000,
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "name":
+    {
+      "en": "Damage with 1H axe",
+      "ru": "Урон одноручным топором"
+    },
+    "description":
+    {
+      "en": "Deal damage to enemy with one-handed axe",
+      "ru": "Нанесите урон противнику одноручным топором"
+    },
+    "eventType": "Hit",
+    "eventFiltersJson": [{"WeaponType":"OneHandedAxe"}],
+    "aggregationType": "Sum",
+    "sumField": "Damage",
+    "requiredValue": 100,
+    "rewardGold": 1000,
+    "rewardExperience": 10000,
+    "isActive": true
+  }
+]
