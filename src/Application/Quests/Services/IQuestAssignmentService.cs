@@ -8,20 +8,20 @@ namespace Crpg.Application.Quests.Services;
 public interface IQuestAssignmentService
 {
     /// <summary>
-    /// Assigns daily quests to all users
+    /// Assigns daily quests to all users.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Assign quests to new users
+    /// Assign quests to new users.
     /// </summary>
     /// <param name="userId">User id.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     Task AssignDailyQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Reroll selected quest
+    /// Reroll selected quest.
     /// </summary>
     /// <param name="userQuest">Old user quest.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

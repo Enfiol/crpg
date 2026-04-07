@@ -3,7 +3,6 @@ using Crpg.Application.Common.Interfaces;
 using Crpg.Application.Common.Mediator;
 using Crpg.Application.Common.Results;
 using Crpg.Application.Common.Services;
-using Crpg.Application.Quests.Models;
 using Crpg.Application.Quests.Services;
 using Crpg.Sdk.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -14,33 +13,26 @@ namespace Crpg.Application.Quests.Commands;
 
 public record RerollQuestCommand : IMediatorRequest
 {
-    [JsonIgnore] public int UserId { get; init; }
+    [JsonIgnore]
+    public int UserId { get; init; }
 
+    [JsonIgnore]
     public int UserQuestId { get; init; }
 
-    internal class Handler : IMediatorRequestHandler<RerollQuestCommand>
+    internal class Handler(
+        ICrpgDbContext db,
+        IDateTime dateTime,
+        IActivityLogService activityLogService,
+        IUserNotificationService userNotificationService,
+        IQuestAssignmentService questAssignmentService) : IMediatorRequestHandler<RerollQuestCommand>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<RerollQuestCommand>();
 
-        private readonly ICrpgDbContext _db;
-        private readonly IDateTime _dateTime;
-        private readonly IActivityLogService _activityLogService;
-        private readonly IUserNotificationService _userNotificationService;
-        private readonly IQuestAssignmentService _questAssignmentService;
-
-        public Handler(
-            ICrpgDbContext db,
-            IDateTime dateTime,
-            IActivityLogService activityLogService,
-            IUserNotificationService userNotificationService,
-            IQuestAssignmentService questAssignmentService)
-        {
-            _db = db;
-            _dateTime = dateTime;
-            _activityLogService = activityLogService;
-            _userNotificationService = userNotificationService;
-            _questAssignmentService = questAssignmentService;
-        }
+        private readonly ICrpgDbContext _db = db;
+        private readonly IDateTime _dateTime = dateTime;
+        private readonly IActivityLogService _activityLogService = activityLogService;
+        private readonly IUserNotificationService _userNotificationService = userNotificationService;
+        private readonly IQuestAssignmentService _questAssignmentService = questAssignmentService;
 
         public async ValueTask<Result> Handle(RerollQuestCommand req,
             CancellationToken cancellationToken)
