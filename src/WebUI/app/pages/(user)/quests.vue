@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { SelectItem } from '@nuxt/ui'
+
 import { useAsyncState } from '@vueuse/core'
 
-import type { Character } from '~/models/character'
 import type { UserQuestViewModel } from '~/services/quests-service'
 
 import { useUser } from '~/composables/user/use-user'
@@ -33,20 +34,19 @@ const {
 // Claim dialog state
 const claimDialogOpen = ref(false)
 const claimingQuest = ref<UserQuestViewModel | null>(null)
-const selectedCharacter = ref<Character | null>(null)
+const selectedCharacterId = ref<number | null>(null)
 
 function openClaimDialog(quest: UserQuestViewModel) {
   claimingQuest.value = quest
-  selectedCharacter.value = null
   claimDialogOpen.value = true
 }
 
 const [onClaim, claiming] = useAsyncCallback(
   async () => {
-    if (!claimingQuest.value || !selectedCharacter.value) {
+    if (!claimingQuest.value || !selectedCharacterId.value) {
       return
     }
-    await claimQuestReward(claimingQuest.value.id, selectedCharacter.value.id)
+    await claimQuestReward(claimingQuest.value.id, selectedCharacterId.value)
     claimDialogOpen.value = false
     await Promise.all([loadQuests(), fetchUser()])
   },
@@ -224,7 +224,17 @@ function progressPercent(quest: UserQuestViewModel): number {
               <span class="font-medium text-white">{{ claimingQuest ? getQuestName(claimingQuest) : '' }}</span>
             </p>
 
-            <USelectMenu
+            <USelect
+              v-model="selectedCharacterId"
+              size="xl"
+              :items="characters.map<SelectItem>((character) => ({
+                label: character.name,
+                value: character.id,
+              }))"
+              class="w-full"
+            />
+
+            <!-- <USelectMenu
               v-model="selectedCharacter"
               :items="characters"
               :loading="loadingCharacters"
@@ -232,7 +242,7 @@ function progressPercent(quest: UserQuestViewModel): number {
               label-key="name"
               placeholder="Select character..."
               size="xl"
-            />
+            /> -->
 
             <div
               v-if="claimingQuest"
@@ -258,7 +268,7 @@ function progressPercent(quest: UserQuestViewModel): number {
               </UButton>
               <UButton
                 color="primary"
-                :disabled="!selectedCharacter"
+                :disabled="!selectedCharacterId"
                 :loading="claiming"
                 @click="onClaim()"
               >
