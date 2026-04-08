@@ -19,4 +19,3 @@ public record UserQuestViewModel : IMapFrom<UserQuest>
             .ForMember(dest => dest.CurrentValue, opt => opt.Ignore());
     }
 }
-

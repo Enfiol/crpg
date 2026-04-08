@@ -4,15 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crpg.Application.Quests.Services;
 
-public class QuestAssignmentService : IQuestAssignmentService
+public class QuestAssignmentService(ICrpgDbContext db) : IQuestAssignmentService
 {
     private const int DailyQuestsPerUser = 3; // todo move to config
-    private readonly ICrpgDbContext _db;
-
-    public QuestAssignmentService(ICrpgDbContext db)
-    {
-        _db = db;
-    }
+    private readonly ICrpgDbContext _db = db;
 
     public async Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
@@ -40,7 +35,6 @@ public class QuestAssignmentService : IQuestAssignmentService
             }
 
             var selectedQuest = availableDefinitions.Shuffle().Take(questsToAddCount);
-
 
             foreach (var definition in selectedQuest)
             {
@@ -79,7 +73,6 @@ public class QuestAssignmentService : IQuestAssignmentService
             };
             _db.UserQuests.Add(userQuest);
         }
-
 
         await _db.SaveChangesAsync(cancellationToken);
     }

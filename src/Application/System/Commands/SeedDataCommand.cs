@@ -5,6 +5,7 @@ using Crpg.Application.Common.Services;
 using Crpg.Application.Items.Models;
 using Crpg.Domain.Entities;
 using Crpg.Domain.Entities.ActivityLogs;
+using Crpg.Domain.Entities.BattleEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -31,7 +32,9 @@ public record SeedDataCommand : IMediatorRequest
         private static readonly Dictionary<SettlementType, int> CampaignSettlementDefaultTroops = new()
         {
             // TODO: to const
-            [SettlementType.Village] = 1000, [SettlementType.Castle] = 4000, [SettlementType.Town] = 8000,
+            [SettlementType.Village] = 1000,
+            [SettlementType.Castle] = 4000,
+            [SettlementType.Town] = 8000,
         };
 
         private readonly ICrpgDbContext _db;
@@ -1212,35 +1215,43 @@ public record SeedDataCommand : IMediatorRequest
 
             CharacterLimitations takeoCharacter0Limitations = new()
             {
-                Character = takeoCharacter0, LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(21),
+                Character = takeoCharacter0,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(21),
             };
             CharacterLimitations takeoCharacter1Limitations = new()
             {
-                Character = takeoCharacter1, LastRespecializeAt = DateTime.UtcNow.AddDays(-2),
+                Character = takeoCharacter1,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-2),
             };
             CharacterLimitations takeoCharacter2Limitations = new()
             {
-                Character = takeoCharacter2, LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
+                Character = takeoCharacter2,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
             };
             CharacterLimitations orleCharacter0Limitations = new()
             {
-                Character = orleCharacter0, LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
+                Character = orleCharacter0,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
             };
             CharacterLimitations orleCharacter1Limitations = new()
             {
-                Character = orleCharacter1, LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(-30),
+                Character = orleCharacter1,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(-30),
             };
             CharacterLimitations orleCharacter2Limitations = new()
             {
-                Character = orleCharacter2, LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(-30),
+                Character = orleCharacter2,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-1).AddMinutes(-30),
             };
             CharacterLimitations kadseCharacter0Limitations = new()
             {
-                Character = kadseCharacter0, LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
+                Character = kadseCharacter0,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
             };
             CharacterLimitations droobCharacter0Limitations = new()
             {
-                Character = droobCharacter0, LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
+                Character = droobCharacter0,
+                LastRespecializeAt = DateTime.UtcNow.AddDays(-8),
             };
             CharacterLimitations[] newCharactersLimitations =
             {
@@ -1842,6 +1853,108 @@ public record SeedDataCommand : IMediatorRequest
             _db.UserNotifications.RemoveRange(await _db.UserNotifications.ToArrayAsync());
             _db.UserNotifications.AddRange(orleNotifications);
 
+            var questDefinitions = await _db.QuestDefinitions.ToArrayAsync(cancellationToken);
+            _db.UserQuests.RemoveRange(await _db.UserQuests.Where(uq => uq.UserId == orle.Id).ToArrayAsync(cancellationToken));
+            if (questDefinitions.Length > 0)
+            {
+                UserQuest[] orleQuests =
+                [
+                    new UserQuest
+                    {
+                        User = orle,
+                        QuestDefinition = questDefinitions[0],
+                        IsRewardClaimed = false,
+                        ExpiresAt = DateTime.UtcNow.AddDays(1),
+                    },
+                    new UserQuest
+                    {
+                        User = orle,
+                        QuestDefinition = questDefinitions[Math.Min(1, questDefinitions.Length - 1)],
+                        IsRewardClaimed = false,
+                        ExpiresAt = DateTime.UtcNow.AddDays(1),
+                    },
+                    new UserQuest
+                    {
+                        User = orle,
+                        QuestDefinition = questDefinitions[Math.Min(2, questDefinitions.Length - 1)],
+                        IsRewardClaimed = true,
+                        ExpiresAt = DateTime.UtcNow.AddDays(1),
+                    },
+                ];
+                _db.UserQuests.AddRange(orleQuests);
+            }
+
+            CrpgGameEvent[] orleBattleEvents =
+            [
+                new CrpgGameEvent
+                {
+                    User = orle,
+                    Type = CrpgGameEvent.EventType.Hit,
+                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    {
+                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
+                        [CrpgGameEvent.EventField.WeaponId] = "crpg_decorated_scimitar_with_wide_grip_v1_h0",
+                        [CrpgGameEvent.EventField.TargetType] = "Player",
+                        [CrpgGameEvent.EventField.Damage] = "120",
+                    },
+                    CreatedAt = DateTime.UtcNow.AddHours(-1),
+                },
+                new CrpgGameEvent
+                {
+                    User = orle,
+                    Type = CrpgGameEvent.EventType.Hit,
+                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    {
+                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
+                        [CrpgGameEvent.EventField.WeaponId] = "crpg_thamaskene_steel_spatha_v1_h2",
+                        [CrpgGameEvent.EventField.TargetType] = "Player",
+                        [CrpgGameEvent.EventField.Damage] = "95",
+                    },
+                    CreatedAt = DateTime.UtcNow.AddHours(-2),
+                },
+                new CrpgGameEvent
+                {
+                    User = orle,
+                    Type = CrpgGameEvent.EventType.Hit,
+                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    {
+                        [CrpgGameEvent.EventField.WeaponType] = "TwoHandedSword",
+                        [CrpgGameEvent.EventField.WeaponId] = "crpg_scythe_v2_h3",
+                        [CrpgGameEvent.EventField.HitType] = "Cut",
+                        [CrpgGameEvent.EventField.BodyPart] = "Chest",
+                        [CrpgGameEvent.EventField.Damage] = "55",
+                    },
+                    CreatedAt = DateTime.UtcNow.AddHours(-3),
+                },
+                new CrpgGameEvent
+                {
+                    User = orle,
+                    Type = CrpgGameEvent.EventType.Hit,
+                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    {
+                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
+                        [CrpgGameEvent.EventField.WeaponId] = "crpg_decorated_scimitar_with_wide_grip_v1_h0",
+                        [CrpgGameEvent.EventField.HitType] = "Cut",
+                        [CrpgGameEvent.EventField.BodyPart] = "Head",
+                        [CrpgGameEvent.EventField.Damage] = "80",
+                    },
+                    CreatedAt = DateTime.UtcNow.AddHours(-1),
+                },
+                new CrpgGameEvent
+                {
+                    User = orle,
+                    Type = CrpgGameEvent.EventType.Block,
+                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    {
+                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
+                        [CrpgGameEvent.EventField.WeaponId] = "crpg_rondel_v3_h3",
+                    },
+                    CreatedAt = DateTime.UtcNow.AddHours(-2),
+                },
+            ];
+            _db.BattleEvents.RemoveRange(await _db.BattleEvents.Where(e => e.UserId == orle.Id).ToArrayAsync(cancellationToken));
+            _db.BattleEvents.AddRange(orleBattleEvents);
+
             ClanInvitation[] newClanInvitations =
             {
                 schumetzqRequestForPecores, victorhh888MemberRequestForPecores, neostralieOfferToBrygganForPecores
@@ -1926,7 +2039,10 @@ public record SeedDataCommand : IMediatorRequest
             };
             Party namidakaParty = new()
             {
-                User = namidaka, Troops = 11, Position = new Point(135, -99), Status = PartyStatus.Idle,
+                User = namidaka,
+                Troops = 11,
+                Position = new Point(135, -99),
+                Status = PartyStatus.Idle,
             };
             Party brainfartParty = new()
             {
@@ -1937,51 +2053,87 @@ public record SeedDataCommand : IMediatorRequest
             };
             Party kiwiParty = new()
             {
-                User = kiwi, Troops = 1, Position = new Point(142, -90), Status = PartyStatus.Idle,
+                User = kiwi,
+                Troops = 1,
+                Position = new Point(142, -90),
+                Status = PartyStatus.Idle,
             };
             Party ikaroozParty = new()
             {
-                User = ikarooz, Troops = 20, Position = new Point(130, -102), Status = PartyStatus.Idle,
+                User = ikarooz,
+                Troops = 20,
+                Position = new Point(130, -102),
+                Status = PartyStatus.Idle,
             };
             Party laHireParty = new()
             {
-                User = laHire, Troops = 20, Position = new Point(135, -97), Status = PartyStatus.Idle,
+                User = laHire,
+                Troops = 20,
+                Position = new Point(135, -97),
+                Status = PartyStatus.Idle,
             };
             Party brygganParty = new()
             {
-                User = bryggan, Troops = 1, Position = new Point(131, -102), Status = PartyStatus.Idle,
+                User = bryggan,
+                Troops = 1,
+                Position = new Point(131, -102),
+                Status = PartyStatus.Idle,
             };
             Party elmarykParty = new()
             {
-                User = elmaryk, Troops = 6, Position = new Point(108, -98), Status = PartyStatus.Idle,
+                User = elmaryk,
+                Troops = 6,
+                Position = new Point(108, -98),
+                Status = PartyStatus.Idle,
             };
             Party schumetzqParty = new()
             {
-                User = schumetzq, Troops = 7, Position = new Point(119, -105), Status = PartyStatus.Idle,
+                User = schumetzq,
+                Troops = 7,
+                Position = new Point(119, -105),
+                Status = PartyStatus.Idle,
             };
             Party azumaParty = new()
             {
-                User = azuma, Troops = 121, Position = new Point(106, -112), Status = PartyStatus.Idle,
+                User = azuma,
+                Troops = 121,
+                Position = new Point(106, -112),
+                Status = PartyStatus.Idle,
             };
             Party zorguyParty = new()
             {
-                User = zorguy, Troops = 98, Position = new Point(114, -114), Status = PartyStatus.Idle,
+                User = zorguy,
+                Troops = 98,
+                Position = new Point(114, -114),
+                Status = PartyStatus.Idle,
             };
             Party eckoParty = new()
             {
-                User = ecko, Troops = 55, Position = new Point(117, -112), Status = PartyStatus.Idle,
+                User = ecko,
+                Troops = 55,
+                Position = new Point(117, -112),
+                Status = PartyStatus.Idle,
             };
             Party firebatParty = new()
             {
-                User = firebat, Troops = 29, Position = new Point(105, -111), Status = PartyStatus.Idle,
+                User = firebat,
+                Troops = 29,
+                Position = new Point(105, -111),
+                Status = PartyStatus.Idle,
             };
             Party laenirParty = new()
             {
-                User = leanir, Troops = 1, Position = new Point(103, -102), Status = PartyStatus.Idle,
+                User = leanir,
+                Troops = 1,
+                Position = new Point(103, -102),
+                Status = PartyStatus.Idle,
             };
             Party opsetParty = new()
             {
-                User = opset, Troops = 1, Position = new Point(113, -112), Status = PartyStatus.Idle,
+                User = opset,
+                Troops = 1,
+                Position = new Point(113, -112),
+                Status = PartyStatus.Idle,
             };
             Party falcomParty = new()
             {
@@ -2096,55 +2248,94 @@ public record SeedDataCommand : IMediatorRequest
             };
             Party manikParty = new()
             {
-                User = manik, Troops = 1, Position = new Point(129, -102), Status = PartyStatus.Idle,
+                User = manik,
+                Troops = 1,
+                Position = new Point(129, -102),
+                Status = PartyStatus.Idle,
             };
             Party ajroselleParty = new()
             {
-                User = ajroselle, Troops = 1, Position = new Point(130, -107), Status = PartyStatus.Idle,
+                User = ajroselle,
+                Troops = 1,
+                Position = new Point(130, -107),
+                Status = PartyStatus.Idle,
             };
             Party skraelParty = new()
             {
-                User = skrael, Troops = 1, Position = new Point(126, -93), Status = PartyStatus.Idle,
+                User = skrael,
+                Troops = 1,
+                Position = new Point(126, -93),
+                Status = PartyStatus.Idle,
             };
             Party bedoParty = new()
             {
-                User = bedo, Troops = 300, Position = new Point(114, -101), Status = PartyStatus.Idle,
+                User = bedo,
+                Troops = 300,
+                Position = new Point(114, -101),
+                Status = PartyStatus.Idle,
             };
             Party lambicParty = new()
             {
-                User = lambic, Troops = 87, Position = new Point(113, -98), Status = PartyStatus.Idle,
+                User = lambic,
+                Troops = 87,
+                Position = new Point(113, -98),
+                Status = PartyStatus.Idle,
             };
             Party sanasarParty = new()
             {
-                User = sanasar, Troops = 21, Position = new Point(119, -101), Status = PartyStatus.Idle,
+                User = sanasar,
+                Troops = 21,
+                Position = new Point(119, -101),
+                Status = PartyStatus.Idle,
             };
             Party vlad007Party = new()
             {
-                User = vlad007, Troops = 21, Position = new Point(119, -101), Status = PartyStatus.Idle,
+                User = vlad007,
+                Troops = 21,
+                Position = new Point(119, -101),
+                Status = PartyStatus.Idle,
             };
             Party canp0GParty = new()
             {
-                User = canp0g, Troops = 1, Position = rhesosCastle.Position, Status = PartyStatus.Idle,
+                User = canp0g,
+                Troops = 1,
+                Position = rhesosCastle.Position,
+                Status = PartyStatus.Idle,
             };
             Party sharkParty = new()
             {
-                User = shark, Troops = 1, Position = new Point(105, -107), Status = PartyStatus.Idle,
+                User = shark,
+                Troops = 1,
+                Position = new Point(105, -107),
+                Status = PartyStatus.Idle,
             };
             Party noobAmphetamineParty = new()
             {
-                User = noobAmphetamine, Troops = 1, Position = new Point(107, -100), Status = PartyStatus.Idle,
+                User = noobAmphetamine,
+                Troops = 1,
+                Position = new Point(107, -100),
+                Status = PartyStatus.Idle,
             };
             Party mundeteParty = new()
             {
-                User = mundete, Troops = 1, Position = new Point(112, -99), Status = PartyStatus.Idle,
+                User = mundete,
+                Troops = 1,
+                Position = new Point(112, -99),
+                Status = PartyStatus.Idle,
             };
             Party aroyFalconerParty = new()
             {
-                User = aroyFalconer, Troops = 1, Position = new Point(123, -88), Status = PartyStatus.Idle,
+                User = aroyFalconer,
+                Troops = 1,
+                Position = new Point(123, -88),
+                Status = PartyStatus.Idle,
             };
             Party insanitoidParty = new()
             {
-                User = insanitoid, Troops = 1, Position = new Point(135, -98), Status = PartyStatus.Idle,
+                User = insanitoid,
+                Troops = 1,
+                Position = new Point(135, -98),
+                Status = PartyStatus.Idle,
             };
 
             // Users with no party: telesto, kypak, devoidDragon.

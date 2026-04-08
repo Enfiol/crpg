@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crpg.Application.Quests.Services;
 
-public class QuestEvaluationService : IQuestEvaluationService
+public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
 {
-    private readonly ICrpgDbContext _db;
-
-    public QuestEvaluationService(ICrpgDbContext db)
-    {
-        _db = db;
-    }
+    private readonly ICrpgDbContext _db = db;
 
     public async Task<int> ComputeCurrentValueAsync(UserQuest userQuest, CancellationToken cancellationToken = default)
     {
@@ -28,7 +23,7 @@ public class QuestEvaluationService : IQuestEvaluationService
         // Apply event filters in memory if any
         if (questDefinition.EventFiltersJson != null && questDefinition.EventFiltersJson.Length > 0)
         {
-            events = events.Where(be => be.EventData != null
+            events = [.. events.Where(be => be.EventData != null
                                         && questDefinition.EventFiltersJson.Any(filter =>
                                             filter.All(kvp =>
                                             {
@@ -39,7 +34,7 @@ public class QuestEvaluationService : IQuestEvaluationService
 
                                                 return be.EventData!.TryGetValue(field, out string? value) &&
                                                        value == kvp.Value;
-                                            }))).ToList();
+                                            })))];
         }
 
         switch (questDefinition.AggregationType)

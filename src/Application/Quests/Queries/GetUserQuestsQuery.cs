@@ -12,18 +12,11 @@ public record GetUserQuestsQuery : IMediatorRequest<IList<UserQuestViewModel>>
 {
     public int UserId { get; init; }
 
-    internal class Handler : IMediatorRequestHandler<GetUserQuestsQuery, IList<UserQuestViewModel>>
+    internal class Handler(ICrpgDbContext db, IMapper mapper, IQuestEvaluationService questEvaluationService) : IMediatorRequestHandler<GetUserQuestsQuery, IList<UserQuestViewModel>>
     {
-        private readonly ICrpgDbContext _db;
-        private readonly IMapper _mapper;
-        private readonly IQuestEvaluationService _questEvaluationService;
-
-        public Handler(ICrpgDbContext db, IMapper mapper, IQuestEvaluationService questEvaluationService)
-        {
-            _db = db;
-            _mapper = mapper;
-            _questEvaluationService = questEvaluationService;
-        }
+        private readonly ICrpgDbContext _db = db;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQuestEvaluationService _questEvaluationService = questEvaluationService;
 
         public async ValueTask<Result<IList<UserQuestViewModel>>> Handle(GetUserQuestsQuery req, CancellationToken cancellationToken)
         {

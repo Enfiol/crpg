@@ -58,7 +58,8 @@ public class UsersController : BaseController
         {
             var res = await Mediator.Send(new GetUserByPlatformIdQuery
             {
-                Platform = (Platform)platform, PlatformUserId = platformUserId,
+                Platform = (Platform)platform,
+                PlatformUserId = platformUserId,
             });
             return ResultToAction(res.Select(u => new[] { u }));
         }
@@ -250,7 +251,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new GetUserCharacterCharacteristicsQuery
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
         }));
     }
 
@@ -295,7 +297,9 @@ public class UsersController : BaseController
     {
         UpdateCharacterCharacteristicsCommand cmd = new()
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id, Characteristics = stats,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
+            Characteristics = stats,
         };
         return ResultToActionAsync(Mediator.Send(cmd));
     }
@@ -328,7 +332,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new GetUserCharacterItemsQuery
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
         }));
     }
 
@@ -375,7 +380,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new GetUserCharacterStatisticsQuery
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
         }));
     }
 
@@ -395,7 +401,10 @@ public class UsersController : BaseController
     {
         return ResultToAction(await Mediator.Send(new GetUserCharacterEarningStatisticsQuery
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id, From = from, To = to,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
+            From = from,
+            To = to,
         }, CancellationToken.None));
     }
 
@@ -410,7 +419,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new GetCharacterLimitationsQuery
         {
-            UserId = CurrentUser.User!.Id, CharacterId = id,
+            UserId = CurrentUser.User!.Id,
+            CharacterId = id,
         }));
     }
 
@@ -464,7 +474,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new SetCharacterForTournamentCommand
         {
-            CharacterId = id, UserId = CurrentUser.User!.Id,
+            CharacterId = id,
+            UserId = CurrentUser.User!.Id,
         }));
     }
 
@@ -540,7 +551,8 @@ public class UsersController : BaseController
     {
         return ResultToActionAsync(Mediator.Send(new DeleteUserItemPresetCommand
         {
-            UserId = CurrentUser.User!.Id, UserItemPresetId = id,
+            UserId = CurrentUser.User!.Id,
+            UserItemPresetId = id,
         }));
     }
 
@@ -622,7 +634,6 @@ public class UsersController : BaseController
         GetUserClanQuery req = new() { UserId = CurrentUser.User!.Id };
         return ResultToActionAsync(Mediator.Send(req));
     }
-
 
     [Authorize(AdminPolicy)]
     [HttpGet("/users/reward-recent")]

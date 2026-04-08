@@ -8,16 +8,11 @@ namespace Crpg.Application.Quests.Commands;
 
 public record AssignDailyQuestsToAllUsersCommand : IMediatorRequest
 {
-    internal class Handler : IMediatorRequestHandler<AssignDailyQuestsToAllUsersCommand>
+    internal class Handler(IQuestAssignmentService questAssignmentService) : IMediatorRequestHandler<AssignDailyQuestsToAllUsersCommand>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<AssignDailyQuestsToAllUsersCommand>();
 
-        private readonly IQuestAssignmentService _questAssignmentService;
-
-        public Handler(IQuestAssignmentService questAssignmentService)
-        {
-            _questAssignmentService = questAssignmentService;
-        }
+        private readonly IQuestAssignmentService _questAssignmentService = questAssignmentService;
 
         public async ValueTask<Result> Handle(AssignDailyQuestsToAllUsersCommand req, CancellationToken cancellationToken)
         {

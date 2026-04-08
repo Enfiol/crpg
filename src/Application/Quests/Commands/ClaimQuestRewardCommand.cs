@@ -18,39 +18,29 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
     [JsonIgnore]
     public int UserId { get; init; }
 
+    [JsonIgnore]
     public int UserQuestId { get; init; }
 
     public int CharacterId { get; init; }
 
-    internal class Handler : IMediatorRequestHandler<ClaimQuestRewardCommand, UserQuestViewModel>
+    internal class Handler(
+        ICrpgDbContext db,
+        IMapper mapper,
+        IDateTime dateTime,
+        ICharacterService characterService,
+        IActivityLogService activityLogService,
+        IUserNotificationService userNotificationService,
+        IQuestEvaluationService questEvaluationService) : IMediatorRequestHandler<ClaimQuestRewardCommand, UserQuestViewModel>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<ClaimQuestRewardCommand>();
 
-        private readonly ICrpgDbContext _db;
-        private readonly IMapper _mapper;
-        private readonly IDateTime _dateTime;
-        private readonly ICharacterService _characterService;
-        private readonly IActivityLogService _activityLogService;
-        private readonly IUserNotificationService _userNotificationService;
-        private readonly IQuestEvaluationService _questEvaluationService;
-
-        public Handler(
-            ICrpgDbContext db,
-            IMapper mapper,
-            IDateTime dateTime,
-            ICharacterService characterService,
-            IActivityLogService activityLogService,
-            IUserNotificationService userNotificationService,
-            IQuestEvaluationService questEvaluationService)
-        {
-            _db = db;
-            _mapper = mapper;
-            _dateTime = dateTime;
-            _characterService = characterService;
-            _activityLogService = activityLogService;
-            _userNotificationService = userNotificationService;
-            _questEvaluationService = questEvaluationService;
-        }
+        private readonly ICrpgDbContext _db = db;
+        private readonly IMapper _mapper = mapper;
+        private readonly IDateTime _dateTime = dateTime;
+        private readonly ICharacterService _characterService = characterService;
+        private readonly IActivityLogService _activityLogService = activityLogService;
+        private readonly IUserNotificationService _userNotificationService = userNotificationService;
+        private readonly IQuestEvaluationService _questEvaluationService = questEvaluationService;
 
         public async ValueTask<Result<UserQuestViewModel>> Handle(ClaimQuestRewardCommand req, CancellationToken cancellationToken)
         {
@@ -78,7 +68,6 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
             {
                 return new(CommonErrors.QuestDefinitionNotFound(userQuest.QuestDefinitionId));
             }
-
 
             int currentValue = await _questEvaluationService.ComputeCurrentValueAsync(userQuest, cancellationToken);
             if (currentValue < userQuest.QuestDefinition.RequiredValue)
@@ -112,7 +101,7 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
             Logger.LogInformation("User '{0}' claimed reward for quest '{1}' on character '{2}'", req.UserId, req.UserQuestId, req.CharacterId);
 
             var vm = _mapper.Map<UserQuestViewModel>(userQuest);
-            currentValue = Math.Min(currentValue,  userQuest.QuestDefinition.RequiredValue);
+            currentValue = Math.Min(currentValue, userQuest.QuestDefinition.RequiredValue);
             vm = vm with { CurrentValue = currentValue };
             return new Result<UserQuestViewModel>(vm);
         }
