@@ -14,7 +14,7 @@ export type ActivityLogMetadataEntitiesDictViewModel = {
     characters: Array<CharacterPublicViewModel>;
 };
 
-export type ActivityLogType = 'UserCreated' | 'UserDeleted' | 'UserRenamed' | 'UserRewarded' | 'ItemBought' | 'ItemSold' | 'ItemBroke' | 'ItemReforged' | 'ItemRepaired' | 'ItemUpgraded' | 'ItemReturned' | 'CharacterCreated' | 'CharacterDeleted' | 'CharacterRatingReset' | 'CharacterRespecialized' | 'CharacterRetired' | 'CharacterRewarded' | 'CharacterEarned' | 'ServerJoined' | 'ChatMessageSent' | 'TeamHit' | 'ClanCreated' | 'ClanDeleted' | 'ClanApplicationCreated' | 'ClanApplicationDeclined' | 'ClanApplicationAccepted' | 'ClanMemberKicked' | 'ClanMemberLeaved' | 'ClanMemberRoleEdited' | 'ClanArmoryAddItem' | 'ClanArmoryRemoveItem' | 'ClanArmoryReturnItem' | 'ClanArmoryBorrowItem' | 'TeamHitReported' | 'TeamHitReportedUserKicked' | 'BattleApplyAsMercenary' | 'BattleMercenaryApplicationDeclined' | 'BattleMercenaryApplicationAccepted' | 'BattleParticipantLeaved' | 'BattleParticipantKicked';
+export type ActivityLogType = 'UserCreated' | 'UserDeleted' | 'UserRenamed' | 'UserRewarded' | 'ItemBought' | 'ItemSold' | 'ItemBroke' | 'ItemReforged' | 'ItemRepaired' | 'ItemUpgraded' | 'ItemReturned' | 'CharacterCreated' | 'CharacterDeleted' | 'CharacterRatingReset' | 'CharacterRespecialized' | 'CharacterRetired' | 'CharacterRewarded' | 'CharacterEarned' | 'ServerJoined' | 'ChatMessageSent' | 'TeamHit' | 'ClanCreated' | 'ClanDeleted' | 'ClanApplicationCreated' | 'ClanApplicationDeclined' | 'ClanApplicationAccepted' | 'ClanMemberKicked' | 'ClanMemberLeaved' | 'ClanMemberRoleEdited' | 'ClanArmoryAddItem' | 'ClanArmoryRemoveItem' | 'ClanArmoryReturnItem' | 'ClanArmoryBorrowItem' | 'TeamHitReported' | 'TeamHitReportedUserKicked' | 'BattleApplyAsMercenary' | 'BattleMercenaryApplicationDeclined' | 'BattleMercenaryApplicationAccepted' | 'BattleParticipantLeaved' | 'BattleParticipantKicked' | 'QuestRewardClaimed' | 'QuestRerolled';
 
 export type ActivityLogViewModel = {
     id: number;
@@ -101,7 +101,7 @@ export type BattleFighterInventoryViewModel = {
     fighterId: number;
     party: PartyPublicViewModel | null;
     settlement: SettlementPublicViewModel | null;
-    items: Array<ItemStack>;
+    items: Array<ItemStackViewModel>;
 };
 
 export type BattleFighterInventoryViewModelIListResult = {
@@ -338,6 +338,10 @@ export type CharacterWeaponProficienciesViewModel = {
     crossbow: number;
 };
 
+export type ClaimQuestRewardCommand = {
+    characterId: number;
+};
+
 export type ClanArmoryBorrowedItemViewModel = {
     borrowerUserId: number;
     userItemId: number;
@@ -520,7 +524,7 @@ export type Error = {
     stackTrace: string | null;
 };
 
-export type ErrorCode = 'ApplicationClosed' | 'ApplicationNotFound' | 'ApplicationAlreadyExist' | 'BattleMercenaryAlreadyExist' | 'BattleInvalidPhase' | 'BattleNotFound' | 'BattleTooFar' | 'BattleParticipantSlotsExceeded' | 'CharacterForTournament' | 'CharacterForTournamentNotFound' | 'CharacterGenerationRequirement' | 'CharacterLevelRequirementNotMet' | 'CharacterNotFound' | 'CharacterRecentlyCreated' | 'CharacteristicDecreased' | 'ClanInvitationClosed' | 'ClanInvitationNotFound' | 'ClanMemberRoleNotMet' | 'ClanNameAlreadyUsed' | 'ClanNeedLeader' | 'ClanNotFound' | 'ClanLeaderFound' | 'ClanTagAlreadyUsed' | 'Conflict' | 'FighterNotACommander' | 'FighterNotFound' | 'BattleParticipantNotFound' | 'InternalError' | 'InvalidField' | 'ItemAlreadyOwned' | 'ItemBadSlot' | 'ItemBroken' | 'ItemDisabled' | 'ItemNotBuyable' | 'ItemNotFound' | 'ItemNotOwned' | 'ItemNotReforgeable' | 'ItemNotSellable' | 'ItemNotUpgradable' | 'InvalidItemUpgradeRank' | 'NotEnoughAttributePoints' | 'NotEnoughGold' | 'NotEnoughHeirloomPoints' | 'NotEnoughSkillPoints' | 'NotEnoughWeaponProficiencyPoints' | 'PartyNotEnoughItems' | 'SettlementNotEnoughItems' | 'PartiesNotOnTheSameSide' | 'PendingBattleFighterApplicationNotExist' | 'PartyFighter' | 'PartyInBattle' | 'PartyNotAFighter' | 'PartyNotEnoughTroops' | 'PartyNotFound' | 'PartyNotInASettlement' | 'PartyNotInSight' | 'PartyNotSettlementOwner' | 'TransferOfferNotFound' | 'TransferOfferNotAllowed' | 'TransferOfferInvalidStatus' | 'TransferOfferMissingItems' | 'TransferOfferInvalidAmount' | 'TransferOfferInvalidItem' | 'SettlementNotFound' | 'SettlementNotEnoughTroops' | 'SettlementTooFar' | 'SkillRequirementNotMet' | 'UserAlreadyInAClan' | 'UserAlreadyInTheClan' | 'UserAlreadyRegisteredToCampaign' | 'UserItemPresetBadSlots' | 'UserItemPresetNotFound' | 'UserItemIsNotBroken' | 'UserItemMaxRankReached' | 'UserItemNotFound' | 'UserNotAClanMember' | 'UserNotFound' | 'UserNotificationNotFound' | 'UserNotInAClan' | 'UserRoleNotMet' | 'PersonalItemAlreadyExist' | 'SettingNotFound' | 'TerrainNotFound';
+export type ErrorCode = 'ApplicationClosed' | 'ApplicationNotFound' | 'ApplicationAlreadyExist' | 'BattleMercenaryAlreadyExist' | 'BattleInvalidPhase' | 'BattleNotFound' | 'BattleTooFar' | 'BattleParticipantSlotsExceeded' | 'CharacterForTournament' | 'CharacterForTournamentNotFound' | 'CharacterGenerationRequirement' | 'CharacterLevelRequirementNotMet' | 'CharacterNotFound' | 'CharacterRecentlyCreated' | 'CharacteristicDecreased' | 'ClanInvitationClosed' | 'ClanInvitationNotFound' | 'ClanMemberRoleNotMet' | 'ClanNameAlreadyUsed' | 'ClanNeedLeader' | 'ClanNotFound' | 'ClanLeaderFound' | 'ClanTagAlreadyUsed' | 'Conflict' | 'FighterNotACommander' | 'FighterNotFound' | 'BattleParticipantNotFound' | 'InternalError' | 'InvalidField' | 'ItemAlreadyOwned' | 'ItemBadSlot' | 'ItemBroken' | 'ItemDisabled' | 'ItemNotBuyable' | 'ItemNotFound' | 'ItemNotOwned' | 'ItemNotReforgeable' | 'ItemNotSellable' | 'ItemNotUpgradable' | 'InvalidItemUpgradeRank' | 'NotEnoughAttributePoints' | 'NotEnoughGold' | 'NotEnoughHeirloomPoints' | 'NotEnoughSkillPoints' | 'NotEnoughWeaponProficiencyPoints' | 'PartyNotEnoughItems' | 'SettlementNotEnoughItems' | 'PartiesNotOnTheSameSide' | 'PendingBattleFighterApplicationNotExist' | 'PartyFighter' | 'PartyInBattle' | 'PartyNotAFighter' | 'PartyNotEnoughTroops' | 'PartyNotFound' | 'PartyNotInASettlement' | 'PartyNotInSight' | 'PartyNotSettlementOwner' | 'TransferOfferNotFound' | 'TransferOfferNotAllowed' | 'TransferOfferInvalidStatus' | 'TransferOfferMissingItems' | 'TransferOfferInvalidAmount' | 'TransferOfferInvalidItem' | 'SettlementNotFound' | 'SettlementNotEnoughTroops' | 'SettlementTooFar' | 'SkillRequirementNotMet' | 'UserAlreadyInAClan' | 'UserAlreadyInTheClan' | 'UserAlreadyRegisteredToCampaign' | 'UserItemPresetBadSlots' | 'UserItemPresetNotFound' | 'UserItemIsNotBroken' | 'UserItemMaxRankReached' | 'UserItemNotFound' | 'UserNotAClanMember' | 'UserNotFound' | 'UserNotificationNotFound' | 'UserNotInAClan' | 'UserRoleNotMet' | 'PersonalItemAlreadyExist' | 'SettingNotFound' | 'TerrainNotFound' | 'UserQuestNotFound' | 'QuestRewardAlreadyClaimed' | 'QuestExpired' | 'QuestDefinitionNotFound' | 'QuestNotCompleted';
 
 export type ErrorSource = {
     pointer?: string | null;
@@ -528,6 +532,8 @@ export type ErrorSource = {
 };
 
 export type ErrorType = 'InternalError' | 'Forbidden' | 'Conflict' | 'NotFound' | 'Validation';
+
+export type EventType = 'Undefined' | 'Hit' | 'Kill' | 'Block';
 
 export type GameCharacterViewModel = {
     id: number;
@@ -550,6 +556,20 @@ export type GameClanMemberViewModel = {
 export type GameEquippedItemViewModel = {
     slot: ItemSlot;
     userItem: GameUserItemViewModel;
+};
+
+export type GameEventViewModel = {
+    userId?: number | null;
+    type: EventType;
+    eventData?: {
+        Undefined?: string;
+        WeaponType?: string;
+        WeaponId?: string;
+        HitType?: string;
+        Damage?: string;
+        TargetType?: string;
+        BodyPart?: string;
+    } | null;
 };
 
 export type GameMode = 'CRPGBattle' | 'CRPGConquest' | 'CRPGDTV' | 'CRPGDuel' | 'CRPGSiege' | 'CRPGTeamDeathmatch' | 'CRPGSkirmish' | 'CRPGUnknownGameMode' | 'CRPGCaptain';
@@ -736,29 +756,29 @@ export type ItemMountComponentViewModel = {
 
 export type ItemSlot = 'Head' | 'Shoulder' | 'Body' | 'Hand' | 'Leg' | 'MountHarness' | 'Mount' | 'Weapon0' | 'Weapon1' | 'Weapon2' | 'Weapon3' | 'WeaponExtra';
 
-export type ItemStack = {
+export type ItemStackUpdate = {
+    itemId: string;
+    count: number;
+};
+
+export type ItemStackViewModel = {
     item: ItemViewModel;
     count: number;
 };
 
-export type ItemStackArrayResult = {
+export type ItemStackViewModelArrayResult = {
     readonly errors: Array<Error> | null;
-    data: Array<ItemStack> | null;
+    data: Array<ItemStackViewModel> | null;
 };
 
-export type ItemStackIListResult = {
+export type ItemStackViewModelIListResult = {
     readonly errors: Array<Error> | null;
-    data: Array<ItemStack> | null;
+    data: Array<ItemStackViewModel> | null;
 };
 
-export type ItemStackResult = {
+export type ItemStackViewModelResult = {
     readonly errors: Array<Error> | null;
-    data: ItemStack | null;
-};
-
-export type ItemStackUpdate = {
-    itemId: string;
-    count: number;
+    data: ItemStackViewModel | null;
 };
 
 export type ItemType = 'Undefined' | 'HeadArmor' | 'ShoulderArmor' | 'BodyArmor' | 'HandArmor' | 'LegArmor' | 'MountHarness' | 'Mount' | 'Shield' | 'Bow' | 'Crossbow' | 'OneHandedWeapon' | 'TwoHandedWeapon' | 'Polearm' | 'Thrown' | 'Arrows' | 'Bolts' | 'Pistol' | 'Musket' | 'Bullets' | 'Banner' | 'Ranged' | 'Ammo';
@@ -810,7 +830,7 @@ export type Languages = 'En' | 'Zh' | 'Ru' | 'De' | 'Fr' | 'It' | 'Es' | 'Pl' | 
 
 export type NotificationState = 'Unread' | 'Read';
 
-export type NotificationType = 'UserRewardedToUser' | 'CharacterRewardedToUser' | 'ItemReturned' | 'ClanApplicationCreatedToUser' | 'ClanApplicationCreatedToOfficers' | 'ClanApplicationAcceptedToUser' | 'ClanApplicationDeclinedToUser' | 'ClanMemberRoleChangedToUser' | 'ClanMemberLeavedToLeader' | 'ClanMemberKickedToExMember' | 'ClanArmoryBorrowItemToLender' | 'ClanArmoryRemoveItemToBorrower' | 'BattleMercenaryApplicationAccepted' | 'BattleMercenaryApplicationDeclined' | 'BattleParticipantKickedToExParticipant';
+export type NotificationType = 'UserRewardedToUser' | 'CharacterRewardedToUser' | 'ItemReturned' | 'ClanApplicationCreatedToUser' | 'ClanApplicationCreatedToOfficers' | 'ClanApplicationAcceptedToUser' | 'ClanApplicationDeclinedToUser' | 'ClanMemberRoleChangedToUser' | 'ClanMemberLeavedToLeader' | 'ClanMemberKickedToExMember' | 'ClanArmoryBorrowItemToLender' | 'ClanArmoryRemoveItemToBorrower' | 'BattleMercenaryApplicationAccepted' | 'BattleMercenaryApplicationDeclined' | 'BattleParticipantKickedToExParticipant' | 'QuestRewardClaimedToUser' | 'QuestRerolledToUser';
 
 export type PartyOrderCommandItemDto = {
     type: PartyOrderType;
@@ -879,7 +899,7 @@ export type PartyTransferOfferViewModel = {
     status: PartyTransferOfferStatus;
     gold: number;
     troops: number;
-    items: Array<ItemStack>;
+    items: Array<ItemStackViewModel>;
 };
 
 export type PartyTransferOfferViewModelResult = {
@@ -930,6 +950,19 @@ export type PatchNotesIListResult = {
 
 export type Platform = 'Steam' | 'EpicGames' | 'Microsoft';
 
+export type QuestDefinitionViewModel = {
+    id: number;
+    name?: {
+        [key: string]: string;
+    } | null;
+    description?: {
+        [key: string]: string;
+    } | null;
+    requiredValue: number;
+    rewardGold: number;
+    rewardExperience: number;
+};
+
 export type RefundItemCommand = {
     itemId: string;
     userId: number;
@@ -943,6 +976,10 @@ export type RemoveBattleFighterApplicationCommand = {
 
 export type RemoveBattleMercenaryApplicationCommand = {
     side: BattleSide;
+};
+
+export type RerollQuestCommand = {
+    [key: string]: never;
 };
 
 export type RespondClanInvitationCommand = {
@@ -1281,6 +1318,25 @@ export type UserPublicViewModel = {
     clanMembership: UserClanViewModel | null;
 };
 
+export type UserQuestViewModel = {
+    id: number;
+    questDefinitionId: number;
+    isRewardClaimed: boolean;
+    expiresAt: Date;
+    currentValue: number;
+    questDefinition?: QuestDefinitionViewModel | null;
+};
+
+export type UserQuestViewModelIListResult = {
+    readonly errors: Array<Error> | null;
+    data: Array<UserQuestViewModel> | null;
+};
+
+export type UserQuestViewModelResult = {
+    readonly errors: Array<Error> | null;
+    data: UserQuestViewModel | null;
+};
+
 export type UserViewModel = {
     id: number;
     platform: Platform;
@@ -1350,7 +1406,7 @@ export type BattleFighterInventoryViewModelWritable = {
     fighterId: number;
     party: PartyPublicViewModel | null;
     settlement: SettlementPublicViewModelWritable | null;
-    items: Array<ItemStack>;
+    items: Array<ItemStackViewModel>;
 };
 
 export type BattleFighterInventoryViewModelIListResultWritable = {
@@ -1523,16 +1579,16 @@ export type GeoJsonPolygonWritable = {
     coordinates: Array<Array<Array<number>>>;
 };
 
-export type ItemStackArrayResultWritable = {
-    data: Array<ItemStack> | null;
+export type ItemStackViewModelArrayResultWritable = {
+    data: Array<ItemStackViewModel> | null;
 };
 
-export type ItemStackIListResultWritable = {
-    data: Array<ItemStack> | null;
+export type ItemStackViewModelIListResultWritable = {
+    data: Array<ItemStackViewModel> | null;
 };
 
-export type ItemStackResultWritable = {
-    data: ItemStack | null;
+export type ItemStackViewModelResultWritable = {
+    data: ItemStackViewModel | null;
 };
 
 export type ItemViewModelIListResultWritable = {
@@ -1577,7 +1633,7 @@ export type PartyTransferOfferViewModelWritable = {
     status: PartyTransferOfferStatus;
     gold: number;
     troops: number;
-    items: Array<ItemStack>;
+    items: Array<ItemStackViewModel>;
 };
 
 export type PartyTransferOfferViewModelResultWritable = {
@@ -1714,6 +1770,14 @@ export type UserPrivateViewModelIListResultWritable = {
 
 export type UserPrivateViewModelResultWritable = {
     data: UserPrivateViewModel | null;
+};
+
+export type UserQuestViewModelIListResultWritable = {
+    data: Array<UserQuestViewModel> | null;
+};
+
+export type UserQuestViewModelResultWritable = {
+    data: UserQuestViewModel | null;
 };
 
 export type UserViewModelResultWritable = {
@@ -2788,6 +2852,30 @@ export type PostGamesActivityLogsResponses = {
     200: unknown;
 };
 
+export type PostGamesGameEventsData = {
+    /**
+     * The game events to insert.
+     */
+    body?: Array<GameEventViewModel>;
+    path?: never;
+    query?: never;
+    url: '/Games/game-events';
+};
+
+export type PostGamesGameEventsErrors = {
+    /**
+     * Bad Request.
+     */
+    400: unknown;
+};
+
+export type PostGamesGameEventsResponses = {
+    /**
+     * Inserted.
+     */
+    200: unknown;
+};
+
 export type GetGamesClansByIdData = {
     body?: never;
     path: {
@@ -3027,7 +3115,7 @@ export type GetPartiesSelfItemsResponses = {
     /**
      * Ok.
      */
-    200: ItemStackIListResult;
+    200: ItemStackViewModelIListResult;
 };
 
 export type GetPartiesSelfItemsResponse = GetPartiesSelfItemsResponses[keyof GetPartiesSelfItemsResponses];
@@ -3050,7 +3138,7 @@ export type PostPartiesSelfItemsResponses = {
     /**
      * Bought.
      */
-    200: ItemStackResult;
+    200: ItemStackViewModelResult;
 };
 
 export type PostPartiesSelfItemsResponse = PostPartiesSelfItemsResponses[keyof PostPartiesSelfItemsResponses];
@@ -3075,7 +3163,7 @@ export type GetPartiesByPartyIdItemsResponses = {
     /**
      * Ok.
      */
-    200: ItemStackIListResult;
+    200: ItemStackViewModelIListResult;
 };
 
 export type GetPartiesByPartyIdItemsResponse = GetPartiesByPartyIdItemsResponses[keyof GetPartiesByPartyIdItemsResponses];
@@ -3283,7 +3371,7 @@ export type GetSettlementsBySettlementIdItemsResponses = {
     /**
      * OK
      */
-    200: ItemStackIListResult;
+    200: ItemStackViewModelIListResult;
 };
 
 export type GetSettlementsBySettlementIdItemsResponse = GetSettlementsBySettlementIdItemsResponses[keyof GetSettlementsBySettlementIdItemsResponses];
@@ -3301,7 +3389,7 @@ export type PutSettlementsBySettlementIdItemsResponses = {
     /**
      * OK
      */
-    200: ItemStackArrayResult;
+    200: ItemStackViewModelArrayResult;
 };
 
 export type PutSettlementsBySettlementIdItemsResponse = PutSettlementsBySettlementIdItemsResponses[keyof PutSettlementsBySettlementIdItemsResponses];
@@ -4475,6 +4563,90 @@ export type GetUsersRewardRecentData = {
 export type GetUsersRewardRecentResponses = {
     /**
      * OK
+     */
+    200: unknown;
+};
+
+export type GetUsersSelfQuestsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/Users/self/quests';
+};
+
+export type GetUsersSelfQuestsResponses = {
+    /**
+     * OK
+     */
+    200: UserQuestViewModelIListResult;
+};
+
+export type GetUsersSelfQuestsResponse = GetUsersSelfQuestsResponses[keyof GetUsersSelfQuestsResponses];
+
+export type PutUsersSelfQuestsByIdClaimData = {
+    /**
+     * The claim request containing the character id.
+     */
+    body?: ClaimQuestRewardCommand;
+    path: {
+        /**
+         * User quest id.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/Users/self/quests/{id}/claim';
+};
+
+export type PutUsersSelfQuestsByIdClaimErrors = {
+    /**
+     * Bad Request.
+     */
+    400: unknown;
+    /**
+     * User quest not found.
+     */
+    404: unknown;
+};
+
+export type PutUsersSelfQuestsByIdClaimResponses = {
+    /**
+     * Reward claimed.
+     */
+    200: UserQuestViewModelResult;
+};
+
+export type PutUsersSelfQuestsByIdClaimResponse = PutUsersSelfQuestsByIdClaimResponses[keyof PutUsersSelfQuestsByIdClaimResponses];
+
+export type PutUsersSelfQuestsByIdRerollData = {
+    /**
+     * The reroll request.
+     */
+    body?: RerollQuestCommand;
+    path: {
+        /**
+         * User quest id.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/Users/self/quests/{id}/reroll';
+};
+
+export type PutUsersSelfQuestsByIdRerollErrors = {
+    /**
+     * Bad Request.
+     */
+    400: unknown;
+    /**
+     * User quest not found.
+     */
+    404: unknown;
+};
+
+export type PutUsersSelfQuestsByIdRerollResponses = {
+    /**
+     * Quest rerolled.
      */
     200: unknown;
 };

@@ -8,7 +8,6 @@ using Crpg.Application.Games.Models;
 using Crpg.Application.Restrictions.Commands;
 using Crpg.Application.Restrictions.Models;
 using Crpg.Domain.Entities;
-using Crpg.Domain.Entities.BattleEvents;
 using Crpg.Domain.Entities.Servers;
 using Crpg.Domain.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -75,7 +74,7 @@ public class GamesController : BaseController
     /// <response code="200">Inserted.</response>
     /// <response code="400">Bad Request.</response>
     [HttpPost("game-events")]
-    public Task<ActionResult> InsertGameEvents([FromBody] CrpgGameEvent[] battleEvents)
+    public Task<ActionResult> InsertGameEvents([FromBody] GameEventViewModel[] battleEvents)
     {
         return ResultToActionAsync(Mediator.Send(new CreateBattleEventsCommand
         {
