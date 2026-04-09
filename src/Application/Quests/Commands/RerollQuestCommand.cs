@@ -19,37 +19,23 @@ public record RerollQuestCommand : IMediatorRequest
 
     public int UserQuestId { get; init; }
 
-    internal class Handler : IMediatorRequestHandler<RerollQuestCommand>
+    internal class Handler(
+        ICrpgDbContext db,
+        IDateTime dateTime,
+        IActivityLogService activityLogService,
+        IUserNotificationService userNotificationService,
+        IQuestAssignmentService questAssignmentService,
+        Constants constants)
+        : IMediatorRequestHandler<RerollQuestCommand>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<RerollQuestCommand>();
 
-        private readonly ICrpgDbContext _db;
-        private readonly IDateTime _dateTime;
-        private readonly IActivityLogService _activityLogService;
-        private readonly IUserNotificationService _userNotificationService;
-        private readonly IQuestAssignmentService _questAssignmentService;
-        private readonly int _rerollDailyQuestPrice;
-
-        public Handler(
-            ICrpgDbContext db,
-            IDateTime dateTime,
-            IActivityLogService activityLogService,
-            IUserNotificationService userNotificationService,
-            IQuestAssignmentService questAssignmentService,
-            Constants constants)
-        {
-            _db = db;
-            _dateTime = dateTime;
-            _activityLogService = activityLogService;
-            _userNotificationService = userNotificationService;
-            _questAssignmentService = questAssignmentService;
-            _rerollDailyQuestPrice = constants.QuestRerollDailyQuestPrice;
-        }
+        private readonly int _rerollDailyQuestPrice = constants.QuestRerollDailyQuestPrice;
 
         public async ValueTask<Result> Handle(RerollQuestCommand req,
             CancellationToken cancellationToken)
         {
-            var userQuest = await _db.UserQuests
+            var userQuest = await db.UserQuests
                 .Include(uq => uq.QuestDefinition)
                 .Include(uq => uq.User!)
                 .FirstOrDefaultAsync(
@@ -66,7 +52,7 @@ public record RerollQuestCommand : IMediatorRequest
                 return new(CommonErrors.QuestRewardAlreadyClaimed(req.UserQuestId));
             }
 
-            if (userQuest.ExpiresAt <= _dateTime.UtcNow)
+            if (userQuest.ExpiresAt <= dateTime.UtcNow)
             {
                 return new(CommonErrors.QuestExpired(req.UserQuestId));
             }
@@ -84,14 +70,14 @@ public record RerollQuestCommand : IMediatorRequest
 
             user.Gold -= _rerollDailyQuestPrice;
 
-            var newUserQuest = await _questAssignmentService.ReplaceDailyUserQuestAsync(userQuest, cancellationToken);
+            var newUserQuest = await questAssignmentService.ReplaceDailyUserQuestAsync(userQuest, cancellationToken);
 
-            _db.ActivityLogs.Add(_activityLogService.CreateQuestRerolledLog(
+            db.ActivityLogs.Add(activityLogService.CreateQuestRerolledLog(
                 req.UserId, userQuest.Id, newUserQuest.Id, _rerollDailyQuestPrice));
-            _db.UserNotifications.Add(_userNotificationService.CreateQuestRerolledToUserNotification(
+            db.UserNotifications.Add(userNotificationService.CreateQuestRerolledToUserNotification(
                 req.UserId, userQuest.Id, newUserQuest.Id, _rerollDailyQuestPrice));
 
-            await _db.SaveChangesAsync(cancellationToken);
+            await db.SaveChangesAsync(cancellationToken);
             Logger.LogInformation("User '{0}' rerolled quest '{1}' to new quest '{2}' for {3} gold",
                 req.UserId, userQuest.Id, newUserQuest.Id, _rerollDailyQuestPrice);
 

@@ -123,7 +123,6 @@ internal class CrpgTrainingGroundGameMode : MissionBasedMultiplayerGameMode
                     new EquipmentControllerLeaveLogic(),
                     new CrpgUserManagerServer(crpgClient, _constants, CrpgGameMode.CRPGDuel),
                     new CrpgActivityLogsBehavior(null, chatBox, crpgClient),
-                    new CrpgSaveStatisticsBehavior(null, crpgClient),
                     new ServerMetricsBehavior(),
                     new NotAllPlayersReadyComponent(),
                     new PopulationBasedEntityVisibilityBehavior(lobbyComponent)

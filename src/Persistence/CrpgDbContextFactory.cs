@@ -58,6 +58,7 @@ public class CrpgDbContextFactory : IDesignTimeDbContextFactory<CrpgDbContext>
                         .MapEnum<NotificationState>()
                         .MapEnum<NotificationType>()
                         .MapEnum<QuestAggregationType>()
+                        .MapEnum<QuestType>()
                         .MapEnum<TerrainType>())
             .UseSnakeCaseNamingConvention()
             .Options;

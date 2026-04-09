@@ -72,6 +72,7 @@ public static class DependencyInjection
                                 .MapEnum<NotificationState>()
                                 .MapEnum<NotificationType>()
                                 .MapEnum<QuestAggregationType>()
+                                .MapEnum<QuestType>()
                                 .MapEnum<TerrainType>())
                     .UseSnakeCaseNamingConvention();
 

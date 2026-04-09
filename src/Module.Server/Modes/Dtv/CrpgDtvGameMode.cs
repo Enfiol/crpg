@@ -156,6 +156,7 @@ internal class CrpgDtvGameMode : MissionBasedMultiplayerGameMode
                 new DrowningBehavior(),
                 new PopulationBasedEntityVisibilityBehavior(lobbyComponent),
                 new CrpgCommanderBehaviorServer(),
+                new CrpgSaveStatisticsBehavior(warmupComponent, crpgClient),
                 new FriendlyFireReportServerBehavior(), // Ctrl+M to report friendly fire
 #else
                 new MultiplayerAchievementComponent(),

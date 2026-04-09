@@ -27,8 +27,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crpg.Persistence.Migrations
 {
     [DbContext(typeof(CrpgDbContext))]
-    [Migration("20260405150308_DailyQuests")]
-    partial class DailyQuests
+    [Migration("20260409135255_AddQuests")]
+    partial class AddQuests
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,7 @@ namespace Crpg.Persistence.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "party_transfer_offer_status", new[] { "intent", "pending" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "platform", new[] { "epic_games", "microsoft", "steam" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "quest_aggregation_type", new[] { "count", "sum", "unknown" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "quest_type", new[] { "daily", "unknown", "weekly" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "region", new[] { "as", "eu", "na", "oc" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "restriction_type", new[] { "all", "chat", "join" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "role", new[] { "admin", "game_admin", "moderator", "user" });
@@ -1356,6 +1357,10 @@ namespace Crpg.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sum_field");
 
+                    b.Property<QuestType>("Type")
+                        .HasColumnType("quest_type")
+                        .HasColumnName("type");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -1402,6 +1407,12 @@ namespace Crpg.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
 
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
                     b.HasKey("Id")
                         .HasName("pk_user_quests");
 
@@ -1412,6 +1423,47 @@ namespace Crpg.Persistence.Migrations
                         .HasDatabaseName("ix_user_quests_user_id");
 
                     b.ToTable("user_quests", (string)null);
+                });
+
+            modelBuilder.Entity("Crpg.Domain.Entities.Quests.WeeklyQuestAssignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("assigned_at");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<int>("QuestDefinitionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("quest_definition_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_weekly_quest_assignments");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("ix_weekly_quest_assignments_expires_at");
+
+                    b.HasIndex("QuestDefinitionId")
+                        .HasDatabaseName("ix_weekly_quest_assignments_quest_definition_id");
+
+                    b.ToTable("weekly_quest_assignments", (string)null);
                 });
 
             modelBuilder.Entity("Crpg.Domain.Entities.Restrictions.Restriction", b =>
@@ -2840,6 +2892,18 @@ namespace Crpg.Persistence.Migrations
                     b.Navigation("QuestDefinition");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Crpg.Domain.Entities.Quests.WeeklyQuestAssignment", b =>
+                {
+                    b.HasOne("Crpg.Domain.Entities.Quests.QuestDefinition", "QuestDefinition")
+                        .WithMany()
+                        .HasForeignKey("QuestDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_weekly_quest_assignments_quest_definitions_quest_definition");
+
+                    b.Navigation("QuestDefinition");
                 });
 
             modelBuilder.Entity("Crpg.Domain.Entities.Restrictions.Restriction", b =>

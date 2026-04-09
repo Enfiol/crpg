@@ -123,6 +123,7 @@ internal class CrpgDuelGameMode : MissionBasedMultiplayerGameMode
                     new ServerMetricsBehavior(),
                     new NotAllPlayersReadyComponent(),
                     new PopulationBasedEntityVisibilityBehavior(lobbyComponent),
+                    new CrpgSaveStatisticsBehavior(null, crpgClient),
 #else
                     new MultiplayerAchievementComponent(),
                     MissionMatchHistoryComponent.CreateIfConditionsAreMet(),

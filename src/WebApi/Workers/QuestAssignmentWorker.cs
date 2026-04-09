@@ -3,16 +3,9 @@ using Mediator;
 
 namespace Crpg.WebApi.Workers;
 
-public class QuestAssignmentWorker : BackgroundService
+public class QuestAssignmentWorker(IServiceScopeFactory serviceScopeFactory) : BackgroundService
 {
     private static readonly ILogger Logger = Logging.LoggerFactory.CreateLogger<QuestAssignmentWorker>();
-
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-
-    public QuestAssignmentWorker(IServiceScopeFactory serviceScopeFactory)
-    {
-        _serviceScopeFactory = serviceScopeFactory;
-    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -33,7 +26,7 @@ public class QuestAssignmentWorker : BackgroundService
     {
         try
         {
-            using var scope = _serviceScopeFactory.CreateScope();
+            using var scope = serviceScopeFactory.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
             Logger.LogInformation("Assigning daily quests to all users");

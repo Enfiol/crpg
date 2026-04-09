@@ -208,7 +208,7 @@ public record GetGameUserCommand : IMediatorRequest<GameUserViewModel>
 
                 _db.ActivityLogs.Add(_activityLogService.CreateCharacterCreatedLog(user.Id, user.ActiveCharacter.Id));
                 await _db.SaveChangesAsync(cancellationToken);
-                await _questAssignmentService.AssignDailyQuestsToNewUserAsync(user.Id, cancellationToken);
+                await _questAssignmentService.AssignQuestsToNewUserAsync(user.Id, cancellationToken);
             }
             else
             {

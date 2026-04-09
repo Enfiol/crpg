@@ -58,6 +58,7 @@ namespace Crpg.Persistence.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "party_transfer_offer_status", new[] { "intent", "pending" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "platform", new[] { "epic_games", "microsoft", "steam" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "quest_aggregation_type", new[] { "count", "sum", "unknown" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "quest_type", new[] { "daily", "unknown", "weekly" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "region", new[] { "as", "eu", "na", "oc" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "restriction_type", new[] { "all", "chat", "join" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "role", new[] { "admin", "game_admin", "moderator", "user" });
@@ -1353,10 +1354,8 @@ namespace Crpg.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sum_field");
 
-                    b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
+                    b.Property<QuestType>("Type")
+                        .HasColumnType("quest_type")
                         .HasColumnName("type");
 
                     b.Property<DateTime>("UpdatedAt")

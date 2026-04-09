@@ -11,4 +11,5 @@ public record QuestDefinitionViewModel : IMapFrom<QuestDefinition>
     public int RequiredValue { get; init; }
     public int RewardGold { get; init; }
     public int RewardExperience { get; init; }
+    public QuestType Type { get; set; }
 }

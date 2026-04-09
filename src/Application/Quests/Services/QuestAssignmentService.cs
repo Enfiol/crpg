@@ -11,12 +11,14 @@ public class QuestAssignmentService : IQuestAssignmentService
     private readonly int _weeklyQuestsPerUser;
     private readonly ICrpgDbContext _db;
 
-    public QuestAssignmentService(ICrpgDbContext db,  Constants constants)
+    public QuestAssignmentService(ICrpgDbContext db, Constants constants)
     {
         _dailyQuestsPerUser = constants.QuestDailyQuestsPerUser;
         _weeklyQuestsPerUser = constants.QuestWeeklyQuestsPerUser;
         _db = db;
     }
+
+
 
     public async Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
@@ -66,11 +68,9 @@ public class QuestAssignmentService : IQuestAssignmentService
 
     public async Task AssignWeeklyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
-        // Delete expired weekly quests (same condition as daily - expired quests are deleted)
         await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ExecuteDeleteAsync(cancellationToken);
-
-        // Delete expired weekly quest assignments
-        await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date).ExecuteDeleteAsync(cancellationToken);
+        await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date)
+            .ExecuteDeleteAsync(cancellationToken);
 
         var userIds = await _db.Users
             .Where(u => u.Characters.Any())
@@ -81,24 +81,20 @@ public class QuestAssignmentService : IQuestAssignmentService
             .Where(qd => qd.IsActive && qd.Type == QuestType.Weekly)
             .ToListAsync(cancellationToken);
 
-        if (!availableWeeklyDefinitions.Any())
+        if (availableWeeklyDefinitions.Count == 0)
         {
-            return; // No weekly quest definitions available
+            return;
         }
 
-        // Get current active weekly quest assignments (for this week)
         var currentWeeklyAssignments = await _db.WeeklyQuestAssignments
             .Where(wqa => wqa.ExpiresAt > DateTime.UtcNow)
             .Select(wqa => wqa.QuestDefinitionId)
             .ToListAsync(cancellationToken);
 
         List<int> selectedWeeklyQuestIds;
-        if (currentWeeklyAssignments.Any())
-        {
-            // Use existing assignments for this week
-            selectedWeeklyQuestIds = currentWeeklyAssignments.Take(_weeklyQuestsPerUser).ToList();
-        }
-        else
+        var now = DateTime.UtcNow;
+        var expiresAt = NextMonday(now.Date);
+        if (currentWeeklyAssignments.Count == 0)
         {
             // Create new weekly assignments for this week
             selectedWeeklyQuestIds = availableWeeklyDefinitions
@@ -107,18 +103,20 @@ public class QuestAssignmentService : IQuestAssignmentService
                 .Select(q => q.Id)
                 .ToList();
 
-            var now = DateTime.UtcNow;
-            var expiresAt = now.Date.AddDays(7);
-            foreach (var questId in selectedWeeklyQuestIds)
+
+            foreach (int questId in selectedWeeklyQuestIds)
             {
                 var assignment = new WeeklyQuestAssignment
                 {
-                    QuestDefinitionId = questId,
-                    AssignedAt = now,
-                    ExpiresAt = expiresAt,
+                    QuestDefinitionId = questId, AssignedAt = now, ExpiresAt = expiresAt,
                 };
                 _db.WeeklyQuestAssignments.Add(assignment);
             }
+        }
+        else
+        {
+            // Use existing assignments for this week
+            selectedWeeklyQuestIds = currentWeeklyAssignments;
         }
 
         // Get existing weekly quests per user to avoid duplicates
@@ -143,14 +141,14 @@ public class QuestAssignmentService : IQuestAssignmentService
                 .Where(q => !existingWeeklyQuestIds.Contains(q))
                 .Take(questsToAddCount);
 
-            foreach (var questDefinitionId in questsToAssign)
+            foreach (int questDefinitionId in questsToAssign)
             {
                 var userQuest = new UserQuest
                 {
                     UserId = userId,
                     QuestDefinitionId = questDefinitionId,
                     IsRewardClaimed = false,
-                    ExpiresAt = DateTime.UtcNow.Date.AddDays(7), // Weekly quests expire in 7 days
+                    ExpiresAt = expiresAt,
                 };
                 _db.UserQuests.Add(userQuest);
             }
@@ -159,12 +157,11 @@ public class QuestAssignmentService : IQuestAssignmentService
         await _db.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task AssignDailyQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task AssignQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default)
     {
-        // Delete any existing quests for the user (should be none, but just in case)
+        // Daily
         await _db.UserQuests.Where(uq => uq.UserId == userId).ExecuteDeleteAsync(cancellationToken);
 
-        // Assign daily quests
         var availableDailyDefinitions = await _db.QuestDefinitions
             .Where(qd => qd.IsActive && qd.Type == QuestType.Daily)
             .ToListAsync(cancellationToken);
@@ -183,80 +180,23 @@ public class QuestAssignmentService : IQuestAssignmentService
             _db.UserQuests.Add(userQuest);
         }
 
-        // Assign weekly quests - use the current weekly quest assignments for this week
+        // Weekly
         var currentWeeklyAssignments = await _db.WeeklyQuestAssignments
             .Where(wqa => wqa.ExpiresAt > DateTime.UtcNow)
             .Select(wqa => wqa.QuestDefinitionId)
             .Take(_weeklyQuestsPerUser)
             .ToListAsync(cancellationToken);
 
-        if (currentWeeklyAssignments.Any())
+        if (currentWeeklyAssignments.Count != 0)
         {
-            // Take up to the configured number of weekly quests per user
-            foreach (var questDefinitionId in currentWeeklyAssignments)
+            foreach (int questDefinitionId in currentWeeklyAssignments)
             {
                 var userQuest = new UserQuest
                 {
                     UserId = userId,
                     QuestDefinitionId = questDefinitionId,
                     IsRewardClaimed = false,
-                    ExpiresAt = DateTime.UtcNow.Date.AddDays(7),
-                };
-                _db.UserQuests.Add(userQuest);
-            }
-        }
-        else
-        {
-            // If no active weekly assignments exist (e.g., before Monday assignment), fall back to random selection
-            var availableWeeklyDefinitions = await _db.QuestDefinitions
-                .Where(qd => qd.IsActive && qd.Type == QuestType.Weekly)
-                .ToListAsync(cancellationToken);
-
-            if (availableWeeklyDefinitions.Any())
-            {
-                var selectedWeeklyQuests = availableWeeklyDefinitions.Shuffle().Take(_weeklyQuestsPerUser).ToList();
-                foreach (var definition in selectedWeeklyQuests)
-                {
-                    var userQuest = new UserQuest
-                    {
-                        UserId = userId,
-                        QuestDefinitionId = definition.Id,
-                        IsRewardClaimed = false,
-                        ExpiresAt = DateTime.UtcNow.Date.AddDays(7),
-                    };
-                    _db.UserQuests.Add(userQuest);
-                }
-            }
-        }
-
-        await _db.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task AssignWeeklyQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default)
-    {
-        // Delete any existing weekly quests for the user
-        await _db.UserQuests
-            .Where(uq => uq.UserId == userId && uq.QuestDefinition!.Type == QuestType.Weekly)
-            .ExecuteDeleteAsync(cancellationToken);
-
-        // Use the current weekly quest assignments for this week
-        var currentWeeklyAssignments = await _db.WeeklyQuestAssignments
-            .Where(wqa => wqa.ExpiresAt > DateTime.UtcNow)
-            .Select(wqa => wqa.QuestDefinitionId)
-            .Take(_weeklyQuestsPerUser)
-            .ToListAsync(cancellationToken);
-
-        if (currentWeeklyAssignments.Any())
-        {
-            // Take up to the configured number of weekly quests per user
-            foreach (var questDefinitionId in currentWeeklyAssignments)
-            {
-                var userQuest = new UserQuest
-                {
-                    UserId = userId,
-                    QuestDefinitionId = questDefinitionId,
-                    IsRewardClaimed = false,
-                    ExpiresAt = DateTime.UtcNow.Date.AddDays(7),
+                    ExpiresAt = NextMonday(DateTime.UtcNow.Date),
                 };
                 _db.UserQuests.Add(userQuest);
             }
@@ -265,13 +205,14 @@ public class QuestAssignmentService : IQuestAssignmentService
         await _db.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<UserQuest> ReplaceDailyUserQuestAsync(UserQuest userQuest, CancellationToken cancellationToken = default)
+    public async Task<UserQuest> ReplaceDailyUserQuestAsync(UserQuest userQuest,
+        CancellationToken cancellationToken = default)
     {
         var questDefinitions = await _db.QuestDefinitions
             .Where(qd => qd.IsActive && userQuest.QuestDefinition!.Id != qd.Id)
             .ToListAsync(cancellationToken);
 
-        var randomQuestDefinition = questDefinitions.Shuffle().FirstOrDefault() ?? throw new Exception("No quest definition found");
+        var randomQuestDefinition = questDefinitions.Shuffle().Single();
 
         var newUserQuest = new UserQuest
         {
@@ -286,5 +227,11 @@ public class QuestAssignmentService : IQuestAssignmentService
         await _db.SaveChangesAsync(cancellationToken);
 
         return newUserQuest;
+    }
+
+    private static DateTime NextMonday(DateTime date)
+    {
+        int daysUntilMonday = ((int)DayOfWeek.Monday - (int)date.DayOfWeek + 7) % 7;
+        return date.AddDays(daysUntilMonday == 0 ? 7 : daysUntilMonday);
     }
 }

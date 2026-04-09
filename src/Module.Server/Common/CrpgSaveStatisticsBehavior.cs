@@ -86,7 +86,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         }
 
         // Don't process self-hits or team hits for statistics
-        if (affectedAgent == affectorAgent) // disabled for testing || affectedAgent.Team == affectorAgent.Team)
+        if (affectedAgent == affectorAgent || affectedAgent.Team == affectorAgent.Team)
         {
             return;
         }
@@ -262,7 +262,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         }
 
         // Don't process self-kills or team kills for statistics
-        if (affectedAgent == affectorAgent) // DEBUG || affectedAgent.Team == affectorAgent.Team)
+        if (affectedAgent == affectorAgent || affectedAgent.Team == affectorAgent.Team)
         {
             return;
         }

@@ -158,6 +158,7 @@ internal class CrpgTeamDeathmatchGameMode : MissionBasedMultiplayerGameMode
                 new CrpgCustomTeamBannersAndNamesServer(null),
                 new CrpgCommanderBehaviorServer(),
                 new CrpgRespawnTimerServer(teamDeathmatchServer, spawnBehavior),
+                new CrpgSaveStatisticsBehavior(warmupComponent, crpgClient),
                 new FriendlyFireReportServerBehavior(), // Ctrl+M to report friendly fire
 #else
                 new MultiplayerAchievementComponent(),

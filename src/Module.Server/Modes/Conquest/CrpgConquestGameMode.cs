@@ -154,6 +154,7 @@ internal class CrpgConquestGameMode : MissionBasedMultiplayerGameMode
                 new CrpgCommanderBehaviorServer(),
                 new FriendlyFireReportServerBehavior(), // Ctrl+M to report friendly fire
                 new CrpgRespawnTimerServer(conquestServer, spawnBehavior),
+                new CrpgSaveStatisticsBehavior(warmupComponent, crpgClient),
 #else
                 new MultiplayerAchievementComponent(),
                 MissionMatchHistoryComponent.CreateIfConditionsAreMet(),
