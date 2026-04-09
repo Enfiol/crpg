@@ -23,5 +23,6 @@ public class CrpgGameEvent
         Damage,
         TargetType,
         BodyPart,
+        DamageType,
     }
 }

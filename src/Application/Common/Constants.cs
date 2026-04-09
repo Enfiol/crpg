@@ -81,4 +81,7 @@ public class Constants
     public int CampaignMercenaryMaxWage { get; set; }
     public int CampaignMercenaryNoteMaxLength { get; set; }
     public int CampaignBattleSideBriefingNoteMaxLength { get; set; }
+    public int QuestDailyQuestsPerUser { get; set; }
+    public int QuestWeeklyQuestsPerUser { get; set; }
+    public int QuestRerollDailyQuestPrice { get; set; }
 }

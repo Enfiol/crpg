@@ -29,5 +29,6 @@ public class CrpgGameEvent : AuditableEntity
         Damage,
         TargetType,
         BodyPart,
+        DamageType,
     }
 }

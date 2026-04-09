@@ -33,6 +33,7 @@ public partial class DailyQuests : Migration
                 user_id = table.Column<int>(type: "integer", nullable: true),
                 type = table.Column<int>(type: "integer", nullable: false),
                 event_data = table.Column<string>(type: "jsonb", nullable: true),
+                version = table.Column<uint>(name: "xmin", type: "xid", rowVersion: true, nullable: false, defaultValue: 0u),
                 updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                 created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
             },

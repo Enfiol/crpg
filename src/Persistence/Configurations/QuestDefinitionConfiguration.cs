@@ -30,6 +30,9 @@ public class QuestDefinitionConfiguration : IEntityTypeConfiguration<QuestDefini
         builder.Property(qd => qd.IsActive)
             .HasDefaultValue(true);
 
+        builder.Property(qd => qd.Type)
+            .HasDefaultValue(QuestType.Daily);
+
         builder.HasIndex(qd => qd.IsActive);
     }
 }

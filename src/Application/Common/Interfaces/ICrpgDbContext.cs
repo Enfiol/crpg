@@ -56,6 +56,7 @@ public interface ICrpgDbContext
     DbSet<Setting> Settings { get; set; }
     DbSet<QuestDefinition> QuestDefinitions { get; set; }
     DbSet<UserQuest> UserQuests { get; set; }
+    DbSet<WeeklyQuestAssignment> WeeklyQuestAssignments { get; set; }
 
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

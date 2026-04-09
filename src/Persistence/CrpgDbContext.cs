@@ -74,6 +74,7 @@ public class CrpgDbContext : DbContext, ICrpgDbContext
     public DbSet<Setting> Settings { get; set; } = default!;
     public DbSet<QuestDefinition> QuestDefinitions { get; set; } = default!;
     public DbSet<UserQuest> UserQuests { get; set; } = default!;
+    public DbSet<WeeklyQuestAssignment> WeeklyQuestAssignments { get; set; } = default!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

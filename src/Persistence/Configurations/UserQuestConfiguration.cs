@@ -18,6 +18,7 @@ public class UserQuestConfiguration : IEntityTypeConfiguration<UserQuest>
             .HasForeignKey(uq => uq.QuestDefinitionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(uq => uq.Version).IsRowVersion();
         builder.HasIndex(uq => uq.UserId);
     }
 }

@@ -14,11 +14,24 @@ public interface IQuestAssignmentService
     Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Assigns weekly quests to all users.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task AssignWeeklyQuestsToAllUsersAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Assign quests to new users.
     /// </summary>
     /// <param name="userId">User id.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     Task AssignDailyQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Assign weekly quests to new users.
+    /// </summary>
+    /// <param name="userId">User id.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task AssignWeeklyQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Reroll selected quest.

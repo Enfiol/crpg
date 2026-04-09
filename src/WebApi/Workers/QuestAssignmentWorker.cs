@@ -18,18 +18,18 @@ public class QuestAssignmentWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await AssignDailyQuestsAsync(stoppingToken);
+            await AssignQuestsAsync(stoppingToken);
 
             var now = DateTime.UtcNow;
             var nextRun = now.Date.AddDays(1); // Next midnight UTC
             var delay = nextRun - now;
 
-            Logger.LogInformation("Next daily quest assignment scheduled at {NextRun} (in {Delay})", nextRun, delay);
+            Logger.LogInformation("Next quest assignment scheduled at {NextRun} (in {Delay})", nextRun, delay);
             await Task.Delay(delay, stoppingToken);
         }
     }
 
-    private async Task AssignDailyQuestsAsync(CancellationToken cancellationToken)
+    private async Task AssignQuestsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -39,10 +39,15 @@ public class QuestAssignmentWorker : BackgroundService
             Logger.LogInformation("Assigning daily quests to all users");
             await mediator.Send(new AssignDailyQuestsToAllUsersCommand(), cancellationToken);
             Logger.LogInformation("Daily quests assigned");
+
+
+            Logger.LogInformation("Assigning weekly quests to all users");
+            await mediator.Send(new AssignWeeklyQuestsToAllUsersCommand(), cancellationToken);
+            Logger.LogInformation("Weekly quests assigned");
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "An error occurred while assigning daily quests");
+            Logger.LogError(e, "An error occurred while assigning quests");
         }
     }
 }
