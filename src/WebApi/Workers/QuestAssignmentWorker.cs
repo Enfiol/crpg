@@ -33,7 +33,6 @@ public class QuestAssignmentWorker(IServiceScopeFactory serviceScopeFactory) : B
             await mediator.Send(new AssignDailyQuestsToAllUsersCommand(), cancellationToken);
             Logger.LogInformation("Daily quests assigned");
 
-
             Logger.LogInformation("Assigning weekly quests to all users");
             await mediator.Send(new AssignWeeklyQuestsToAllUsersCommand(), cancellationToken);
             Logger.LogInformation("Weekly quests assigned");

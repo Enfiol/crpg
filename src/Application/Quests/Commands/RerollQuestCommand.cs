@@ -15,15 +15,16 @@ namespace Crpg.Application.Quests.Commands;
 
 public record RerollQuestCommand : IMediatorRequest
 {
-    [JsonIgnore] public int UserId { get; init; }
+    [JsonIgnore]
+    public int UserId { get; init; }
 
+    [JsonIgnore]
     public int UserQuestId { get; init; }
 
     internal class Handler(
         ICrpgDbContext db,
         IDateTime dateTime,
         IActivityLogService activityLogService,
-        IUserNotificationService userNotificationService,
         IQuestAssignmentService questAssignmentService,
         Constants constants)
         : IMediatorRequestHandler<RerollQuestCommand>
@@ -73,8 +74,6 @@ public record RerollQuestCommand : IMediatorRequest
             var newUserQuest = await questAssignmentService.ReplaceDailyUserQuestAsync(userQuest, cancellationToken);
 
             db.ActivityLogs.Add(activityLogService.CreateQuestRerolledLog(
-                req.UserId, userQuest.Id, newUserQuest.Id, _rerollDailyQuestPrice));
-            db.UserNotifications.Add(userNotificationService.CreateQuestRerolledToUserNotification(
                 req.UserId, userQuest.Id, newUserQuest.Id, _rerollDailyQuestPrice));
 
             await db.SaveChangesAsync(cancellationToken);

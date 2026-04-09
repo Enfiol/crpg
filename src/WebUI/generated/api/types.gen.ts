@@ -569,6 +569,7 @@ export type GameEventViewModel = {
         Damage?: string;
         TargetType?: string;
         BodyPart?: string;
+        DamageType?: string;
     } | null;
 };
 
@@ -952,16 +953,19 @@ export type Platform = 'Steam' | 'EpicGames' | 'Microsoft';
 
 export type QuestDefinitionViewModel = {
     id: number;
-    name?: {
+    type: QuestType;
+    name: {
         [key: string]: string;
     } | null;
-    description?: {
+    description: {
         [key: string]: string;
     } | null;
     requiredValue: number;
     rewardGold: number;
     rewardExperience: number;
 };
+
+export type QuestType = 'Daily' | 'Weekly';
 
 export type RefundItemCommand = {
     itemId: string;
@@ -976,10 +980,6 @@ export type RemoveBattleFighterApplicationCommand = {
 
 export type RemoveBattleMercenaryApplicationCommand = {
     side: BattleSide;
-};
-
-export type RerollQuestCommand = {
-    [key: string]: never;
 };
 
 export type RespondClanInvitationCommand = {
@@ -1320,11 +1320,10 @@ export type UserPublicViewModel = {
 
 export type UserQuestViewModel = {
     id: number;
-    questDefinitionId: number;
     isRewardClaimed: boolean;
     expiresAt: Date;
     currentValue: number;
-    questDefinition?: QuestDefinitionViewModel | null;
+    questDefinition: QuestDefinitionViewModel;
 };
 
 export type UserQuestViewModelIListResult = {
@@ -4619,10 +4618,7 @@ export type PutUsersSelfQuestsByIdClaimResponses = {
 export type PutUsersSelfQuestsByIdClaimResponse = PutUsersSelfQuestsByIdClaimResponses[keyof PutUsersSelfQuestsByIdClaimResponses];
 
 export type PutUsersSelfQuestsByIdRerollData = {
-    /**
-     * The reroll request.
-     */
-    body?: RerollQuestCommand;
+    body?: never;
     path: {
         /**
          * User quest id.

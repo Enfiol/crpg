@@ -27,11 +27,6 @@ const items = computed<DropdownMenuItem[][]>(() => [
       slot: 'notifications' as const,
     },
     {
-      label: 'Quests',
-      icon: 'crpg:quest',
-      to: { name: 'quests' },
-    },
-    {
       label: t('setting.settings'),
       icon: 'crpg:settings',
       to: { name: 'settings' },

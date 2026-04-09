@@ -1,18 +1,16 @@
-import type { UserQuestViewModel } from '#api/types.gen'
-
 import {
   getUsersSelfQuests,
   putUsersSelfQuestsByIdClaim,
   putUsersSelfQuestsByIdReroll,
 } from '#api/sdk.gen'
 
-export type { UserQuestViewModel }
+import type { UserQuest } from '~/models/quest'
 
-export const getUserQuests = async (): Promise<UserQuestViewModel[]> =>
+export const getUserQuests = async (): Promise<UserQuest[]> =>
   (await getUsersSelfQuests({})).data!
 
-export const claimQuestReward = async (questId: number, characterId: number): Promise<UserQuestViewModel> =>
-  (await putUsersSelfQuestsByIdClaim({ path: { id: questId }, body: { characterId } })).data!
+export const claimQuestReward = (questId: number, characterId: number) =>
+  putUsersSelfQuestsByIdClaim({ path: { id: questId }, body: { characterId } })
 
 export const rerollQuest = (questId: number) =>
-  putUsersSelfQuestsByIdReroll({ path: { id: questId }, body: {} })
+  putUsersSelfQuestsByIdReroll({ path: { id: questId } })

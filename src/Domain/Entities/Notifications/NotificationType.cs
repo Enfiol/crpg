@@ -17,6 +17,4 @@ public enum NotificationType
     BattleMercenaryApplicationAccepted,
     BattleMercenaryApplicationDeclined,
     BattleParticipantKickedToExParticipant,
-    QuestRewardClaimedToUser,
-    QuestRerolledToUser,
 }
