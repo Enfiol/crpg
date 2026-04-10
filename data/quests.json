@@ -15,9 +15,9 @@
     "eventFiltersJson": [{}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1000,
-    "rewardExperience": 10000,
+    "requiredValue": 1500,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -37,9 +37,9 @@
     "eventFiltersJson": [{"WeaponType":"OneHandedSword"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1000,
-    "rewardExperience": 10000,
+    "requiredValue": 750,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -59,9 +59,9 @@
     "eventFiltersJson": [{"WeaponType":"OneHandedAxe"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1000,
-    "rewardExperience": 10000,
+    "requiredValue": 750,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -81,9 +81,9 @@
     "eventFiltersJson": [{"WeaponType":"TwoHandedSword"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1200,
-    "rewardExperience": 12000,
+    "requiredValue": 750,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -103,9 +103,9 @@
     "eventFiltersJson": [{"WeaponType":"OneHandedPolearm"},{"WeaponType":"TwoHandedPolearm"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1100,
-    "rewardExperience": 11000,
+    "requiredValue": 1000,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -125,9 +125,9 @@
     "eventFiltersJson": [{"WeaponType":"Bow"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1300,
-    "rewardExperience": 13000,
+    "requiredValue": 1250,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -147,9 +147,9 @@
     "eventFiltersJson": [{"WeaponType":"Crossbow"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1300,
-    "rewardExperience": 13000,
+    "requiredValue": 1250,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -169,9 +169,9 @@
     "eventFiltersJson": [{"BodyPart":"Head"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 50,
-    "rewardGold": 1500,
-    "rewardExperience": 15000,
+    "requiredValue": 500,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -191,9 +191,9 @@
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 5,
-    "rewardGold": 2000,
-    "rewardExperience": 20000,
+    "requiredValue": 20,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -210,12 +210,12 @@
       "ru": "Убейте противников выстрелами в голову"
     },
     "eventType": "Kill",
-    "eventFiltersJson": [{"BodyPart":"Head"}],
+    "eventFiltersJson": [{"BodyPart":"Head", "HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 3,
-    "rewardGold": 2500,
-    "rewardExperience": 25000,
+    "requiredValue": 5,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -235,9 +235,9 @@
     "eventFiltersJson": [{"HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 4,
-    "rewardGold": 2200,
-    "rewardExperience": 22000,
+    "requiredValue": 15,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -257,9 +257,9 @@
     "eventFiltersJson": [{"HitType":"Melee"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 5,
-    "rewardGold": 1800,
-    "rewardExperience": 18000,
+    "requiredValue": 10,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -279,9 +279,9 @@
     "eventFiltersJson": [{"WeaponType":"SmallShield"}, {"WeaponType":"LargeShield"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 10,
-    "rewardGold": 1500,
-    "rewardExperience": 15000,
+    "requiredValue": 80,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -301,9 +301,9 @@
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 20,
-    "rewardGold": 1800,
-    "rewardExperience": 18000,
+    "requiredValue": 200,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -323,9 +323,9 @@
     "eventFiltersJson": [{"WeaponType":"ThrowingAxe"}, {"WeaponType":"ThrowingKnife"}, {"WeaponType":"Javelin"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 80,
-    "rewardGold": 1400,
-    "rewardExperience": 14000,
+    "requiredValue": 500,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -342,12 +342,12 @@
       "ru": "Нанесите урон булавой"
     },
     "eventType": "Hit",
-    "eventFiltersJson": [{"WeaponType":"Mace"}],
+    "eventFiltersJson": [{"WeaponType":"Mace"},{"WeaponType": "TwoHandedMace"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 100,
-    "rewardGold": 1100,
-    "rewardExperience": 11000,
+    "requiredValue": 750,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -367,9 +367,9 @@
     "eventFiltersJson": [{"BodyPart":"Legs"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 60,
-    "rewardGold": 1200,
-    "rewardExperience": 12000,
+    "requiredValue": 500,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -389,9 +389,9 @@
     "eventFiltersJson": [{"WeaponType":"OneHandedSword"}, {"WeaponType":"TwoHandedSword"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 4,
-    "rewardGold": 2000,
-    "rewardExperience": 20000,
+    "requiredValue": 10,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -411,9 +411,9 @@
     "eventFiltersJson": [{"HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 8,
-    "rewardGold": 1600,
-    "rewardExperience": 16000,
+    "requiredValue": 30,
+    "rewardGold": 3000,
+    "rewardExperience": 100000,
     "isActive": true,
     "type": "Daily"
   },
@@ -433,9 +433,9 @@
     "eventFiltersJson": [{}],
     "aggregationType": "Sum",
     "sumField": "Damage",
-    "requiredValue": 500,
-    "rewardGold": 5000,
-    "rewardExperience": 50000,
+    "requiredValue": 5000,
+    "rewardGold": 10000,
+    "rewardExperience": 350000,
     "isActive": true,
     "type": "Weekly"
   },
@@ -455,9 +455,9 @@
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 25,
+    "requiredValue": 100,
     "rewardGold": 10000,
-    "rewardExperience": 100000,
+    "rewardExperience": 350000,
     "isActive": true,
     "type": "Weekly"
   },
@@ -477,9 +477,75 @@
     "eventFiltersJson": [{"BodyPart":"Head", "HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
-    "requiredValue": 15,
-    "rewardGold": 12000,
-    "rewardExperience": 120000,
+    "requiredValue": 25,
+    "rewardGold": 10000,
+    "rewardExperience": 350000,
+    "isActive": true,
+    "type": "Weekly"
+  },
+  {
+    "id": 24,
+    "name":
+    {
+      "en": "Weekly Titan's Grip",
+      "ru": "Хватка титана (неделя)"
+    },
+    "description":
+    {
+      "en": "Kill enemies with two handed weapon",
+      "ru": "Убейте противников двуручным оружием"
+    },
+    "eventType": "Kill",
+    "eventFiltersJson": [{"WeaponType":"TwoHandedSword"},{"WeaponType":"TwoHandedAxe"},{"WeaponType":"TwoHandedMace"},{"WeaponType":"TwoHandedPolearm"}],
+    "aggregationType": "Count",
+    "sumField": null,
+    "requiredValue": 50,
+    "rewardGold": 10000,
+    "rewardExperience": 350000,
+    "isActive": true,
+    "type": "Weekly"
+  },
+  {
+    "id": 25,
+    "name":
+    {
+      "en": "Weekly Ready, aim, fire",
+      "ru": "Готовься, целься, пли (неделя)"
+    },
+    "description":
+    {
+      "en": "Deal massive damage to enemies with pistol or musket",
+      "ru": "Нанесите огромный урон противникам используя пистоль или мушкет"
+    },
+    "eventType": "Hit",
+    "eventFiltersJson": [{"WeaponType":"Pistol"},{"WeaponType":"Musket"}],
+    "aggregationType": "Sum",
+    "sumField": "Damage",
+    "requiredValue": 5000,
+    "rewardGold": 10000,
+    "rewardExperience": 350000,
+    "isActive": true,
+    "type": "Weekly"
+  },
+  {
+    "id": 26,
+    "name":
+    {
+      "en": "Weekly Shield wall",
+      "ru": "Стена щитов (неделя)"
+    },
+    "description":
+    {
+      "en": "Block a large number of attacks with your shield",
+      "ru": "Заблокируйте большое количество атак щитом"
+    },
+    "eventType": "Block",
+    "eventFiltersJson": [{"WeaponType":"SmallShield"},{"WeaponType":"LargeShield"}],
+    "aggregationType": "Count",
+    "sumField": null,
+    "requiredValue": 500,
+    "rewardGold": 10000,
+    "rewardExperience": 350000,
     "isActive": true,
     "type": "Weekly"
   }
