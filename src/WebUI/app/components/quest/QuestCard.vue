@@ -3,6 +3,7 @@ import { questRerollDailyQuestPrice } from '~root/data/constants.json'
 
 import type { UserQuest } from '~/models/quest'
 
+import { useQuestDescription } from '~/composables/quest/use-quest-description'
 import { QUEST_TYPE } from '~/models/quest'
 
 const { quest } = defineProps<{
@@ -14,15 +15,7 @@ defineEmits<{
   rerollQuest: [questId: number]
 }>()
 
-const { locale } = useI18n()
-
-function getQuestName(quest: UserQuest): string {
-  return quest.questDefinition?.name?.[locale.value] ?? quest.questDefinition?.name?.en ?? '—'
-}
-
-function getQuestDescription(quest: UserQuest): string {
-  return quest.questDefinition?.description?.[locale.value] ?? quest.questDefinition?.description?.en ?? ''
-}
+const { questName, questDescription } = useQuestDescription(() => quest)
 
 function progressPercent(quest: UserQuest): number {
   const required = quest.questDefinition?.requiredValue ?? 1
@@ -48,8 +41,8 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
     <template #header>
       <div class="flex items-start justify-between gap-2">
         <UiDataContent
-          :label="getQuestName(quest)"
-          :caption="getQuestDescription(quest)"
+          :label="questName"
+          :caption="questDescription"
         />
 
         <div class="flex shrink-0 items-center gap-2">

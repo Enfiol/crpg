@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Crpg.Application.Common.Mappings;
 using Crpg.Domain.Entities.Quests;
+using static Crpg.Domain.Entities.BattleEvents.CrpgGameEvent;
 
 namespace Crpg.Application.Quests.Models;
 
@@ -8,12 +9,15 @@ public record QuestDefinitionViewModel : IMapFrom<QuestDefinition>
 {
     public int Id { get; init; }
     public QuestType Type { get; set; }
+    public EventType EventType { get; init; }
+    public QuestAggregationType AggregationType { get; init; }
 
     [JsonRequired]
-    public Dictionary<string, string>? Name { get; init; }
+    public EventField SumField { get; init; }
 
     [JsonRequired]
-    public Dictionary<string, string>? Description { get; init; }
+    public Dictionary<string, string>[] EventFiltersJson { get; set; } = [];
+
     public int RequiredValue { get; init; }
     public int RewardGold { get; init; }
     public int RewardExperience { get; init; }

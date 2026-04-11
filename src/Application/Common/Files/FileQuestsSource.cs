@@ -5,7 +5,7 @@ using Crpg.Domain.Entities.Quests;
 
 namespace Crpg.Application.Common.Files;
 
-internal class FileQuestSource : IQuestSource
+internal class FileQuestsSource : IQuestSource
 {
     private static readonly string QuestsPath = FileDataPathResolver.Resolve(
         Path.Combine("Common", "Files", "quests.json"));
@@ -16,6 +16,7 @@ internal class FileQuestSource : IQuestSource
         return (await JsonSerializer.DeserializeAsync<IEnumerable<QuestDefinition>>(file, new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            ReadCommentHandling = JsonCommentHandling.Skip,
             Converters = { new JsonStringEnumConverter() },
         }).AsTask())!;
     }

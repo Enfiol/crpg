@@ -1,10 +1,7 @@
-using AutoMapper;
 using Crpg.Application.Common;
-using Crpg.Application.Common.Interfaces;
 using Crpg.Application.Common.Results;
 using Crpg.Application.Common.Services;
 using Crpg.Application.Quests.Commands;
-using Crpg.Application.Quests.Models;
 using Crpg.Application.Quests.Services;
 using Crpg.Domain.Entities.ActivityLogs;
 using Crpg.Domain.Entities.Characters;
@@ -33,7 +30,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
 
         var handler = new ClaimQuestRewardCommand.Handler(
@@ -42,7 +38,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -86,7 +81,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
 
         var handler = new ClaimQuestRewardCommand.Handler(
@@ -95,7 +89,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -139,7 +132,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
 
         var handler = new ClaimQuestRewardCommand.Handler(
@@ -148,7 +140,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -184,7 +175,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
 
         var handler = new ClaimQuestRewardCommand.Handler(
@@ -193,7 +183,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -237,7 +226,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
         questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(5); // less than required 10
@@ -248,7 +236,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -292,7 +279,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
         questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(15); // greater than required
@@ -303,7 +289,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -353,11 +338,9 @@ public class ClaimQuestRewardCommandTest : TestBase
         dateTimeMock.Setup(d => d.UtcNow).Returns(now);
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        activityLogServiceMock.Setup(al => al.CreateQuestRewardClaimedLog(user.Id, userQuest.Id, 100, 200))
+        activityLogServiceMock.Setup(al => al.CreateQuestRewardClaimedLog(user.Id, character.Id, userQuest.Id, 100, 200))
             .Returns(new ActivityLog());
         Mock<IUserNotificationService> userNotificationServiceMock = new();
-        userNotificationServiceMock.Setup(un => un.CreateQuestRewardClaimedToUserNotification(user.Id, userQuest.Id, 100, 200))
-            .Returns(new UserNotification());
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
         questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(15); // greater than required
@@ -368,7 +351,6 @@ public class ClaimQuestRewardCommandTest : TestBase
             dateTimeMock.Object,
             characterServiceMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new ClaimQuestRewardCommand
@@ -392,8 +374,6 @@ public class ClaimQuestRewardCommandTest : TestBase
         Assert.That(dbUserQuest.IsRewardClaimed, Is.True);
 
         activityLogServiceMock.Verify(al => al.CreateQuestRewardClaimedLog(
-            user.Id, userQuest.Id, 100, 200), Times.Once);
-        userNotificationServiceMock.Verify(un => un.CreateQuestRewardClaimedToUserNotification(
-            user.Id, userQuest.Id, 100, 200), Times.Once);
+            user.Id, character.Id, userQuest.Id, 100, 200), Times.Once);
     }
 }

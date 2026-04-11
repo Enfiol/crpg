@@ -1,11 +1,9 @@
 using Crpg.Application.Common;
-using Crpg.Application.Common.Interfaces;
 using Crpg.Application.Common.Results;
 using Crpg.Application.Common.Services;
 using Crpg.Application.Quests.Commands;
 using Crpg.Application.Quests.Services;
 using Crpg.Domain.Entities.ActivityLogs;
-using Crpg.Domain.Entities.Notifications;
 using Crpg.Domain.Entities.Quests;
 using Crpg.Domain.Entities.Users;
 using Crpg.Sdk.Abstractions;
@@ -29,14 +27,12 @@ public class RerollQuestCommandTest : TestBase
     {
         Mock<IDateTime> dateTimeMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -77,14 +73,12 @@ public class RerollQuestCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -125,14 +119,12 @@ public class RerollQuestCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -167,14 +159,12 @@ public class RerollQuestCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -215,14 +205,12 @@ public class RerollQuestCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -263,14 +251,12 @@ public class RerollQuestCommandTest : TestBase
         Mock<IDateTime> dateTimeMock = new();
         dateTimeMock.Setup(d => d.UtcNow).Returns(DateTime.UtcNow);
         Mock<IActivityLogService> activityLogServiceMock = new();
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
 
         var handler = new RerollQuestCommand.Handler(
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -325,8 +311,6 @@ public class RerollQuestCommandTest : TestBase
         activityLogServiceMock.Setup(al => al.CreateQuestRerolledLog(user.Id, userQuest.Id, newUserQuest.Id, Constants.QuestRerollDailyQuestPrice))
             .Returns(new ActivityLog());
         Mock<IUserNotificationService> userNotificationServiceMock = new();
-        userNotificationServiceMock.Setup(un => un.CreateQuestRerolledToUserNotification(user.Id, userQuest.Id, newUserQuest.Id, Constants.QuestRerollDailyQuestPrice))
-            .Returns(new UserNotification());
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
         questAssignmentServiceMock.Setup(q => q.ReplaceDailyUserQuestAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
             .Callback<UserQuest, CancellationToken>((uq, ct) =>
@@ -341,7 +325,6 @@ public class RerollQuestCommandTest : TestBase
             ActDb,
             dateTimeMock.Object,
             activityLogServiceMock.Object,
-            userNotificationServiceMock.Object,
             questAssignmentServiceMock.Object,
             Constants);
 
@@ -359,10 +342,8 @@ public class RerollQuestCommandTest : TestBase
         questAssignmentServiceMock.Verify(q => q.ReplaceDailyUserQuestAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()), Times.Once);
         activityLogServiceMock.Verify(al => al.CreateQuestRerolledLog(
             user.Id, userQuest.Id, newUserQuest.Id, Constants.QuestRerollDailyQuestPrice), Times.Once);
-        userNotificationServiceMock.Verify(un => un.CreateQuestRerolledToUserNotification(
-            user.Id, userQuest.Id, newUserQuest.Id, Constants.QuestRerollDailyQuestPrice), Times.Once);
 
-        var oldUserQuestExists = await AssertDb.UserQuests.AnyAsync(uq => uq.Id == userQuest.Id);
+        bool oldUserQuestExists = await AssertDb.UserQuests.AnyAsync(uq => uq.Id == userQuest.Id);
         Assert.That(oldUserQuestExists, Is.False); // should have been removed
     }
 }

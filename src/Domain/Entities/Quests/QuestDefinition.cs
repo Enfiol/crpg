@@ -7,8 +7,6 @@ public class QuestDefinition : AuditableEntity
 {
     public int Id { get; set; }
     public QuestType Type { get; set; }
-    public Dictionary<string, string>? Name { get; set; }
-    public Dictionary<string, string>? Description { get; set; }
     public CrpgGameEvent.EventType EventType { get; set; }
     public Dictionary<string, string>[]? EventFiltersJson { get; set; }
     public QuestAggregationType AggregationType { get; set; }

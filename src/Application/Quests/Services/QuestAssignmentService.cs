@@ -13,7 +13,9 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
 
     public async Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
-        await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ExecuteDeleteAsync(cancellationToken);
+        var oldUserQuests = await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ToListAsync(cancellationToken);
+        // ExecuteDelete can't be used because it is not supported by the in-memory provider which is used in our tests (https://github.com/dotnet/efcore/issues/30185).
+        _db.UserQuests.RemoveRange(oldUserQuests);
 
         var userIds = await _db.Users
             .Where(u => u.Characters.Any())
@@ -24,11 +26,13 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
             .Where(qd => qd.IsActive && qd.Type == QuestType.Daily)
             .ToListAsync(cancellationToken);
 
-        var userActiveQuestsCount = await _db.UserQuests
+        var userActiveQuests = await _db.UserQuests
             .Include(uq => uq.QuestDefinition)
-            .Where(uq => uq.QuestDefinition!.Type == QuestType.Daily)
-            .GroupBy(x => x.UserId)
-            .ToDictionaryAsync(key => key.Key, value => value.Count(), cancellationToken: cancellationToken);
+            .Where(uq => uq.QuestDefinition!.Type == QuestType.Daily).ToListAsync(cancellationToken);
+
+        var userActiveQuestsCount = userActiveQuests
+                    .GroupBy(x => x.UserId)
+                    .ToDictionary(key => key.Key, value => value.Count());
 
         foreach (int userId in userIds)
         {
@@ -59,9 +63,11 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
 
     public async Task AssignWeeklyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
-        await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ExecuteDeleteAsync(cancellationToken);
-        await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date)
-            .ExecuteDeleteAsync(cancellationToken);
+        var oldUserQuests = await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ToListAsync(cancellationToken);
+        _db.UserQuests.RemoveRange(oldUserQuests);
+
+        var oldWeeklyAssignments = await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date).ToListAsync(cancellationToken);
+        _db.WeeklyQuestAssignments.RemoveRange(oldWeeklyAssignments);
 
         var userIds = await _db.Users
             .Where(u => u.Characters.Any())
@@ -111,11 +117,14 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
         }
 
         // Get existing weekly quests per user to avoid duplicates
-        var userWeeklyQuests = await _db.UserQuests
+        var userWeeklyQuestsList = await _db.UserQuests
             .Include(uq => uq.QuestDefinition)
             .Where(uq => uq.QuestDefinition!.Type == QuestType.Weekly)
-            .GroupBy(uq => uq.UserId)
-            .ToDictionaryAsync(g => g.Key, g => g.Select(uq => uq.QuestDefinitionId).ToHashSet(), cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var userWeeklyQuests = userWeeklyQuestsList
+                    .GroupBy(x => x.UserId)
+                    .ToDictionary(g => g.Key, g => g.Select(uq => uq.QuestDefinitionId).ToHashSet());
 
         foreach (int userId in userIds)
         {
@@ -151,7 +160,8 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
     public async Task AssignQuestsToNewUserAsync(int userId, CancellationToken cancellationToken = default)
     {
         // Daily
-        await _db.UserQuests.Where(uq => uq.UserId == userId).ExecuteDeleteAsync(cancellationToken);
+        var oldUserQuests = await _db.UserQuests.Where(uq => uq.UserId == userId).ToListAsync(cancellationToken);
+        _db.UserQuests.RemoveRange(oldUserQuests);
 
         var availableDailyDefinitions = await _db.QuestDefinitions
             .Where(qd => qd.IsActive && qd.Type == QuestType.Daily)

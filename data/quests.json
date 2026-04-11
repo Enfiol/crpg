@@ -1,16 +1,8 @@
-﻿[
+[
   {
+    /* Damage */
     "id": 1,
-    "name":
-    {
-      "en": "Damage",
-      "ru": "Урон"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy",
-      "ru": "Нанесите урон противнику"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{}],
     "aggregationType": "Sum",
@@ -18,21 +10,12 @@
     "requiredValue": 1500,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with 1H sword */
     "id": 2,
-    "name":
-    {
-      "en": "Damage with 1H sword",
-      "ru": "Урон одноручным мечом"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with one-handed sword",
-      "ru": "Нанесите урон противнику одноручным мечом"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"OneHandedSword"}],
     "aggregationType": "Sum",
@@ -40,21 +23,12 @@
     "requiredValue": 750,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with 1H axe */
     "id": 3,
-    "name":
-    {
-      "en": "Damage with 1H axe",
-      "ru": "Урон одноручным топором"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with one-handed axe",
-      "ru": "Нанесите урон противнику одноручным топором"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"OneHandedAxe"}],
     "aggregationType": "Sum",
@@ -62,21 +36,12 @@
     "requiredValue": 750,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with 2H sword */
     "id": 4,
-    "name":
-    {
-      "en": "Damage with 2H sword",
-      "ru": "Урон двуручным мечом"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with two-handed sword",
-      "ru": "Нанесите урон противнику двуручным мечом"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"TwoHandedSword"}],
     "aggregationType": "Sum",
@@ -84,21 +49,12 @@
     "requiredValue": 750,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with polearm */
     "id": 5,
-    "name":
-    {
-      "en": "Damage with polearm",
-      "ru": "Урон древковым оружием"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with polearm",
-      "ru": "Нанесите урон противнику древковым оружием"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"OneHandedPolearm"},{"WeaponType":"TwoHandedPolearm"}],
     "aggregationType": "Sum",
@@ -106,21 +62,12 @@
     "requiredValue": 1000,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with bow */
     "id": 6,
-    "name":
-    {
-      "en": "Damage with bow",
-      "ru": "Урон луком"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with bow",
-      "ru": "Нанесите урон противнику луком"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"Bow"}],
     "aggregationType": "Sum",
@@ -128,21 +75,12 @@
     "requiredValue": 1250,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with crossbow */
     "id": 7,
-    "name":
-    {
-      "en": "Damage with crossbow",
-      "ru": "Урон арбалетом"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy with crossbow",
-      "ru": "Нанесите урон противнику арбалетом"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"Crossbow"}],
     "aggregationType": "Sum",
@@ -150,21 +88,12 @@
     "requiredValue": 1250,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Headshot damage */
     "id": 8,
-    "name":
-    {
-      "en": "Headshot damage",
-      "ru": "Урон в голову"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy head",
-      "ru": "Нанесите урон противнику в голову"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"BodyPart":"Head"}],
     "aggregationType": "Sum",
@@ -172,21 +101,12 @@
     "requiredValue": 500,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Kills */
     "id": 9,
-    "name":
-    {
-      "en": "Kills",
-      "ru": "Убийства"
-    },
-    "description":
-    {
-      "en": "Kill enemies",
-      "ru": "Убейте противников"
-    },
+    "type": "Daily",
     "eventType": "Kill",
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
@@ -194,43 +114,25 @@
     "requiredValue": 20,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Headshot kills */
     "id": 10,
-    "name":
-    {
-      "en": "Headshot kills",
-      "ru": "Убийства в голову"
-    },
-    "description":
-    {
-      "en": "Kill enemies with headshots",
-      "ru": "Убейте противников выстрелами в голову"
-    },
+    "type": "Daily",
     "eventType": "Kill",
-    "eventFiltersJson": [{"BodyPart":"Head", "HitType":"Ranged"}],
+    "eventFiltersJson": [{"BodyPart":"Head","HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
     "requiredValue": 5,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Ranged kills */
     "id": 11,
-    "name":
-    {
-      "en": "Ranged kills",
-      "ru": "Убийства дальним оружием"
-    },
-    "description":
-    {
-      "en": "Kill enemies with ranged weapons",
-      "ru": "Убейте противников дальним оружием"
-    },
+    "type": "Daily",
     "eventType": "Kill",
     "eventFiltersJson": [{"HitType":"Ranged"}],
     "aggregationType": "Count",
@@ -238,21 +140,12 @@
     "requiredValue": 15,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Melee kills */
     "id": 12,
-    "name":
-    {
-      "en": "Melee kills",
-      "ru": "Убийства ближним оружием"
-    },
-    "description":
-    {
-      "en": "Kill enemies with melee weapons",
-      "ru": "Убейте противников ближним оружием"
-    },
+    "type": "Daily",
     "eventType": "Kill",
     "eventFiltersJson": [{"HitType":"Melee"}],
     "aggregationType": "Count",
@@ -260,43 +153,25 @@
     "requiredValue": 10,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Shield blocks */
     "id": 13,
-    "name":
-    {
-      "en": "Shield blocks",
-      "ru": "Блоки щитом"
-    },
-    "description":
-    {
-      "en": "Block attacks with shield",
-      "ru": "Заблокируйте атаки щитом"
-    },
+    "type": "Daily",
     "eventType": "Block",
-    "eventFiltersJson": [{"WeaponType":"SmallShield"}, {"WeaponType":"LargeShield"}],
+    "eventFiltersJson": [{"WeaponType":"SmallShield"},{"WeaponType":"LargeShield"}],
     "aggregationType": "Count",
     "sumField": null,
     "requiredValue": 80,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Total blocks */
     "id": 15,
-    "name":
-    {
-      "en": "Total blocks",
-      "ru": "Всего блоков"
-    },
-    "description":
-    {
-      "en": "Block attacks (shield or weapon)",
-      "ru": "Заблокируйте атаки (щитом или оружием)"
-    },
+    "type": "Daily",
     "eventType": "Block",
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
@@ -304,65 +179,38 @@
     "requiredValue": 200,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with throwing weapons */
     "id": 16,
-    "name":
-    {
-      "en": "Damage with throwing weapons",
-      "ru": "Урон метательным оружием"
-    },
-    "description":
-    {
-      "en": "Deal damage with throwing axes, knives, or javelins",
-      "ru": "Нанесите урон метательными топорами, ножами или дротиками"
-    },
+    "type": "Daily",
     "eventType": "Hit",
-    "eventFiltersJson": [{"WeaponType":"ThrowingAxe"}, {"WeaponType":"ThrowingKnife"}, {"WeaponType":"Javelin"}],
+    "eventFiltersJson": [{"WeaponType":"ThrowingAxe"},{"WeaponType":"ThrowingKnife"},{"WeaponType":"Javelin"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
     "requiredValue": 500,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage with mace */
     "id": 17,
-    "name":
-    {
-      "en": "Damage with mace",
-      "ru": "Урон булавой"
-    },
-    "description":
-    {
-      "en": "Deal damage with mace",
-      "ru": "Нанесите урон булавой"
-    },
+    "type": "Daily",
     "eventType": "Hit",
-    "eventFiltersJson": [{"WeaponType":"Mace"},{"WeaponType": "TwoHandedMace"}],
+    "eventFiltersJson": [{"WeaponType":"Mace"},{"WeaponType":"TwoHandedMace"}],
     "aggregationType": "Sum",
     "sumField": "Damage",
     "requiredValue": 750,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Damage to legs */
     "id": 18,
-    "name":
-    {
-      "en": "Damage to legs",
-      "ru": "Урон по ногам"
-    },
-    "description":
-    {
-      "en": "Deal damage to enemy legs",
-      "ru": "Нанесите урон противнику по ногам"
-    },
+    "type": "Daily",
     "eventType": "Hit",
     "eventFiltersJson": [{"BodyPart":"Legs"}],
     "aggregationType": "Sum",
@@ -370,43 +218,25 @@
     "requiredValue": 500,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Kills with sword */
     "id": 19,
-    "name":
-    {
-      "en": "Kills with sword",
-      "ru": "Убийства мечом"
-    },
-    "description":
-    {
-      "en": "Kill enemies with any sword",
-      "ru": "Убейте противников любым мечом"
-    },
+    "type": "Daily",
     "eventType": "Kill",
-    "eventFiltersJson": [{"WeaponType":"OneHandedSword"}, {"WeaponType":"TwoHandedSword"}],
+    "eventFiltersJson": [{"WeaponType":"OneHandedSword"},{"WeaponType":"TwoHandedSword"}],
     "aggregationType": "Count",
     "sumField": null,
     "requiredValue": 10,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Block ranged attacks */
     "id": 20,
-    "name":
-    {
-      "en": "Block ranged attacks",
-      "ru": "Блоки дальних атак"
-    },
-    "description":
-    {
-      "en": "Block ranged attacks (arrows, bolts, etc.)",
-      "ru": "Заблокируйте дальние атаки (стрелы, болты и т.д.)"
-    },
+    "type": "Daily",
     "eventType": "Block",
     "eventFiltersJson": [{"HitType":"Ranged"}],
     "aggregationType": "Count",
@@ -414,21 +244,12 @@
     "requiredValue": 30,
     "rewardGold": 3000,
     "rewardExperience": 100000,
-    "isActive": true,
-    "type": "Daily"
+    "isActive": true
   },
   {
+    /* Weekly Damage Master */
     "id": 21,
-    "name":
-    {
-      "en": "Weekly Damage Master",
-      "ru": "Мастер урона (неделя)"
-    },
-    "description":
-    {
-      "en": "Deal massive damage to enemies",
-      "ru": "Нанесите огромный урон противникам"
-    },
+    "type": "Weekly",
     "eventType": "Hit",
     "eventFiltersJson": [{}],
     "aggregationType": "Sum",
@@ -436,21 +257,12 @@
     "requiredValue": 5000,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   },
   {
+    /* Weekly Slayer */
     "id": 22,
-    "name":
-    {
-      "en": "Weekly Slayer",
-      "ru": "Убийца (неделя)"
-    },
-    "description":
-    {
-      "en": "Kill many enemies",
-      "ru": "Убейте много противников"
-    },
+    "type": "Weekly",
     "eventType": "Kill",
     "eventFiltersJson": [{}],
     "aggregationType": "Count",
@@ -458,43 +270,25 @@
     "requiredValue": 100,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   },
   {
+    /* Weekly Headhunter */
     "id": 23,
-    "name":
-    {
-      "en": "Weekly Headhunter",
-      "ru": "Охотник за головами (неделя)"
-    },
-    "description":
-    {
-      "en": "Kill enemies with headshots",
-      "ru": "Убейте противников выстрелами в голову"
-    },
+    "type": "Weekly",
     "eventType": "Kill",
-    "eventFiltersJson": [{"BodyPart":"Head", "HitType":"Ranged"}],
+    "eventFiltersJson": [{"BodyPart":"Head","HitType":"Ranged"}],
     "aggregationType": "Count",
     "sumField": null,
     "requiredValue": 25,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   },
   {
+    /* Weekly Titan's Grip */
     "id": 24,
-    "name":
-    {
-      "en": "Weekly Titan's Grip",
-      "ru": "Хватка титана (неделя)"
-    },
-    "description":
-    {
-      "en": "Kill enemies with two handed weapon",
-      "ru": "Убейте противников двуручным оружием"
-    },
+    "type": "Weekly",
     "eventType": "Kill",
     "eventFiltersJson": [{"WeaponType":"TwoHandedSword"},{"WeaponType":"TwoHandedAxe"},{"WeaponType":"TwoHandedMace"},{"WeaponType":"TwoHandedPolearm"}],
     "aggregationType": "Count",
@@ -502,21 +296,12 @@
     "requiredValue": 50,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   },
   {
+    /* Weekly Ready, aim, fire */
     "id": 25,
-    "name":
-    {
-      "en": "Weekly Ready, aim, fire",
-      "ru": "Готовься, целься, пли (неделя)"
-    },
-    "description":
-    {
-      "en": "Deal massive damage to enemies with pistol or musket",
-      "ru": "Нанесите огромный урон противникам используя пистоль или мушкет"
-    },
+    "type": "Weekly",
     "eventType": "Hit",
     "eventFiltersJson": [{"WeaponType":"Pistol"},{"WeaponType":"Musket"}],
     "aggregationType": "Sum",
@@ -524,21 +309,12 @@
     "requiredValue": 5000,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   },
   {
+    /* Weekly Shield wall */
     "id": 26,
-    "name":
-    {
-      "en": "Weekly Shield wall",
-      "ru": "Стена щитов (неделя)"
-    },
-    "description":
-    {
-      "en": "Block a large number of attacks with your shield",
-      "ru": "Заблокируйте большое количество атак щитом"
-    },
+    "type": "Weekly",
     "eventType": "Block",
     "eventFiltersJson": [{"WeaponType":"SmallShield"},{"WeaponType":"LargeShield"}],
     "aggregationType": "Count",
@@ -546,7 +322,6 @@
     "requiredValue": 500,
     "rewardGold": 10000,
     "rewardExperience": 350000,
-    "isActive": true,
-    "type": "Weekly"
+    "isActive": true
   }
 ]

@@ -16,8 +16,8 @@ public class CrpgGameEventConfiguration : IEntityTypeConfiguration<CrpgGameEvent
             .HasForeignKey(e => e.UserId)
             .IsRequired(false);
 
-        builder.HasIndex(e => new { e.CreatedAt, e.UserId });
-        builder.HasIndex(e => e.Type);
+        builder.HasIndex(e => e.CreatedAt);
+        builder.HasIndex(e => new { e.UserId, e.Type, e.CreatedAt });
 
         // Store dictionary as JSON in PostgreSQL
         builder.Property(e => e.EventData)

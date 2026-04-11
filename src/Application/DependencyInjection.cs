@@ -53,7 +53,7 @@ public static class DependencyInjection
             .AddSingleton<IBattleParticipantDistributionModel, BattleParticipantUniformDistributionModel>()
             .AddSingleton(constants)
             .AddSingleton<IItemsSource, FileItemsSource>()
-            .AddSingleton<IQuestSource, FileQuestSource>()
+            .AddSingleton<IQuestSource, FileQuestsSource>()
             .AddSingleton<ISettlementsSource, FileSettlementsSource>()
             .AddScoped<IPartyTransferOfferValidationService, PartyTransferOfferValidationService>()
             .AddScoped<IQuestAssignmentService, QuestAssignmentService>()
