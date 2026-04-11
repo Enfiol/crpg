@@ -1319,10 +1319,6 @@ partial class AddQuests
                     .HasColumnType("timestamp with time zone")
                     .HasColumnName("created_at");
 
-                b.Property<string>("Description")
-                    .HasColumnType("jsonb")
-                    .HasColumnName("description");
-
                 b.Property<string>("EventFiltersJson")
                     .HasColumnType("jsonb")
                     .HasColumnName("event_filters_json");
@@ -1336,10 +1332,6 @@ partial class AddQuests
                     .HasColumnType("boolean")
                     .HasDefaultValue(true)
                     .HasColumnName("is_active");
-
-                b.Property<string>("Name")
-                    .HasColumnType("jsonb")
-                    .HasColumnName("name");
 
                 b.Property<int>("RequiredValue")
                     .HasColumnType("integer")

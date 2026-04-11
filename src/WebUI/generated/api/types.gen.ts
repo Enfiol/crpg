@@ -533,6 +533,8 @@ export type ErrorSource = {
 
 export type ErrorType = 'InternalError' | 'Forbidden' | 'Conflict' | 'NotFound' | 'Validation';
 
+export type EventField = 'Undefined' | 'WeaponType' | 'WeaponId' | 'HitType' | 'Damage' | 'TargetType' | 'BodyPart' | 'DamageType';
+
 export type EventType = 'Undefined' | 'Hit' | 'Kill' | 'Block';
 
 export type GameCharacterViewModel = {
@@ -831,7 +833,7 @@ export type Languages = 'En' | 'Zh' | 'Ru' | 'De' | 'Fr' | 'It' | 'Es' | 'Pl' | 
 
 export type NotificationState = 'Unread' | 'Read';
 
-export type NotificationType = 'UserRewardedToUser' | 'CharacterRewardedToUser' | 'ItemReturned' | 'ClanApplicationCreatedToUser' | 'ClanApplicationCreatedToOfficers' | 'ClanApplicationAcceptedToUser' | 'ClanApplicationDeclinedToUser' | 'ClanMemberRoleChangedToUser' | 'ClanMemberLeavedToLeader' | 'ClanMemberKickedToExMember' | 'ClanArmoryBorrowItemToLender' | 'ClanArmoryRemoveItemToBorrower' | 'BattleMercenaryApplicationAccepted' | 'BattleMercenaryApplicationDeclined' | 'BattleParticipantKickedToExParticipant' | 'QuestRewardClaimedToUser' | 'QuestRerolledToUser';
+export type NotificationType = 'UserRewardedToUser' | 'CharacterRewardedToUser' | 'ItemReturned' | 'ClanApplicationCreatedToUser' | 'ClanApplicationCreatedToOfficers' | 'ClanApplicationAcceptedToUser' | 'ClanApplicationDeclinedToUser' | 'ClanMemberRoleChangedToUser' | 'ClanMemberLeavedToLeader' | 'ClanMemberKickedToExMember' | 'ClanArmoryBorrowItemToLender' | 'ClanArmoryRemoveItemToBorrower' | 'BattleMercenaryApplicationAccepted' | 'BattleMercenaryApplicationDeclined' | 'BattleParticipantKickedToExParticipant';
 
 export type PartyOrderCommandItemDto = {
     type: PartyOrderType;
@@ -951,15 +953,17 @@ export type PatchNotesIListResult = {
 
 export type Platform = 'Steam' | 'EpicGames' | 'Microsoft';
 
+export type QuestAggregationType = 'Count' | 'Sum';
+
 export type QuestDefinitionViewModel = {
     id: number;
     type: QuestType;
-    name: {
+    eventType: EventType;
+    aggregationType: QuestAggregationType;
+    sumField: EventField;
+    eventFiltersJson: Array<{
         [key: string]: string;
-    } | null;
-    description: {
-        [key: string]: string;
-    } | null;
+    }>;
     requiredValue: number;
     rewardGold: number;
     rewardExperience: number;

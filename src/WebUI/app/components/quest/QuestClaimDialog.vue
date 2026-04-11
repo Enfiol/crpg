@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UserQuest } from '~/models/quest'
 
+import { useQuestDescription } from '~/composables/quest/use-quest-description'
 import { useUser } from '~/composables/user/use-user'
 import { getCharacters } from '~/services/character-service'
 
@@ -32,11 +33,6 @@ const onConfirm = async () => {
 
   emit('close', true, selectedCharacterId.value)
 }
-const { locale } = useI18n()
-
-function getQuestName(quest: UserQuest): string {
-  return quest.questDefinition?.name?.[locale.value] ?? quest.questDefinition?.name?.en ?? '—'
-}
 </script>
 
 <template>
@@ -55,10 +51,6 @@ function getQuestName(quest: UserQuest): string {
         tag="div"
         keypath="user.quests.action.claim.selectCharacter"
       >
-        <template #questName>
-          <span class="font-semibold text-highlighted">{{ getQuestName(quest) }}</span>&nbsp;
-        </template>
-
         <template #questRewards>
           <AppCoin :value="quest.questDefinition?.rewardGold ?? 0" />&nbsp;
           <AppExperience :value="quest.questDefinition?.rewardExperience ?? 0" />

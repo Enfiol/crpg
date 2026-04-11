@@ -47,8 +47,6 @@ public partial class AddQuests : Migration
             {
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                name = table.Column<string>(type: "jsonb", nullable: true),
-                description = table.Column<string>(type: "jsonb", nullable: true),
                 event_type = table.Column<int>(type: "integer", nullable: false),
                 event_filters_json = table.Column<string>(type: "jsonb", nullable: true),
                 aggregation_type = table.Column<QuestAggregationType>(type: "quest_aggregation_type", nullable: false),
