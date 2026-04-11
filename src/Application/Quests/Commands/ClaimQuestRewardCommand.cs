@@ -29,7 +29,6 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
         IDateTime dateTime,
         ICharacterService characterService,
         IActivityLogService activityLogService,
-        IUserNotificationService userNotificationService,
         IQuestEvaluationService questEvaluationService) : IMediatorRequestHandler<ClaimQuestRewardCommand, UserQuestViewModel>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<ClaimQuestRewardCommand>();
@@ -85,9 +84,7 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
             userQuest.IsRewardClaimed = true;
 
             db.ActivityLogs.Add(activityLogService.CreateQuestRewardClaimedLog(
-                req.UserId, userQuest.Id, userQuest.QuestDefinition.RewardGold, userQuest.QuestDefinition.RewardExperience));
-            db.UserNotifications.Add(userNotificationService.CreateQuestRewardClaimedToUserNotification(
-                req.UserId, userQuest.Id, userQuest.QuestDefinition.RewardGold, userQuest.QuestDefinition.RewardExperience));
+                req.UserId, req.CharacterId, userQuest.Id, userQuest.QuestDefinition.RewardGold, userQuest.QuestDefinition.RewardExperience));
 
             await db.SaveChangesAsync(cancellationToken);
             Logger.LogInformation("User '{0}' claimed reward for quest '{1}' on character '{2}'", req.UserId, req.UserQuestId, req.CharacterId);

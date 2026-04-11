@@ -668,10 +668,9 @@ public class UsersController : BaseController
     /// <response code="400">Bad Request.</response>
     /// <response code="404">User quest not found.</response>
     [HttpPut("self/quests/{id}/reroll")]
-    public Task<ActionResult> RerollQuest([FromRoute] int id,
-        [FromBody] RerollQuestCommand req)
+    public Task<ActionResult> RerollQuest([FromRoute] int id)
     {
-        var cmd = req with { UserQuestId = id, UserId = CurrentUser.User!.Id };
+        var cmd = new RerollQuestCommand { UserQuestId = id, UserId = CurrentUser.User!.Id };
 
         return ResultToActionAsync(Mediator.Send(cmd));
     }

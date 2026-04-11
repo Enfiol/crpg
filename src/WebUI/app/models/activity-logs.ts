@@ -42,6 +42,8 @@ export const ACTIVITY_LOG_TYPE = {
   BattleMercenaryApplicationDeclined: 'BattleMercenaryApplicationDeclined',
   BattleParticipantKicked: 'BattleParticipantKicked',
   BattleParticipantLeaved: 'BattleParticipantLeaved',
+  QuestRerolled: 'QuestRerolled',
+  QuestRewardClaimed: 'QuestRewardClaimed',
 } as const satisfies Record<_ActivityLogType, _ActivityLogType>
 
 export type ActivityLogType = ValueOf<typeof ACTIVITY_LOG_TYPE>

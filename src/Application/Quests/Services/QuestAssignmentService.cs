@@ -5,20 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crpg.Application.Quests.Services;
 
-public class QuestAssignmentService : IQuestAssignmentService
+public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQuestAssignmentService
 {
-    private readonly int _dailyQuestsPerUser;
-    private readonly int _weeklyQuestsPerUser;
-    private readonly ICrpgDbContext _db;
-
-    public QuestAssignmentService(ICrpgDbContext db, Constants constants)
-    {
-        _dailyQuestsPerUser = constants.QuestDailyQuestsPerUser;
-        _weeklyQuestsPerUser = constants.QuestWeeklyQuestsPerUser;
-        _db = db;
-    }
-
-
+    private readonly int _dailyQuestsPerUser = constants.QuestDailyQuestsPerUser;
+    private readonly int _weeklyQuestsPerUser = constants.QuestWeeklyQuestsPerUser;
+    private readonly ICrpgDbContext _db = db;
 
     public async Task AssignDailyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
@@ -97,18 +88,18 @@ public class QuestAssignmentService : IQuestAssignmentService
         if (currentWeeklyAssignments.Count == 0)
         {
             // Create new weekly assignments for this week
-            selectedWeeklyQuestIds = availableWeeklyDefinitions
+            selectedWeeklyQuestIds = [.. availableWeeklyDefinitions
                 .Shuffle()
                 .Take(_weeklyQuestsPerUser)
-                .Select(q => q.Id)
-                .ToList();
-
+                .Select(q => q.Id)];
 
             foreach (int questId in selectedWeeklyQuestIds)
             {
                 var assignment = new WeeklyQuestAssignment
                 {
-                    QuestDefinitionId = questId, AssignedAt = now, ExpiresAt = expiresAt,
+                    QuestDefinitionId = questId,
+                    AssignedAt = now,
+                    ExpiresAt = expiresAt,
                 };
                 _db.WeeklyQuestAssignments.Add(assignment);
             }
@@ -209,15 +200,15 @@ public class QuestAssignmentService : IQuestAssignmentService
         CancellationToken cancellationToken = default)
     {
         var questDefinitions = await _db.QuestDefinitions
-            .Where(qd => qd.IsActive && userQuest.QuestDefinition!.Id != qd.Id)
+            .Where(qd => qd.IsActive && qd.Type == QuestType.Daily && userQuest.QuestDefinition!.Id != qd.Id)
             .ToListAsync(cancellationToken);
 
-        var randomQuestDefinition = questDefinitions.Shuffle().Single();
+        var randomQuestDefinition = questDefinitions.Shuffle().FirstOrDefault() ?? throw new InvalidOperationException("No available daily quest definitions found.");
 
         var newUserQuest = new UserQuest
         {
-            UserId = userQuest.UserId,
-            QuestDefinitionId = randomQuestDefinition!.Id,
+            User = userQuest.User,
+            QuestDefinition = randomQuestDefinition,
             IsRewardClaimed = false,
             ExpiresAt = userQuest.ExpiresAt,
         };

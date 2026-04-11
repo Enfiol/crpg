@@ -1257,11 +1257,7 @@ export const putUsersSelfQuestsByIdClaim = <TComposable extends Composable = '$f
 export const putUsersSelfQuestsByIdReroll = <TComposable extends Composable = '$fetch', DefaultT = undefined>(options: Options<TComposable, PutUsersSelfQuestsByIdRerollData, unknown, DefaultT>) => (options.client ?? client).put<TComposable, unknown | DefaultT, unknown, DefaultT>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/Users/self/quests/{id}/reroll',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
+    ...options
 });
 
 /**

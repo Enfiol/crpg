@@ -121,6 +121,7 @@ dateTimeFormat:
   ss: '{secondes} @:dateTime.secondes.short'
   hh: '{hours} @:dateTime.hours.short'
   'dd:hh:mm': '{days}@:dateTime.days.short {hours}@:dateTime.hours.short {minutes}@:dateTime.minutes.short'
+  'hh:mm': '{hours}@:dateTime.hours.short {minutes}@:dateTime.minutes.short'
 
 pagination:
   counter: '{from}-{to} of {total}'
@@ -133,6 +134,7 @@ sort:
 nav:
   main:
     Characters: Characters
+    Quests: Quests
     Shop: Shop
     Clans: Clans
     Moderator: Moderator
@@ -1021,6 +1023,27 @@ user:
       deleteAll:
         title: Delete all
         confirmTitle: Are you sure you want to delete all notifications?
+  quests:
+    title: Quests
+    type:
+      daily: Daily
+      weekly: Weekly
+    status:
+      claimed: Claimed
+      expired: Expired
+    action:
+      claim:
+        label: Claim reward
+        title: Claim reward
+        selectCharacter: Select a character to receive the reward for {questName} {questRewards}
+        notify:
+          success: Reward claimed
+      reroll:
+        label: Reroll
+        title: Reroll quest
+        confirmation: Do you want to reroll for {goldCost}?
+        notify:
+          success: Quest rerolled
 
 banned:
   title: You are banned
@@ -1513,6 +1536,8 @@ activityLog:
     ClanArmoryRemoveItem: 'Item {userItem} removed from clan {clan} armory'
     ClanArmoryReturnItem: 'Item {userItem} was returned from clan {clan} armory'
     ClanArmoryBorrowItem: 'Item {userItem} was borrowed from clan {clan} armory'
+    QuestRerolled: 'The quest {oldUserQuestId} was rerolled to {newUserQuestId} for {goldCost} gold'
+    QuestRewardClaimed: 'The reward for the quest {userQuestId} was claimed by {character} for {gold} and {experience} exp.'
 
 notification:
   ItemReturned:

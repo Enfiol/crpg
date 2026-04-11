@@ -20,9 +20,11 @@ const [open, toggle] = useToggle()
     <slot />
 
     <template #content>
-      <UiTextView variant="h5">
-        {{ title ?? $t('confirmAction') }}
-      </UiTextView>
+      <slot name="title">
+        <UiTextView variant="h5">
+          {{ title ?? $t('confirmAction') }}
+        </UiTextView>
+      </slot>
 
       <div class="flex items-center gap-2">
         <UButton

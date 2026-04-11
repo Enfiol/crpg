@@ -41,7 +41,7 @@ internal interface IActivityLogService
     ActivityLog CreateRespondToBattleMercenaryApplicationLog(int battleId, int applicationId, int userId, bool accept);
     ActivityLog CreateBattleParticipantLeavedLog(int battleId, int userId);
     ActivityLog CreateBattleParticipantKickedLog(int battleId, int userId, int actorUserId);
-    ActivityLog CreateQuestRewardClaimedLog(int userId, int userQuestId, int gold, int experience);
+    ActivityLog CreateQuestRewardClaimedLog(int userId, int characterId, int userQuestId, int gold, int experience);
     ActivityLog CreateQuestRerolledLog(int userId, int oldUserQuestId, int newUserQuestId, int goldCost);
 }
 
@@ -320,9 +320,10 @@ internal class ActivityLogService : IActivityLogService
       ]);
     }
 
-    public ActivityLog CreateQuestRewardClaimedLog(int userId, int userQuestId, int gold, int experience)
+    public ActivityLog CreateQuestRewardClaimedLog(int userId, int characterId, int userQuestId, int gold, int experience)
     {
         return CreateLog(ActivityLogType.QuestRewardClaimed, userId, [
+            new("characterId", characterId.ToString()),
             new("userQuestId", userQuestId.ToString()),
             new("gold", gold.ToString()),
             new("experience", experience.ToString()),
