@@ -1,12 +1,7 @@
-using AutoMapper;
-using Crpg.Application.Common.Interfaces;
-using Crpg.Application.Common.Results;
-using Crpg.Application.Quests.Models;
 using Crpg.Application.Quests.Queries;
 using Crpg.Application.Quests.Services;
 using Crpg.Domain.Entities.Quests;
 using Crpg.Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 

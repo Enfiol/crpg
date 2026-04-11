@@ -9,18 +9,6 @@ public class QuestDefinitionConfiguration : IEntityTypeConfiguration<QuestDefini
 {
     public void Configure(EntityTypeBuilder<QuestDefinition> builder)
     {
-        builder.Property(qd => qd.Name)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<Dictionary<string, string>>(v))
-            .HasColumnType("jsonb");
-
-        builder.Property(qd => qd.Description)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<Dictionary<string, string>>(v))
-            .HasColumnType("jsonb");
-
         builder.Property(qd => qd.EventFiltersJson)
             .HasConversion(
                 v => JsonConvert.SerializeObject(v),
