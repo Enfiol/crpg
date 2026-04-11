@@ -1,5 +1,4 @@
-﻿using System;
-using Crpg.Domain.Entities.Quests;
+﻿using Crpg.Domain.Entities.Quests;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -47,6 +46,7 @@ public partial class AddQuests : Migration
             {
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                type = table.Column<QuestType>(type: "quest_type", nullable: false),
                 event_type = table.Column<int>(type: "integer", nullable: false),
                 event_filters_json = table.Column<string>(type: "jsonb", nullable: true),
                 aggregation_type = table.Column<QuestAggregationType>(type: "quest_aggregation_type", nullable: false),
@@ -55,7 +55,6 @@ public partial class AddQuests : Migration
                 reward_gold = table.Column<int>(type: "integer", nullable: false),
                 reward_experience = table.Column<int>(type: "integer", nullable: false),
                 is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                type = table.Column<QuestType>(type: "quest_type", nullable: false),
                 updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                 created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
             },
@@ -119,24 +118,14 @@ public partial class AddQuests : Migration
             });
 
         migrationBuilder.CreateIndex(
-            name: "ix_battle_events_created_at_user_id",
+            name: "ix_battle_events_created_at",
             table: "battle_events",
-            columns: new[] { "created_at", "user_id" });
+            column: "created_at");
 
         migrationBuilder.CreateIndex(
-            name: "ix_battle_events_type",
+            name: "ix_battle_events_user_id_type_created_at",
             table: "battle_events",
-            column: "type");
-
-        migrationBuilder.CreateIndex(
-            name: "ix_battle_events_user_id",
-            table: "battle_events",
-            column: "user_id");
-
-        migrationBuilder.CreateIndex(
-            name: "ix_quest_definitions_is_active",
-            table: "quest_definitions",
-            column: "is_active");
+            columns: new[] { "user_id", "type", "created_at" });
 
         migrationBuilder.CreateIndex(
             name: "ix_user_quests_quest_definition_id",
