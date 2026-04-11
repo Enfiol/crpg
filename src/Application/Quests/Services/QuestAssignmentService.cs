@@ -59,9 +59,13 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
 
     public async Task AssignWeeklyQuestsToAllUsersAsync(CancellationToken cancellationToken = default)
     {
-        await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ExecuteDeleteAsync(cancellationToken);
-        await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date)
-            .ExecuteDeleteAsync(cancellationToken);
+        var oldUserQuests = await _db.UserQuests.Where(uq => uq.ExpiresAt <= DateTime.UtcNow.Date).ToListAsync(cancellationToken);
+        // ExecuteDelete can't be used because it is not supported by the in-memory provider which is used in our
+        // tests (https://github.com/dotnet/efcore/issues/30185).
+        _db.UserQuests.RemoveRange(oldUserQuests);
+
+        var oldWeeklyAssignments = await _db.WeeklyQuestAssignments.Where(wqa => wqa.ExpiresAt <= DateTime.UtcNow.Date).ToListAsync(cancellationToken);
+        _db.WeeklyQuestAssignments.RemoveRange(oldWeeklyAssignments);
 
         var userIds = await _db.Users
             .Where(u => u.Characters.Any())
