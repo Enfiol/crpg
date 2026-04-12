@@ -34,23 +34,32 @@ public partial class MainViewModel : ObservableObject
 
     private readonly ConcurrentQueue<string> _messageQueue = new();
 
-    [ObservableProperty] private double _progress;
+    [ObservableProperty]
+    private double _progress;
 
-    [ObservableProperty] private bool _isBeta;
+    [ObservableProperty]
+    private bool _isBeta;
 
-    [ObservableProperty] private bool _isUpdating;
+    [ObservableProperty]
+    private bool _isUpdating;
 
-    [ObservableProperty] private bool _isVerifying;
+    [ObservableProperty]
+    private bool _isVerifying;
 
-    [ObservableProperty] private bool _isGameUpToDate;
+    [ObservableProperty]
+    private bool _isGameUpToDate;
 
-    [ObservableProperty] private Platform _selectedPlatform;
+    [ObservableProperty]
+    private Platform _selectedPlatform;
 
-    [ObservableProperty] private GameInstallationInfo? _gameLocation;
+    [ObservableProperty]
+    private GameInstallationInfo? _gameLocation;
 
-    [ObservableProperty] private string _version = "1.0.0";
+    [ObservableProperty]
+    private string _version = "1.0.0";
 
-    [ObservableProperty] private bool _isCrpgInstalled;
+    [ObservableProperty]
+    private bool _isCrpgInstalled;
 
     public MainViewModel()
     {
@@ -140,9 +149,8 @@ public partial class MainViewModel : ObservableObject
         IsUpdating = false;
         ApplySettings();
         Version = ReadTextFromResource("pack://application:,,,/launcherversion.txt");
-        _ = CheckNewVersion();
 
-        // Check if game is up to date automatically on startup
+        _ = CheckNewVersion();
         _ = CheckForUpdatesAsync();
 
         NotifyUI();
@@ -269,11 +277,23 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private async Task CheckForUpdatesAsync()
+    private async Task<(bool downloadRest, List<KeyValuePair<string, string>> assetsToDownload,
+        List<KeyValuePair<string, string>> assetsToDelete, List<KeyValuePair<string, string>> mapsToDownload,
+        List<KeyValuePair<string, string>> mapsToDelete, bool hasDifferences, XmlDocument? remoteDoc)> GetUpdateDiffCoreAsync(bool includeDevMode = false)
     {
-        if (!HashExist() || GameLocation == null)
+        if (GameLocation == null)
         {
-            return;
+            UpdateGameLocation(SelectedPlatform);
+            if (GameLocation == null)
+            {
+                return (false, new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(),
+                    new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(), false, null);
+            }
+        }
+
+        if (!HashExist())
+        {
+            await VerifyGameFilesAsync();
         }
 
         try
@@ -288,7 +308,8 @@ public partial class MainViewModel : ObservableObject
 
             if (remoteDoc.DocumentElement == null)
             {
-                return;
+                return (false, new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(),
+                    new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(), false, null);
             }
 
             XmlDocument localDoc = new();
@@ -308,22 +329,49 @@ public partial class MainViewModel : ObservableObject
             var mapsToDownload = remoteMaps.Where(a => !localMaps.Contains(a)).ToList();
             var mapsToDelete = localMaps.Where(a => !remoteMaps.Contains(a)).ToList();
 
-            if (assetsToDelete.Count == 0 && assetsToDownload.Count == 0 &&
-                mapsToDownload.Count == 0 && mapsToDelete.Count == 0 && !downloadRest)
+            if (includeDevMode && Config.DevMode)
             {
-                IsGameUpToDate = true;
-                WriteToConsole("Your game is up to date");
+                assetsToDelete = localAssets
+                    .Where(a => remoteAssets.ContainsKey(a.Key) && !remoteAssets.ContainsValue(a.Value)).ToList();
+                mapsToDelete = localMaps.Where(a => remoteMaps.ContainsKey(a.Key) && !remoteMaps.ContainsValue(a.Value))
+                    .ToList();
             }
-            else
-            {
-                IsGameUpToDate = false;
-                WriteToConsole("Updates are available. Click 'Update cRPG' to install them.");
-            }
+
+            bool hasDifferences = assetsToDelete.Count != 0 || assetsToDownload.Count != 0 ||
+                                  mapsToDownload.Count != 0 || mapsToDelete.Count != 0 || downloadRest;
+
+            return (downloadRest, assetsToDownload, assetsToDelete, mapsToDownload, mapsToDelete, hasDifferences, remoteDoc);
         }
         catch (Exception ex)
         {
             WriteToConsole($"Could not check for updates: {ex.Message}");
-            // If we can't check, keep the current IsGameUpToDate state
+            // If we can't check, return empty diff
+            return (false, new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(),
+                new List<KeyValuePair<string, string>>(), new List<KeyValuePair<string, string>>(), false, null);
+        }
+    }
+
+    private async Task<(bool downloadRest, List<KeyValuePair<string, string>> assetsToDownload,
+        List<KeyValuePair<string, string>> assetsToDelete, List<KeyValuePair<string, string>> mapsToDownload,
+        List<KeyValuePair<string, string>> mapsToDelete, bool hasDifferences)> GetUpdateDiffAsync(bool includeDevMode = false)
+    {
+        var (downloadRest, assetsToDownload, assetsToDelete, mapsToDownload, mapsToDelete, hasDifferences, _) = await GetUpdateDiffCoreAsync(includeDevMode);
+        return (downloadRest, assetsToDownload, assetsToDelete, mapsToDownload, mapsToDelete, hasDifferences);
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        var (downloadRest, assetsToDownload, assetsToDelete, mapsToDownload, mapsToDelete, hasDifferences) = await GetUpdateDiffAsync();
+
+        if (!hasDifferences)
+        {
+            IsGameUpToDate = true;
+            WriteToConsole("Your game is up to date");
+        }
+        else
+        {
+            IsGameUpToDate = false;
+            WriteToConsole("Updates are available. Click 'Update cRPG' to install them.");
         }
     }
 
@@ -555,76 +603,10 @@ public partial class MainViewModel : ObservableObject
     private async Task UpdateGameFilesAsync()
     {
         IsUpdating = true;
-        if (!HashExist())
-        {
-            await VerifyGameFilesAsync();
-        }
 
-        XmlDocument doc = new();
-        try
-        {
-            string url = IsBeta ? "https://namidaka.fr/hash.xml" : "https://c-rpg.eu/hash.xml";
-            using (var client = new HttpClient())
-            {
-                string xmlContent = await client.GetStringAsync(url);
-                doc.LoadXml(xmlContent);
-            }
-        }
-        catch (Exception ex)
-        {
-            WriteToConsole($"Website may be updating, Use modmail to report it if issue persists in 15 minutes");
-            WriteToConsole($"Error: {ex.Message}");
-            IsUpdating = false;
-            return;
-        }
+        var (downloadRest, assetsToDownload, assetsToDelete, mapsToDownload, mapsToDelete, hasDifferences, remoteDoc) = await GetUpdateDiffCoreAsync(includeDevMode: true);
 
-        if (doc?.DocumentElement == null)
-        {
-            IsUpdating = false;
-            return;
-        }
-
-        Dictionary<string, string> distantAssets = new();
-        Dictionary<string, string> distantMaps = new();
-        string distantRestHash = CrpgHashMethods.ReadHash(doc, distantAssets, distantMaps);
-        XmlDocument doc2 = new();
-        try
-        {
-            doc2.Load(Path.Combine(ProgramDataPath, HashFileName));
-        }
-        catch (Exception ex)
-        {
-            WriteToConsole(ex.Message);
-            WriteToConsole("Please Verify your game files first");
-            IsUpdating = false;
-            return;
-        }
-
-        Dictionary<string, string> localAssets = new();
-        Dictionary<string, string> localMaps = new();
-
-        string localRestHash = CrpgHashMethods.ReadHash(doc2, localAssets, localMaps);
-        bool downloadRest = localRestHash != distantRestHash;
-
-        var assetsToDownload = distantAssets.Where(a => !localAssets.Contains(a)).ToList();
-        var assetsToDelete = localAssets.Where(a => !distantAssets.Contains(a)).ToList();
-        if (Config.DevMode)
-        {
-            assetsToDelete = localAssets
-                .Where(a => distantAssets.ContainsKey(a.Key) && !distantAssets.ContainsValue(a.Value)).ToList();
-        }
-
-        var mapsToDelete = localMaps.Where(a => !distantMaps.Contains(a)).ToList();
-        if (Config.DevMode)
-        {
-            mapsToDelete = localMaps.Where(a => distantMaps.ContainsKey(a.Key) && !distantMaps.ContainsValue(a.Value))
-                .ToList();
-        }
-
-        var mapsToDownload = distantMaps.Where(a => !localMaps.Contains(a)).ToList();
-
-        if (assetsToDelete.Count == 0 && assetsToDownload.Count == 0 && mapsToDownload.Count == 0 &&
-            mapsToDelete.Count == 0 && !downloadRest)
+        if (!hasDifferences)
         {
             WriteToConsole("Your game is Up To Date");
             IsGameUpToDate = true;
@@ -839,7 +821,7 @@ public partial class MainViewModel : ObservableObject
         await Task.WhenAll(allTasks);
         if (updateSuccessful)
         {
-            doc.Save(Path.Combine(ProgramDataPath, HashFileName));
+            remoteDoc!.Save(Path.Combine(ProgramDataPath, HashFileName));
             WriteToConsole("Update Finished");
             IsGameUpToDate = true;
             WriteConfig();
