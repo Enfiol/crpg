@@ -205,15 +205,15 @@ namespace Crpg.Persistence.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_battle_events");
+                        .HasName("pk_crpg_game_events");
 
                     b.HasIndex("CreatedAt")
-                        .HasDatabaseName("ix_battle_events_created_at");
+                        .HasDatabaseName("ix_crpg_game_events_created_at");
 
                     b.HasIndex("UserId", "Type", "CreatedAt")
-                        .HasDatabaseName("ix_battle_events_user_id_type_created_at");
+                        .HasDatabaseName("ix_crpg_game_events_user_id_type_created_at");
 
-                    b.ToTable("battle_events", (string)null);
+                    b.ToTable("crpg_game_events", (string)null);
                 });
 
             modelBuilder.Entity("Crpg.Domain.Entities.Battles.Battle", b =>
@@ -1794,7 +1794,7 @@ namespace Crpg.Persistence.Migrations
                     b.HasOne("Crpg.Domain.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .HasConstraintName("fk_battle_events_users_user_id");
+                        .HasConstraintName("fk_crpg_game_events_users_user_id");
 
                     b.Navigation("User");
                 });
