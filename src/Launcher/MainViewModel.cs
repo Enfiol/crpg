@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Formats.Tar;
 using System.IO;
 using System.IO.Compression;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
@@ -23,42 +24,33 @@ public partial class MainViewModel : ObservableObject
     {
         Steam,
         Epic,
-        Xbox,
     }
 
-    public static readonly string ProgramDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Crpg Launcher");
+    public static readonly string ProgramDataPath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Crpg Launcher");
 
     private static readonly string HashFileName = "CrpgHash.xml";
     private static readonly string ConfigFileName = "config.json";
 
     private readonly ConcurrentQueue<string> _messageQueue = new();
 
-    [ObservableProperty]
-    private double _progress;
+    [ObservableProperty] private double _progress;
 
-    [ObservableProperty]
-    private bool _isBeta;
+    [ObservableProperty] private bool _isBeta;
 
-    [ObservableProperty]
-    private bool _isUpdating;
+    [ObservableProperty] private bool _isUpdating;
 
-    [ObservableProperty]
-    private bool _isVerifying;
+    [ObservableProperty] private bool _isVerifying;
 
-    [ObservableProperty]
-    private bool _isGameUpToDate;
+    [ObservableProperty] private bool _isGameUpToDate;
 
-    [ObservableProperty]
-    private Platform _selectedPlatform;
+    [ObservableProperty] private Platform _selectedPlatform;
 
-    [ObservableProperty]
-    private GameInstallationInfo? _gameLocation;
+    [ObservableProperty] private GameInstallationInfo? _gameLocation;
 
-    [ObservableProperty]
-    private string _version = "1.0.0";
+    [ObservableProperty] private string _version = "1.0.0";
 
-    [ObservableProperty]
-    private bool _isCrpgInstalled;
+    [ObservableProperty] private bool _isCrpgInstalled;
 
     public MainViewModel()
     {
@@ -76,7 +68,9 @@ public partial class MainViewModel : ObservableObject
         if (ReadConfig())
         {
             SelectedPlatform = Config.LastPlatform;
-            GameLocation = Config.GameLocations.TryGetValue(SelectedPlatform, out var gameLocation) ? gameLocation : null;
+            GameLocation = Config.GameLocations.TryGetValue(SelectedPlatform, out var gameLocation)
+                ? gameLocation
+                : null;
             IsGameUpToDate = false;
         }
 
@@ -109,10 +103,7 @@ public partial class MainViewModel : ObservableObject
                 Directory.CreateDirectory(ProgramDataPath);
             }
 
-            List<string> lines = new()
-            {
-                "test",
-            };
+            List<string> lines = new() { "test", };
             File.WriteAllLines(Path.Combine(ProgramDataPath, "test.ini"), lines);
             File.Delete(Path.Combine(ProgramDataPath, "test.ini"));
             return true;
@@ -150,6 +141,10 @@ public partial class MainViewModel : ObservableObject
         ApplySettings();
         Version = ReadTextFromResource("pack://application:,,,/launcherversion.txt");
         _ = CheckNewVersion();
+
+        // Check if game is up to date automatically on startup
+        _ = CheckForUpdatesAsync();
+
         NotifyUI();
     }
 
@@ -175,12 +170,6 @@ public partial class MainViewModel : ObservableObject
             if (platform == Platform.Steam)
             {
                 GameLocation = ResolveBannerlordSteamInstallation();
-                _ = HandleGameLocationChange(platform);
-            }
-
-            if (platform == Platform.Xbox)
-            {
-                GameLocation = ResolveBannerlordXboxInstallation();
                 _ = HandleGameLocationChange(platform);
             }
         }
@@ -240,6 +229,27 @@ public partial class MainViewModel : ObservableObject
         return canUpdate;
     }
 
+    private static bool IsSteamRunning()
+    {
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam\ActiveProcess");
+        if (key == null)
+        {
+            return false;
+        }
+
+        object? activeUser = key.GetValue("ActiveUser"); // Logged in
+        object? pidObj = key.GetValue("pid"); // Steam pid
+
+        if (activeUser != null && (int)activeUser > 0 && pidObj != null && (int)pidObj > 0)
+        {
+            Process steamProc = Process.GetProcessById((int)pidObj); // Get process by steam pid
+            // Ensure that steam pid are steam (causes by reuse pid after steam crashes)
+            return steamProc.ProcessName.Contains("steam", StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        return false;
+    }
+
     private async Task CheckNewVersion()
     {
         string onlineVersion = await OnlineLauncherVersion("https://c-rpg.eu/LauncherVersion.txt");
@@ -256,6 +266,64 @@ public partial class MainViewModel : ObservableObject
         else
         {
             WriteToConsole("Your Launcher is up to date");
+        }
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        if (!HashExist() || GameLocation == null)
+        {
+            return;
+        }
+
+        try
+        {
+            XmlDocument remoteDoc = new();
+            string url = IsBeta ? "https://namidaka.fr/hash.xml" : "https://c-rpg.eu/hash.xml";
+            using (var client = new HttpClient())
+            {
+                string xmlContent = await client.GetStringAsync(url);
+                remoteDoc.LoadXml(xmlContent);
+            }
+
+            if (remoteDoc.DocumentElement == null)
+            {
+                return;
+            }
+
+            XmlDocument localDoc = new();
+            localDoc.Load(Path.Combine(ProgramDataPath, HashFileName));
+
+            Dictionary<string, string> remoteAssets = new();
+            Dictionary<string, string> remoteMaps = new();
+            string remoteRestHash = CrpgHashMethods.ReadHash(remoteDoc, remoteAssets, remoteMaps);
+
+            Dictionary<string, string> localAssets = new();
+            Dictionary<string, string> localMaps = new();
+            string localRestHash = CrpgHashMethods.ReadHash(localDoc, localAssets, localMaps);
+
+            bool downloadRest = localRestHash != remoteRestHash;
+            var assetsToDownload = remoteAssets.Where(a => !localAssets.Contains(a)).ToList();
+            var assetsToDelete = localAssets.Where(a => !remoteAssets.Contains(a)).ToList();
+            var mapsToDownload = remoteMaps.Where(a => !localMaps.Contains(a)).ToList();
+            var mapsToDelete = localMaps.Where(a => !remoteMaps.Contains(a)).ToList();
+
+            if (assetsToDelete.Count == 0 && assetsToDownload.Count == 0 &&
+                mapsToDownload.Count == 0 && mapsToDelete.Count == 0 && !downloadRest)
+            {
+                IsGameUpToDate = true;
+                WriteToConsole("Your game is up to date");
+            }
+            else
+            {
+                IsGameUpToDate = false;
+                WriteToConsole("Updates are available. Click 'Update cRPG' to install them.");
+            }
+        }
+        catch (Exception ex)
+        {
+            WriteToConsole($"Could not check for updates: {ex.Message}");
+            // If we can't check, keep the current IsGameUpToDate state
         }
     }
 
@@ -302,7 +370,8 @@ public partial class MainViewModel : ObservableObject
 
     private void ExtractAndDeleteFile(string inputPath, string outputPath)
     {
-        using (var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.None, bufferSize: 4096, useAsync: true))
+        using (var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.None, bufferSize: 4096,
+                   useAsync: true))
         {
             using (var gzipStream = new GZipStream(stream, CompressionMode.Decompress))
             {
@@ -368,7 +437,7 @@ public partial class MainViewModel : ObservableObject
 
     private bool HashExist()
     {
-        return File.Exists(Path.Combine(ProgramDataPath, ConfigFileName));
+        return File.Exists(Path.Combine(ProgramDataPath, HashFileName));
     }
 
     private void NotifyUI()
@@ -408,7 +477,8 @@ public partial class MainViewModel : ObservableObject
 
         if (folderDialog.ShowDialog() == true)
         {
-            GameLocation = GameInstallationFolderResolver.CreateGameInstallationInfo(folderDialog.FolderName, SelectedPlatform);
+            GameLocation =
+                GameInstallationFolderResolver.CreateGameInstallationInfo(folderDialog.FolderName, SelectedPlatform);
         }
 
         if (GameLocation != null)
@@ -451,6 +521,26 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
+        if (SelectedPlatform == Platform.Steam && !IsSteamRunning())
+        {
+            WriteToConsole("Steam is not running. Starting Steam...");
+            Process.Start(new ProcessStartInfo { FileName = "steam://main/open", UseShellExecute = true, });
+
+            // Wait for Steam to start before launching the game
+            WriteToConsole("Waiting for Steam to start...");
+            int maxAttempts = 50; // 50 * 100ms = 5 seconds timeout
+            for (int i = 0; i < maxAttempts; i++)
+            {
+                Thread.Sleep(100);
+                if (IsSteamRunning())
+                {
+                    WriteToConsole("Steam started successfully.");
+                    break;
+                }
+            }
+        }
+
+        WriteToConsole("Launching Bannerlord...");
         Process.Start(new ProcessStartInfo
         {
             WorkingDirectory = GameLocation?.ProgramWorkingDirectory ?? string.Empty,
@@ -520,18 +610,21 @@ public partial class MainViewModel : ObservableObject
         var assetsToDelete = localAssets.Where(a => !distantAssets.Contains(a)).ToList();
         if (Config.DevMode)
         {
-            assetsToDelete = localAssets.Where(a => distantAssets.ContainsKey(a.Key) && !distantAssets.ContainsValue(a.Value)).ToList();
+            assetsToDelete = localAssets
+                .Where(a => distantAssets.ContainsKey(a.Key) && !distantAssets.ContainsValue(a.Value)).ToList();
         }
 
         var mapsToDelete = localMaps.Where(a => !distantMaps.Contains(a)).ToList();
         if (Config.DevMode)
         {
-            mapsToDelete = localMaps.Where(a => distantMaps.ContainsKey(a.Key) && !distantMaps.ContainsValue(a.Value)).ToList();
+            mapsToDelete = localMaps.Where(a => distantMaps.ContainsKey(a.Key) && !distantMaps.ContainsValue(a.Value))
+                .ToList();
         }
 
         var mapsToDownload = distantMaps.Where(a => !localMaps.Contains(a)).ToList();
 
-        if (assetsToDelete.Count == 0 && assetsToDownload.Count == 0 && mapsToDownload.Count == 0 && mapsToDelete.Count == 0 && !downloadRest)
+        if (assetsToDelete.Count == 0 && assetsToDownload.Count == 0 && mapsToDownload.Count == 0 &&
+            mapsToDelete.Count == 0 && !downloadRest)
         {
             WriteToConsole("Your game is Up To Date");
             IsGameUpToDate = true;
@@ -548,7 +641,8 @@ public partial class MainViewModel : ObservableObject
 
         foreach (var assetToDelete in assetsToDelete)
         {
-            string pathToDelete = Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/AssetPackages/", assetToDelete.Key);
+            string pathToDelete = Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/AssetPackages/",
+                assetToDelete.Key);
             WriteToConsole(pathToDelete);
             try
             {
@@ -561,7 +655,8 @@ public partial class MainViewModel : ObservableObject
 
         foreach (var mapToDelete in mapsToDelete)
         {
-            string pathToDelete = Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/SceneObj/", mapToDelete.Key);
+            string pathToDelete =
+                Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/SceneObj/", mapToDelete.Key);
             WriteToConsole($"deleting {pathToDelete}");
             try
             {
@@ -626,15 +721,18 @@ public partial class MainViewModel : ObservableObject
                     // Download the file
                     WriteToConsole($"Downloading and extracting {assetToDownload.Key + ".tar.gz"} ");
                     string fileToDownload = assetToDownload.Key + ".tar.gz";
-                    var chunkedRequest = CrpgChunkedRequest.Create((IsBeta ? "https://namidaka.fr/AssetPackages/" : "https://c-rpg.eu/AssetPackages/") + assetToDownload.Key + ".tar.gz");
+                    var chunkedRequest = CrpgChunkedRequest.Create(
+                        (IsBeta ? "https://namidaka.fr/AssetPackages/" : "https://c-rpg.eu/AssetPackages/") +
+                        assetToDownload.Key + ".tar.gz");
                     string tempPath = Path.Combine(Path.GetTempPath(), fileToDownload);
                     IProgress<double> currentProgress = new Progress<double>(p =>
                     {
-                       Progress = p * 100;
+                        Progress = p * 100;
                     });
                     await chunkedRequest.DownloadAsync(tempPath, currentProgress);
 
-                    var extractionTask1 = Task.Run(() => ExtractAndDeleteFile(tempPath, Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/AssetPackages/")));
+                    var extractionTask1 = Task.Run(() => ExtractAndDeleteFile(tempPath,
+                        Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/AssetPackages/")));
                     allTasks.Add(extractionTask1);
                 }
                 catch (Exception ex)
@@ -671,7 +769,8 @@ public partial class MainViewModel : ObservableObject
                     {
                         WriteToConsole($"Downloading and extracting {mapToDownload.Key + ".tar.gz"} ");
                         string fileToDownload = mapToDownload.Key + ".tar.gz";
-                        var chunkedRequest = CrpgChunkedRequest.Create((IsBeta ? "https://namidaka.fr/SceneObj/" : "https://c-rpg.eu/SceneObj/") + fileToDownload);
+                        var chunkedRequest = CrpgChunkedRequest.Create(
+                            (IsBeta ? "https://namidaka.fr/SceneObj/" : "https://c-rpg.eu/SceneObj/") + fileToDownload);
                         string tempPath = Path.Combine(Path.GetTempPath(), fileToDownload);
 
                         progresses.TryAdd(localIndex, 0); // Initialize progress for this download
@@ -683,7 +782,8 @@ public partial class MainViewModel : ObservableObject
                         });
 
                         await chunkedRequest.DownloadAsync(tempPath, progressReporter);
-                        await Task.Run(() => ExtractAndDeleteFile(tempPath, Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/SceneObj/")));
+                        await Task.Run(() => ExtractAndDeleteFile(tempPath,
+                            Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/SceneObj/")));
                     }
                     catch (Exception ex)
                     {
@@ -710,7 +810,9 @@ public partial class MainViewModel : ObservableObject
                     // Download the file
                     WriteToConsole($"Downloading and extracting the xmls files : rest.tar.gz");
                     string fileToDownload = "rest" + ".tar.gz";
-                    var chunkedRequest = CrpgChunkedRequest.Create((IsBeta ? "https://namidaka.fr/" : "https://c-rpg.eu/") + fileToDownload);
+                    var chunkedRequest =
+                        CrpgChunkedRequest.Create((IsBeta ? "https://namidaka.fr/" : "https://c-rpg.eu/") +
+                                                  fileToDownload);
                     string tempPath = Path.Combine(Path.GetTempPath(), fileToDownload);
                     IProgress<double> currentProgress = new Progress<double>(p =>
                     {
@@ -718,7 +820,8 @@ public partial class MainViewModel : ObservableObject
                     });
                     await chunkedRequest.DownloadAsync(tempPath, currentProgress);
 
-                    var extractionTask3 = Task.Run(() => ExtractAndDeleteFile(tempPath, Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/")));
+                    var extractionTask3 = Task.Run(() =>
+                        ExtractAndDeleteFile(tempPath, Path.Combine(GameLocation.InstallationPath, "Modules/cRPG/")));
                     allTasks.Add(extractionTask3);
                 }
                 catch (Exception ex)
