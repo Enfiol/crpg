@@ -1,4 +1,4 @@
-﻿using Crpg.Domain.Entities.BattleEvents;
+﻿using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Module.Api;
 using Crpg.Module.Api.Models.Items;
 using Crpg.Module.Modes.Warmup;
@@ -331,7 +331,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
     {
         var events = _buffer.ToArray();
         _buffer.Clear();
-        _ = _crpgClient.CreateBattleEventsAsync(events); // Fire and forget
+        _ = _crpgClient.CreateCrpgGameEventsAsync(events); // Fire and forget
         Debug.Print($"Sent {events.Length} battle events");
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Crpg.Application.Common.Mappings;
 using Crpg.Domain.Entities.Quests;
-using static Crpg.Domain.Entities.BattleEvents.CrpgGameEvent;
+using static Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent;
 
 namespace Crpg.Application.Quests.Models;
 

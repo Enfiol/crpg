@@ -5,7 +5,7 @@ using Crpg.Application.Common.Services;
 using Crpg.Application.Items.Models;
 using Crpg.Domain.Entities;
 using Crpg.Domain.Entities.ActivityLogs;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -85,6 +85,7 @@ public record SeedDataCommand : IMediatorRequest
 
         private async Task AddDevelopmentData(CancellationToken cancellationToken)
         {
+            return;
             if (!await _db.Settings.AnyAsync())
             {
                 _db.Settings.Add(new()
@@ -1885,7 +1886,7 @@ public record SeedDataCommand : IMediatorRequest
 
             _db.UserQuests.AddRange(orleQuests);
 
-            CrpgGameEvent[] orleBattleEvents =
+            CrpgGameEvent[] orleCrpgGameEvents =
             [
                 new CrpgGameEvent
                 {
@@ -2071,8 +2072,8 @@ public record SeedDataCommand : IMediatorRequest
                     CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-10),
                 },
             ];
-            _db.BattleEvents.RemoveRange(await _db.BattleEvents.Where(e => e.UserId == orle.Id).ToArrayAsync(cancellationToken));
-            _db.BattleEvents.AddRange(orleBattleEvents);
+            _db.CrpgGameEvents.RemoveRange(await _db.CrpgGameEvents.Where(e => e.UserId == orle.Id).ToArrayAsync(cancellationToken));
+            _db.CrpgGameEvents.AddRange(orleCrpgGameEvents);
 
             ClanInvitation[] newClanInvitations =
             {

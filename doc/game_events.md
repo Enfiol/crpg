@@ -184,7 +184,7 @@ if (isBlocked && validPlayers && !selfBlock) {
 3. **Event Creation**: Event object created with relevant data
 4. **Buffering**: Event added to in-memory buffer
 5. **Batch Processing**: Every 5 seconds, buffer is flushed
-6. **API Call**: Events sent to backend via `_crpgClient.CreateBattleEventsAsync()`
+6. **API Call**: Events sent to backend via `_crpgClient.CreateCrpgGameEventsAsync()`
 7. **Storage**: Events stored in database for quest processing
 
 ## Quest Integration
@@ -204,19 +204,22 @@ The behavior maps Bannerlord `EquipmentIndex` to cRPG `CrpgItemSlot` for item ID
 
 | EquipmentIndex | CrpgItemSlot |
 |----------------|--------------|
+| Head           | Head         |
+| Cape           | Shoulder     |
+| Body           | Body         |
+| Gloves         | Hand         |
+| Leg            | Leg          |
+| HorseHarness   | MountHarness |
+| Horse          | Mount        |
 | Weapon0        | Weapon0      |
 | Weapon1        | Weapon1      |
 | Weapon2        | Weapon2      |
 | Weapon3        | Weapon3      |
 | ExtraWeaponSlot| WeaponExtra  |
-| Head           | Head         |
-| Body           | Body         |
-| Leg            | Leg          |
-| ...            | ...          |
 
 ### Performance Considerations
 - Events are buffered in memory and sent in batches (default 5 seconds)
-- Fire-and-forget API calls (`_ = _crpgClient.CreateBattleEventsAsync()`)
+- Fire-and-forget API calls (`_ = _crpgClient.CreateCrpgGameEventsAsync()`)
 - Minimal computation during gameplay (most data comes directly from Bannerlord APIs)
 
 ### Limitations
@@ -230,6 +233,7 @@ The behavior maps Bannerlord `EquipmentIndex` to cRPG `CrpgItemSlot` for item ID
 
 | Date | Changes |
 |------|---------|
+| 2026-04-12 | Updated Equipment Index Mapping table with complete slot mappings |
 | 2026-04-09 | Added DamageType field documentation for Hit and Kill events. Clarified Block event damage field is conditional (shield blocks only). Fixed team hit filtering description. |
 | 2026-04-06 | Enhanced Block events to include weapon blocks, parries, chamber blocks |
 | 2026-04-06 | Enhanced Kill events with weapon type, hit type, body part |
@@ -240,6 +244,6 @@ The behavior maps Bannerlord `EquipmentIndex` to cRPG `CrpgItemSlot` for item ID
 
 - `src/Module.Server/Common/CrpgSaveStatisticsBehavior.cs` - Event generation logic
 - `src/Module.Server/Api/Models/CrpgGameEvent.cs` - Event model definition
-- `src/Domain/Entities/BattleEvents/CrpgGameEvent.cs` - Domain event model with DamageType field
-- `src/Application/Games/Commands/CreateBattleEventsCommand.cs` - Backend event processing
+- `src/Domain/Entities/CrpgGameEvents/CrpgGameEvent.cs` - Domain event model with DamageType field
+- `src/Application/Games/Commands/CreateCrpgGameEventsCommand.cs` - Backend event processing
 - `src/Application/Quests/Services/QuestEvaluationService.cs` - Event-based quest evaluation

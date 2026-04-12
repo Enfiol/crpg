@@ -1,5 +1,5 @@
 using Crpg.Domain.Common;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 
 namespace Crpg.Domain.Entities.Quests;
 

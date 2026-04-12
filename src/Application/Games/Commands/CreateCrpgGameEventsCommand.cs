@@ -3,19 +3,19 @@ using Crpg.Application.Common.Mediator;
 using Crpg.Application.Common.Results;
 using Crpg.Application.Games.Models;
 using Crpg.Application.Quests.Services;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Microsoft.Extensions.Logging;
 using LoggerFactory = Crpg.Logging.LoggerFactory;
 
 namespace Crpg.Application.Games.Commands;
 
-public record CreateBattleEventsCommand : IMediatorRequest
+public record CreateCrpgGameEventsCommand : IMediatorRequest
 {
-    public IList<GameEventViewModel> BattleEvents { get; init; } = Array.Empty<GameEventViewModel>();
+    public IList<GameEventViewModel> CrpgGameEvents { get; init; } = Array.Empty<GameEventViewModel>();
 
-    internal class Handler : IMediatorRequestHandler<CreateBattleEventsCommand>
+    internal class Handler : IMediatorRequestHandler<CreateCrpgGameEventsCommand>
     {
-        private static readonly ILogger Logger = LoggerFactory.CreateLogger<CreateBattleEventsCommand>();
+        private static readonly ILogger Logger = LoggerFactory.CreateLogger<CreateCrpgGameEventsCommand>();
 
         private readonly ICrpgDbContext _db;
 
@@ -24,9 +24,9 @@ public record CreateBattleEventsCommand : IMediatorRequest
             _db = db;
         }
 
-        public async ValueTask<Result> Handle(CreateBattleEventsCommand req, CancellationToken cancellationToken)
+        public async ValueTask<Result> Handle(CreateCrpgGameEventsCommand req, CancellationToken cancellationToken)
         {
-            var battleEvents = req.BattleEvents
+            var crpgGameEvents = req.CrpgGameEvents
                 .Select(e => new CrpgGameEvent
                 {
                     UserId = e.UserId,
@@ -34,10 +34,10 @@ public record CreateBattleEventsCommand : IMediatorRequest
                     EventData = e.EventData,
                 }).ToList();
 
-            _db.BattleEvents.AddRange(battleEvents);
+            _db.CrpgGameEvents.AddRange(crpgGameEvents);
             await _db.SaveChangesAsync(cancellationToken);
 
-            Logger.LogInformation("Inserted {0} battle events", battleEvents.Count);
+            Logger.LogInformation("Inserted {0} crpg game events", crpgGameEvents.Count);
             return Result.NoErrors;
         }
     }

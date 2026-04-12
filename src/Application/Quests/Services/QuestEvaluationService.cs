@@ -1,5 +1,5 @@
 ﻿using Crpg.Application.Common.Interfaces;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Domain.Entities.Quests;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,58 +7,75 @@ namespace Crpg.Application.Quests.Services;
 
 public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
 {
-    private readonly ICrpgDbContext _db = db;
-
-    public async Task<int> ComputeCurrentValueAsync(UserQuest userQuest, CancellationToken cancellationToken = default)
+    public async Task<Dictionary<int, int>> ComputeCurrentValuesAsync(List<UserQuest> userQuests,
+        CancellationToken cancellationToken = default)
     {
-        var questDefinition = userQuest.QuestDefinition!;
+        if (userQuests.Count == 0)
+        {
+            return new Dictionary<int, int>();
+        }
 
-        // Fetch events matching the basic criteria
-        var events = await _db.BattleEvents
-            .Where(be => be.UserId == userQuest.UserId
-                         && be.Type == questDefinition.EventType
-                         && be.CreatedAt >= userQuest.CreatedAt.Date) // trim time part
+        var results = new Dictionary<int, int>();
+
+        HashSet<int> userIds = [.. userQuests.Select(uq => uq.UserId)];
+
+        var eventTypes = userQuests.Select(q => q.QuestDefinition!.EventType).Distinct().ToList();
+        var earliestDate = userQuests.Min(q => q.CreatedAt.Date);
+
+        var events = await db.CrpgGameEvents
+            .Where(be => userIds.Contains(be.UserId!.Value)
+                         && eventTypes.Contains(be.Type)
+                         && be.CreatedAt >= earliestDate)
             .ToListAsync(cancellationToken);
 
-        // Apply event filters in memory if any
-        if (questDefinition.EventFiltersJson != null && questDefinition.EventFiltersJson.Length > 0)
+        foreach (var userQuest in userQuests)
         {
-            events = [.. events.Where(be => be.EventData != null
-                                        && questDefinition.EventFiltersJson.Any(filter =>
-                                            filter.All(kvp =>
-                                            {
-                                                if (!Enum.TryParse<CrpgGameEvent.EventField>(kvp.Key, out var field))
-                                                {
-                                                    return false;
-                                                }
+            var questDefinition = userQuest.QuestDefinition!;
+            var questEvents = events
+                .Where(be => be.Type == questDefinition.EventType
+                             && be.CreatedAt >= userQuest.CreatedAt.Date)
+                .ToList();
 
-                                                return be.EventData!.TryGetValue(field, out string? value) &&
-                                                       value == kvp.Value;
-                                            })))];
-        }
+            // Apply event filters in memory if any
+            if (questDefinition.EventFiltersJson != null && questDefinition.EventFiltersJson.Length > 0)
+            {
+                questEvents = questEvents.Where(be => be.EventData != null
+                                                      && questDefinition.EventFiltersJson.Any(filter =>
+                                                          filter.All(kvp =>
+                                                          {
+                                                              if (!Enum.TryParse<CrpgGameEvent.EventField>(kvp.Key,
+                                                                      out var field))
+                                                              {
+                                                                  return false;
+                                                              }
 
-        switch (questDefinition.AggregationType)
-        {
-            case QuestAggregationType.Count:
-                return events.Count;
-            case QuestAggregationType.Sum when questDefinition.SumField != null:
-                {
-                    int sum = 0;
-                    foreach (var ev in events)
+                                                              return be.EventData!.TryGetValue(field,
+                                                                         out string? value) &&
+                                                                     value == kvp.Value;
+                                                          }))).ToList();
+            }
+
+            int value = questDefinition.AggregationType switch
+            {
+                QuestAggregationType.Count => questEvents.Count,
+                QuestAggregationType.Sum when questDefinition.SumField != null =>
+                    questEvents.Sum(ev =>
                     {
                         if (ev.EventData != null &&
-                            ev.EventData.TryGetValue(questDefinition.SumField.Value, out string? value) &&
-                            int.TryParse(value, out int intValue))
+                            ev.EventData.TryGetValue(questDefinition.SumField.Value, out string? strValue) &&
+                            int.TryParse(strValue, out int intValue))
                         {
-                            sum += intValue;
+                            return intValue;
                         }
-                    }
 
-                    return sum;
-                }
+                        return 0;
+                    }),
+                _ => 0,
+            };
 
-            default:
-                return 0;
+            results[userQuest.Id] = value;
         }
+
+        return results;
     }
 }

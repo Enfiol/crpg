@@ -1,4 +1,4 @@
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Module.Api.Models;
 using Crpg.Module.Api.Models.ActivityLogs;
 using Crpg.Module.Api.Models.Characters;
@@ -126,7 +126,7 @@ internal class StubCrpgClient : ICrpgClient
         throw new NotImplementedException();
     }
 
-    public Task CreateBattleEventsAsync(IList<CrpgGameEvent> battleEvents, CancellationToken cancellationToken = default)
+    public Task CreateCrpgGameEventsAsync(IList<CrpgGameEvent> crpgGameEvents, CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }

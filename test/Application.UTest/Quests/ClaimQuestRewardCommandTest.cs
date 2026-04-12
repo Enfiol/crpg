@@ -227,8 +227,9 @@ public class ClaimQuestRewardCommandTest : TestBase
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
-        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(5); // less than required 10
+        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValuesAsync(It.IsAny<List<UserQuest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((List<UserQuest> uqs, CancellationToken ct) =>
+                uqs.ToDictionary(uq => uq.Id, uq => 5)); // less than required 10
 
         var handler = new ClaimQuestRewardCommand.Handler(
             ActDb,
@@ -280,8 +281,9 @@ public class ClaimQuestRewardCommandTest : TestBase
         Mock<ICharacterService> characterServiceMock = new();
         Mock<IActivityLogService> activityLogServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
-        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(15); // greater than required
+        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValuesAsync(It.IsAny<List<UserQuest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((List<UserQuest> uqs, CancellationToken ct) =>
+                uqs.ToDictionary(uq => uq.Id, uq => 15)); // greater than required
 
         var handler = new ClaimQuestRewardCommand.Handler(
             ActDb,
@@ -340,10 +342,10 @@ public class ClaimQuestRewardCommandTest : TestBase
         Mock<IActivityLogService> activityLogServiceMock = new();
         activityLogServiceMock.Setup(al => al.CreateQuestRewardClaimedLog(user.Id, character.Id, userQuest.Id, 100, 200))
             .Returns(new ActivityLog());
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
-        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(15); // greater than required
+        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValuesAsync(It.IsAny<List<UserQuest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((List<UserQuest> uqs, CancellationToken ct) =>
+                uqs.ToDictionary(uq => uq.Id, uq => 15)); // greater than required
 
         var handler = new ClaimQuestRewardCommand.Handler(
             ActDb,

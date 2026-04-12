@@ -1,5 +1,5 @@
 using Crpg.Application.Quests.Services;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Domain.Entities.Quests;
 using NUnit.Framework;
 
@@ -21,7 +21,7 @@ public class QuestEvaluationServiceTest : TestBase
             },
         };
 
-        ArrangeDb.BattleEvents.AddRange(
+        ArrangeDb.CrpgGameEvents.AddRange(
             new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 10, 00, 00, 00, DateTimeKind.Utc) },
             new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
             new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Block, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
@@ -31,9 +31,9 @@ public class QuestEvaluationServiceTest : TestBase
 
         QuestEvaluationService service = new(ActDb);
 
-        int value = await service.ComputeCurrentValueAsync(userQuest);
+        var values = await service.ComputeCurrentValuesAsync([userQuest]);
 
-        Assert.That(value, Is.EqualTo(2));
+        Assert.That(values[userQuest.Id], Is.EqualTo(2));
     }
 
     [Test]
@@ -62,7 +62,7 @@ public class QuestEvaluationServiceTest : TestBase
             },
         };
 
-        ArrangeDb.BattleEvents.AddRange(
+        ArrangeDb.CrpgGameEvents.AddRange(
             new CrpgGameEvent
             {
                 UserId = 10,
@@ -105,9 +105,9 @@ public class QuestEvaluationServiceTest : TestBase
 
         QuestEvaluationService service = new(ActDb);
 
-        int value = await service.ComputeCurrentValueAsync(userQuest);
+        var values = await service.ComputeCurrentValuesAsync([userQuest]);
 
-        Assert.That(value, Is.EqualTo(2));
+        Assert.That(values[userQuest.Id], Is.EqualTo(2));
     }
 
     [Test]
@@ -125,7 +125,7 @@ public class QuestEvaluationServiceTest : TestBase
             },
         };
 
-        ArrangeDb.BattleEvents.AddRange(
+        ArrangeDb.CrpgGameEvents.AddRange(
             new CrpgGameEvent
             {
                 UserId = 10,
@@ -160,9 +160,9 @@ public class QuestEvaluationServiceTest : TestBase
 
         QuestEvaluationService service = new(ActDb);
 
-        int value = await service.ComputeCurrentValueAsync(userQuest);
+        var values = await service.ComputeCurrentValuesAsync([userQuest]);
 
-        Assert.That(value, Is.EqualTo(12));
+        Assert.That(values[userQuest.Id], Is.EqualTo(12));
     }
 
     [Test]
@@ -180,7 +180,7 @@ public class QuestEvaluationServiceTest : TestBase
             },
         };
 
-        ArrangeDb.BattleEvents.Add(new CrpgGameEvent
+        ArrangeDb.CrpgGameEvents.Add(new CrpgGameEvent
         {
             UserId = 10,
             Type = CrpgGameEvent.EventType.Hit,
@@ -194,8 +194,8 @@ public class QuestEvaluationServiceTest : TestBase
 
         QuestEvaluationService service = new(ActDb);
 
-        int value = await service.ComputeCurrentValueAsync(userQuest);
+        var values = await service.ComputeCurrentValuesAsync([userQuest]);
 
-        Assert.That(value, Is.EqualTo(0));
+        Assert.That(values[userQuest.Id], Is.EqualTo(0));
     }
 }

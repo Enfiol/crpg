@@ -310,7 +310,6 @@ public class RerollQuestCommandTest : TestBase
         Mock<IActivityLogService> activityLogServiceMock = new();
         activityLogServiceMock.Setup(al => al.CreateQuestRerolledLog(user.Id, userQuest.Id, newUserQuest.Id, Constants.QuestRerollDailyQuestPrice))
             .Returns(new ActivityLog());
-        Mock<IUserNotificationService> userNotificationServiceMock = new();
         Mock<IQuestAssignmentService> questAssignmentServiceMock = new();
         questAssignmentServiceMock.Setup(q => q.ReplaceDailyUserQuestAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
             .Callback<UserQuest, CancellationToken>((uq, ct) =>

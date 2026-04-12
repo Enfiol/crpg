@@ -1,7 +1,7 @@
 using Crpg.Domain.Common;
 using Crpg.Domain.Entities.Users;
 
-namespace Crpg.Domain.Entities.BattleEvents;
+namespace Crpg.Domain.Entities.CrpgGameEvents;
 
 public class CrpgGameEvent : AuditableEntity
 {

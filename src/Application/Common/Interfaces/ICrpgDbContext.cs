@@ -1,5 +1,5 @@
 using Crpg.Domain.Entities.ActivityLogs;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -48,7 +48,7 @@ public interface ICrpgDbContext
     DbSet<BattleParticipant> BattleParticipants { get; }
     DbSet<BattleMercenaryApplication> BattleMercenaryApplications { get; }
     DbSet<ActivityLog> ActivityLogs { get; set; }
-    DbSet<CrpgGameEvent> BattleEvents { get; set; }
+    DbSet<CrpgGameEvent> CrpgGameEvents { get; set; }
     DbSet<ActivityLogMetadata> ActivityLogMetadata { get; set; }
     DbSet<UserNotification> UserNotifications { get; set; }
     DbSet<Terrain> Terrains { get; }

@@ -72,8 +72,9 @@ public class GetUserQuestsQueryTest : TestBase
         await ArrangeDb.SaveChangesAsync();
 
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
-        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserQuest uq, CancellationToken ct) => uq.Id == userQuest1.Id ? 8 : 25);
+        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValuesAsync(It.IsAny<List<UserQuest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((List<UserQuest> uqs, CancellationToken ct) =>
+                uqs.ToDictionary(uq => uq.Id, uq => uq.Id == userQuest1.Id ? 8 : 25));
 
         var handler = new GetUserQuestsQuery.Handler(ActDb, Mapper, questEvaluationServiceMock.Object);
 
@@ -128,8 +129,9 @@ public class GetUserQuestsQueryTest : TestBase
         await ArrangeDb.SaveChangesAsync();
 
         Mock<IQuestEvaluationService> questEvaluationServiceMock = new();
-        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValueAsync(It.IsAny<UserQuest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserQuest uq, CancellationToken ct) => uq.Id == userQuest1.Id ? 5 : 15);
+        questEvaluationServiceMock.Setup(q => q.ComputeCurrentValuesAsync(It.IsAny<List<UserQuest>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((List<UserQuest> uqs, CancellationToken ct) =>
+                uqs.ToDictionary(uq => uq.Id, uq => uq.Id == userQuest1.Id ? 5 : 15));
 
         var handler = new GetUserQuestsQuery.Handler(ActDb, Mapper, questEvaluationServiceMock.Object);
 

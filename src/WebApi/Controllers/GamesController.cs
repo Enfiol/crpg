@@ -70,15 +70,15 @@ public class GamesController : BaseController
     /// <summary>
     /// Insert game events.
     /// </summary>
-    /// <param name="battleEvents">The game events to insert.</param>
+    /// <param name="gameEvents">The game events to insert.</param>
     /// <response code="200">Inserted.</response>
     /// <response code="400">Bad Request.</response>
     [HttpPost("game-events")]
-    public Task<ActionResult> InsertGameEvents([FromBody] GameEventViewModel[] battleEvents)
+    public Task<ActionResult> InsertGameEvents([FromBody] GameEventViewModel[] gameEvents)
     {
-        return ResultToActionAsync(Mediator.Send(new CreateBattleEventsCommand
+        return ResultToActionAsync(Mediator.Send(new CreateCrpgGameEventsCommand
         {
-            BattleEvents = battleEvents,
+            CrpgGameEvents = gameEvents,
         }, CancellationToken.None));
     }
 

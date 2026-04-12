@@ -23,10 +23,19 @@ public record GetUserQuestsQuery : IMediatorRequest<IList<UserQuestViewModel>>
                 .Where(uq => uq.UserId == req.UserId)
                 .ToListAsync(cancellationToken);
 
+            // Separate claimed and non-claimed quests
+            var claimedQuests = userQuests.Where(uq => uq.IsRewardClaimed).ToList();
+            var nonClaimedQuests = userQuests.Where(uq => !uq.IsRewardClaimed).ToList();
+
+            // Batch compute values for non-claimed quests
+            var computedValues = await questEvaluationService.ComputeCurrentValuesAsync(nonClaimedQuests, cancellationToken);
+
             var viewModels = new List<UserQuestViewModel>();
             foreach (var userQuest in userQuests)
             {
-                int currentValue = await questEvaluationService.ComputeCurrentValueAsync(userQuest, cancellationToken);
+                int currentValue = userQuest.IsRewardClaimed
+                    ? userQuest.QuestDefinition!.RequiredValue
+                    : computedValues[userQuest.Id];
                 var vm = mapper.Map<UserQuestViewModel>(userQuest);
                 currentValue = Math.Min(currentValue, userQuest.QuestDefinition!.RequiredValue);
                 vm = vm with { CurrentValue = currentValue };

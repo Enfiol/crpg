@@ -2,7 +2,7 @@ using Crpg.Application.Common.Exceptions;
 using Crpg.Application.Common.Interfaces;
 using Crpg.Domain.Common;
 using Crpg.Domain.Entities.ActivityLogs;
-using Crpg.Domain.Entities.BattleEvents;
+using Crpg.Domain.Entities.CrpgGameEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -66,7 +66,7 @@ public class CrpgDbContext : DbContext, ICrpgDbContext
     public DbSet<BattleParticipant> BattleParticipants { get; set; } = default!;
     public DbSet<BattleMercenaryApplication> BattleMercenaryApplications { get; set; } = default!;
     public DbSet<ActivityLog> ActivityLogs { get; set; } = default!;
-    public DbSet<CrpgGameEvent> BattleEvents { get; set; } = default!;
+    public DbSet<CrpgGameEvent> CrpgGameEvents { get; set; } = default!;
     public DbSet<ActivityLogMetadata> ActivityLogMetadata { get; set; } = default!;
     public DbSet<UserNotification> UserNotifications { get; set; } = default!;
     public DbSet<UserNotificationMetadata> UserNotificationMetadata { get; set; } = default!;

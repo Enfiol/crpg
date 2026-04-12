@@ -15,11 +15,9 @@ namespace Crpg.Application.Quests.Commands;
 
 public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
 {
-    [JsonIgnore]
-    public int UserId { get; init; }
+    [JsonIgnore] public int UserId { get; init; }
 
-    [JsonIgnore]
-    public int UserQuestId { get; init; }
+    [JsonIgnore] public int UserQuestId { get; init; }
 
     public int CharacterId { get; init; }
 
@@ -29,11 +27,13 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
         IDateTime dateTime,
         ICharacterService characterService,
         IActivityLogService activityLogService,
-        IQuestEvaluationService questEvaluationService) : IMediatorRequestHandler<ClaimQuestRewardCommand, UserQuestViewModel>
+        IQuestEvaluationService questEvaluationService)
+        : IMediatorRequestHandler<ClaimQuestRewardCommand, UserQuestViewModel>
     {
         private static readonly ILogger Logger = LoggerFactory.CreateLogger<ClaimQuestRewardCommand>();
 
-        public async ValueTask<Result<UserQuestViewModel>> Handle(ClaimQuestRewardCommand req, CancellationToken cancellationToken)
+        public async ValueTask<Result<UserQuestViewModel>> Handle(ClaimQuestRewardCommand req,
+            CancellationToken cancellationToken)
         {
             var userQuest = await db.UserQuests
                 .Include(uq => uq.QuestDefinition)
@@ -60,10 +60,14 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
                 return new(CommonErrors.QuestDefinitionNotFound(userQuest.QuestDefinitionId));
             }
 
-            int currentValue = await questEvaluationService.ComputeCurrentValueAsync(userQuest, cancellationToken);
+            int currentValue =
+                (await questEvaluationService.ComputeCurrentValuesAsync([userQuest], cancellationToken))
+                .GetValueOrDefault(userQuest.Id);
+
             if (currentValue < userQuest.QuestDefinition.RequiredValue)
             {
-                return new(CommonErrors.QuestNotCompleted(req.UserQuestId, currentValue, userQuest.QuestDefinition.RequiredValue));
+                return new(CommonErrors.QuestNotCompleted(req.UserQuestId, currentValue,
+                    userQuest.QuestDefinition.RequiredValue));
             }
 
             var user = userQuest.User!;
@@ -79,15 +83,18 @@ public record ClaimQuestRewardCommand : IMediatorRequest<UserQuestViewModel>
             user.Gold += userQuest.QuestDefinition.RewardGold;
 
             // Give flat experience to the specified character
-            characterService.GiveExperience(character, userQuest.QuestDefinition.RewardExperience, useExperienceMultiplier: false);
+            characterService.GiveExperience(character, userQuest.QuestDefinition.RewardExperience,
+                useExperienceMultiplier: false);
 
             userQuest.IsRewardClaimed = true;
 
             db.ActivityLogs.Add(activityLogService.CreateQuestRewardClaimedLog(
-                req.UserId, req.CharacterId, userQuest.Id, userQuest.QuestDefinition.RewardGold, userQuest.QuestDefinition.RewardExperience));
+                req.UserId, req.CharacterId, userQuest.Id, userQuest.QuestDefinition.RewardGold,
+                userQuest.QuestDefinition.RewardExperience));
 
             await db.SaveChangesAsync(cancellationToken);
-            Logger.LogInformation("User '{0}' claimed reward for quest '{1}' on character '{2}'", req.UserId, req.UserQuestId, req.CharacterId);
+            Logger.LogInformation("User '{0}' claimed reward for quest '{1}' on character '{2}'", req.UserId,
+                req.UserQuestId, req.CharacterId);
 
             var vm = mapper.Map<UserQuestViewModel>(userQuest);
             currentValue = Math.Min(currentValue, userQuest.QuestDefinition.RequiredValue);

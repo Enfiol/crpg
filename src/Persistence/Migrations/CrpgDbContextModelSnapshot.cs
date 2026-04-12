@@ -172,7 +172,7 @@ namespace Crpg.Persistence.Migrations
                     b.ToTable("activity_log_metadata", (string)null);
                 });
 
-            modelBuilder.Entity("Crpg.Domain.Entities.BattleEvents.CrpgGameEvent", b =>
+            modelBuilder.Entity("Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1786,7 +1786,7 @@ namespace Crpg.Persistence.Migrations
                         .HasConstraintName("fk_activity_log_metadata_activity_logs_activity_log_id");
                 });
 
-            modelBuilder.Entity("Crpg.Domain.Entities.BattleEvents.CrpgGameEvent", b =>
+            modelBuilder.Entity("Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent", b =>
                 {
                     b.HasOne("Crpg.Domain.Entities.Users.User", "User")
                         .WithMany()

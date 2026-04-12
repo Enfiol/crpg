@@ -4,5 +4,5 @@ namespace Crpg.Application.Quests.Services;
 
 public interface IQuestEvaluationService
 {
-    Task<int> ComputeCurrentValueAsync(UserQuest userQuest, CancellationToken cancellationToken = default);
+    Task<Dictionary<int, int>> ComputeCurrentValuesAsync(List<UserQuest> userQuests, CancellationToken cancellationToken = default);
 }

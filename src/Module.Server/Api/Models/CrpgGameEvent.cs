@@ -1,4 +1,4 @@
-﻿namespace Crpg.Domain.Entities.BattleEvents;
+﻿namespace Crpg.Domain.Entities.CrpgGameEvents;
 
 public class CrpgGameEvent
 {

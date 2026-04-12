@@ -28,7 +28,7 @@ public class QuestAssignmentService(ICrpgDbContext db, Constants constants) : IQ
 
         var userActiveQuests = await _db.UserQuests
             .Include(uq => uq.QuestDefinition)
-            .Where(uq => uq.QuestDefinition!.Type == QuestType.Daily).ToListAsync(cancellationToken);
+            .Where(uq => uq.QuestDefinition!.Type == QuestType.Daily && uq.ExpiresAt > DateTime.UtcNow.Date).ToListAsync(cancellationToken);
 
         var userActiveQuestsCount = userActiveQuests
                     .GroupBy(x => x.UserId)

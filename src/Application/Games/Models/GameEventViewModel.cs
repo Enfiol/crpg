@@ -1,5 +1,5 @@
-using Crpg.Domain.Entities.BattleEvents;
-using static Crpg.Domain.Entities.BattleEvents.CrpgGameEvent;
+using Crpg.Domain.Entities.CrpgGameEvents;
+using static Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent;
 
 namespace Crpg.Application.Games.Models;
 
