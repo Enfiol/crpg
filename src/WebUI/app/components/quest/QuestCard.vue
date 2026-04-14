@@ -34,6 +34,7 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
 <template>
   <UCard
     :variant="quest.isRewardClaimed ? 'soft' : 'subtle'"
+    :class="{ 'opacity-66': quest.isRewardClaimed }"
     :ui="{
       body: 'space-y-4.5',
     }"
@@ -41,9 +42,12 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
     <template #header>
       <div class="flex items-start justify-between gap-2">
         <UiDataContent
-          :label="questName"
           :caption="questDescription"
-        />
+        >
+          <template #default>
+            {{ questName }}
+          </template>
+        </UiDataContent>
 
         <div class="flex shrink-0 items-center gap-2">
           <UTooltip v-if="!isExpired && !quest.isRewardClaimed" :text="$d(quest.expiresAt, 'short')">
@@ -87,7 +91,7 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
     </UProgress>
 
     <div class="flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3.5">
         <AppCoin :value="quest.questDefinition.rewardGold" />
         <AppExperience :value="quest.questDefinition.rewardExperience" />
       </div>

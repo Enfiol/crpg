@@ -2,22 +2,23 @@ import { useI18n } from '#imports'
 
 import type { QuestDefinition, UserQuest } from '~/models/quest'
 
+function collectFilterValues(filters: Record<string, string>[]): Map<string, Set<string>> {
+  const map = new Map<string, Set<string>>()
+
+  for (const filter of filters) {
+    for (const [key, value] of Object.entries(filter)) {
+      if (!map.has(key)) {
+        map.set(key, new Set())
+      }
+      map.get(key)!.add(value)
+    }
+  }
+  return map
+}
+
 export function useQuestDescription(quest: MaybeRefOrGetter<UserQuest>) {
   const { t, n } = useI18n()
   const questRef = toRef(quest)
-
-  function collectFilterValues(filters: Record<string, string>[]): Map<string, Set<string>> {
-    const map = new Map<string, Set<string>>()
-    for (const filter of filters) {
-      for (const [key, value] of Object.entries(filter)) {
-        if (!map.has(key)) {
-          map.set(key, new Set())
-        }
-        map.get(key)!.add(value)
-      }
-    }
-    return map
-  }
 
   function _getQuestName(def: QuestDefinition): string {
     const base = t(`user.quests.generate.eventType.${def.eventType}`)
@@ -33,6 +34,13 @@ export function useQuestDescription(quest: MaybeRefOrGetter<UserQuest>) {
     for (const [key, values] of filtersByKey) {
       const labels = new Set<string>()
       for (const value of values) {
+        if (key === 'WeaponType') {
+          console.log({ key, value })
+
+          // weaponClassToIcon
+          labels.add(t(`item.weaponClass.${value}`))
+          continue
+        }
         labels.add(t(`user.quests.generate.filterTitle.${key}.${value}`, value))
       }
       titleParts.push([...labels].join('/'))

@@ -1050,20 +1050,20 @@ user:
         Kill: Kills
         Block: Blocks
       filterTitle:
-        WeaponType:
-          OneHandedSword: 1H sword
-          TwoHandedSword: 2H sword
-          OneHandedAxe: 1H axe
-          OneHandedPolearm: polearm
-          TwoHandedPolearm: polearm
-          Bow: bow
-          Crossbow: crossbow
-          SmallShield: shield
-          LargeShield: shield
-          ThrowingAxe: throwing
-          ThrowingKnife: throwing
-          Javelin: throwing
-          Mace: mace
+        # WeaponType:
+        #   OneHandedSword: 1H sword
+        #   TwoHandedSword: 2H sword
+        #   OneHandedAxe: 1H axe
+        #   OneHandedPolearm: polearm
+        #   TwoHandedPolearm: polearm
+        #   Bow: bow
+        #   Crossbow: crossbow
+        #   SmallShield: shield
+        #   LargeShield: shield
+        #   ThrowingAxe: throwing
+        #   ThrowingKnife: throwing
+        #   Javelin: throwing
+        #   Mace: mace
         HitType:
           Ranged: ranged
           Melee: melee
@@ -1071,20 +1071,20 @@ user:
           Head: headshot
           Legs: legs
       filterDesc:
-        WeaponType:
-          OneHandedSword: with one-handed sword
-          TwoHandedSword: with two-handed sword
-          OneHandedAxe: with one-handed axe
-          OneHandedPolearm: with polearm
-          TwoHandedPolearm: with polearm
-          Bow: with bow
-          Crossbow: with crossbow
-          SmallShield: with shield
-          LargeShield: with shield
-          ThrowingAxe: with throwing weapon
-          ThrowingKnife: with throwing weapon
-          Javelin: with throwing weapon
-          Mace: with mace
+        # WeaponType:
+        #   OneHandedSword: with one-handed sword
+        #   TwoHandedSword: with two-handed sword
+        #   OneHandedAxe: with one-handed axe
+        #   OneHandedPolearm: with polearm
+        #   TwoHandedPolearm: with polearm
+        #   Bow: with bow
+        #   Crossbow: with crossbow
+        #   SmallShield: with shield
+        #   LargeShield: with shield
+        #   ThrowingAxe: with throwing weapon
+        #   ThrowingKnife: with throwing weapon
+        #   Javelin: with throwing weapon
+        #   Mace: with mace
         HitType:
           Ranged: with ranged weapons
           Melee: with melee weapons

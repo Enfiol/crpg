@@ -3,7 +3,7 @@ import { useAsyncState } from '@vueuse/core'
 import { LazyQuestClaimDialog } from '#components'
 import { groupBy } from 'es-toolkit'
 
-import type { UserQuest } from '~/models/quest'
+import type { QuestType, UserQuest } from '~/models/quest'
 
 import { useUser } from '~/composables/user/use-user'
 import { useAsyncCallback } from '~/composables/utils/use-async-callback'
@@ -24,10 +24,10 @@ const {
   isLoading,
   execute: loadQuests,
 } = useAsyncState(async () =>
-  groupBy(
-    (await getUserQuests()).sort((a, b) => typeOrder.indexOf(a.questDefinition.type) - typeOrder.indexOf(b.questDefinition.type)),
-    quest => quest.questDefinition.type,
-  ), {} as Record<string, UserQuest[]>, { resetOnExecute: false })
+  Object.fromEntries(
+    Object.entries(groupBy(await getUserQuests(), quest => quest.questDefinition.type))
+      .sort(([aType], [bType]) => typeOrder.indexOf(aType as QuestType) - typeOrder.indexOf(bType as QuestType)),
+  ), {} as Record<QuestType, UserQuest[]>, { resetOnExecute: false })
 
 const overlay = useOverlay()
 const toast = useToast()
