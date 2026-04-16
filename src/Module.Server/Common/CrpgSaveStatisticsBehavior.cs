@@ -29,6 +29,18 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         [EquipmentIndex.ExtraWeaponSlot] = CrpgItemSlot.WeaponExtra,
     };
 
+    private enum TargetType
+    {
+        Mount,
+        Character
+    };
+
+    private enum HitType
+    {
+        Ranged,
+        Melee
+    };
+
     private readonly CrpgWarmupComponent? _warmupComponent;
     private readonly ICrpgClient _crpgClient;
     private readonly List<CrpgGameEvent> _buffer;
@@ -80,7 +92,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             return;
         }
 
-        // Affected must be either a player or a horse
+        // Affected must be either a player or a mount
         if (affectedAgent.MissionPeer == null && !affectedAgent.IsMount)
         {
             return;
@@ -93,7 +105,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         }
 
         bool isRanged = !affectorWeapon.IsEmpty && affectorWeapon.CurrentUsageItem.IsRangedWeapon;
-        string targetType = affectedAgent.IsMount ? "Horse" : "Player";
+        TargetType targetType = affectedAgent.IsMount ? TargetType.Mount : TargetType.Character;
 
         // Check if attack was blocked (by shield or weapon)
         bool isBlocked = attackCollisionData.AttackBlockedWithShield
@@ -117,8 +129,8 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                 Type = CrpgGameEventType.Block,
                 EventData = new Dictionary<CrpgGameEventField, string>
                 {
-                    { CrpgGameEventField.HitType, isRanged ? "Ranged" : "Melee" },
-                    { CrpgGameEventField.TargetType, targetType },
+                    { CrpgGameEventField.HitType, isRanged ? HitType.Ranged.ToString() : HitType.Melee.ToString() },
+                    { CrpgGameEventField.TargetType, targetType.ToString() },
                 },
             };
 
@@ -189,8 +201,8 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             EventData = new Dictionary<CrpgGameEventField, string>
             {
                 { CrpgGameEventField.Damage, attackCollisionData.InflictedDamage.ToString() },
-                { CrpgGameEventField.HitType, isRanged ? "Ranged" : "Melee" },
-                { CrpgGameEventField.TargetType, targetType },
+                { CrpgGameEventField.HitType, isRanged ? HitType.Ranged.ToString() : HitType.Melee.ToString() },
+                { CrpgGameEventField.TargetType, targetType.ToString() },
                 { CrpgGameEventField.DamageType, ((DamageTypes)attackCollisionData.DamageType).ToString() },
             },
         };
@@ -256,7 +268,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             return;
         }
 
-        // Affected must be either a player or a horse
+        // Affected must be either a player or a mount
         if (affectedAgent.MissionPeer == null && !affectedAgent.IsMount)
         {
             return;
@@ -268,7 +280,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             return;
         }
 
-        string targetType = affectedAgent.IsMount ? "Horse" : "Player";
+        TargetType targetType = affectedAgent.IsMount ? TargetType.Mount : TargetType.Player;
 
         CrpgGameEvent evt = new()
         {
@@ -276,7 +288,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             Type = CrpgGameEventType.Kill,
             EventData = new Dictionary<CrpgGameEventField, string>
             {
-                { CrpgGameEventField.TargetType, targetType },
+                { CrpgGameEventField.TargetType, targetType.ToString() },
                 { CrpgGameEventField.DamageType, blow.DamageType.ToString() },
             },
         };
@@ -333,7 +345,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         var events = _buffer.ToArray();
         _buffer.Clear();
         _ = _crpgClient.CreateGameEventsAsync(events); // Fire and forget
-        Debug.Print($"Sent {events.Length} battle events");
+        Debug.Print($"Sent {events.Length} game events");
     }
 
     private string? ToString(BoneBodyPartType partType)
