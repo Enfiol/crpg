@@ -556,7 +556,7 @@ export type GameEquippedItemViewModel = {
     userItem: GameUserItemViewModel;
 };
 
-export type GameEventField = 'WeaponType' | 'WeaponId' | 'HitType' | 'Damage' | 'TargetType' | 'BodyPart' | 'DamageType';
+export type GameEventField = 'WeaponClass' | 'ItemId' | 'HitType' | 'Damage' | 'TargetType' | 'BodyPart' | 'DamageType';
 
 export type GameEventType = 'Hit' | 'Kill' | 'Block';
 
@@ -564,8 +564,8 @@ export type GameEventViewModel = {
     userId?: number | null;
     type: GameEventType;
     eventData?: {
-        WeaponType?: string;
-        WeaponId?: string;
+        WeaponClass?: string;
+        ItemId?: string;
         HitType?: string;
         Damage?: string;
         TargetType?: string;
@@ -959,7 +959,7 @@ export type QuestDefinitionViewModel = {
     type: QuestType;
     eventType: GameEventType;
     aggregationType: QuestAggregationType;
-    sumField: GameEventField | null;
+    aggregationField: GameEventField | null;
     eventFiltersJson: Array<{
         [key: string]: string;
     }>;

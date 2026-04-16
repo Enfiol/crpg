@@ -1339,7 +1339,7 @@ namespace Crpg.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("reward_gold");
 
-                    b.Property<int?>("SumField")
+                    b.Property<int?>("AggregationField")
                         .HasColumnType("integer")
                         .HasColumnName("sum_field");
 

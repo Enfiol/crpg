@@ -121,7 +121,7 @@ public class QuestEvaluationServiceTest : TestBase
             {
                 EventType = GameEventType.Hit,
                 AggregationType = QuestAggregationType.Sum,
-                SumField = GameEventField.Damage,
+                AggregationField = GameEventField.Damage,
             },
         };
 
@@ -176,7 +176,7 @@ public class QuestEvaluationServiceTest : TestBase
             {
                 EventType = GameEventType.Hit,
                 AggregationType = QuestAggregationType.Sum,
-                SumField = null,
+                AggregationField = null,
             },
         };
 

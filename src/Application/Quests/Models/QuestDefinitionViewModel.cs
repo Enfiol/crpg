@@ -13,7 +13,7 @@ public record QuestDefinitionViewModel : IMapFrom<QuestDefinition>
     public QuestAggregationType AggregationType { get; init; }
 
     [JsonRequired]
-    public GameEventField? SumField { get; init; }
+    public GameEventField? AggregationField { get; init; }
 
     public Dictionary<string, string>[] EventFiltersJson { get; set; } = [];
 

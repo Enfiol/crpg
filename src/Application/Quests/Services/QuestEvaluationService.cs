@@ -58,11 +58,11 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
             int value = questDefinition.AggregationType switch
             {
                 QuestAggregationType.Count => questEvents.Count,
-                QuestAggregationType.Sum when questDefinition.SumField != null =>
+                QuestAggregationType.Sum when questDefinition.AggregationField != null =>
                     questEvents.Sum(ev =>
                     {
                         if (ev.EventData != null &&
-                            ev.EventData.TryGetValue(questDefinition.SumField.Value, out string? strValue) &&
+                            ev.EventData.TryGetValue(questDefinition.AggregationField.Value, out string? strValue) &&
                             int.TryParse(strValue, out int intValue))
                         {
                             return intValue;

@@ -10,7 +10,7 @@ public class QuestDefinition : AuditableEntity
     public GameEventType EventType { get; set; }
     public Dictionary<string, string>[]? EventFiltersJson { get; set; }
     public QuestAggregationType AggregationType { get; set; }
-    public GameEventField? SumField { get; set; }
+    public GameEventField? AggregationField { get; set; }
     public int RequiredValue { get; set; }
     public int RewardGold { get; set; }
     public int RewardExperience { get; set; }
