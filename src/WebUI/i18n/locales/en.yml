@@ -1045,6 +1045,9 @@ user:
         notify:
           success: Quest rerolled
     generate:
+      titleConnector:
+        to: to
+        with: with
       tplByEventTypeAndAggregationType:
         Hit_Sum: 'Deal {value} damage'
         Kill_Count: 'Kill {value} enemies'
