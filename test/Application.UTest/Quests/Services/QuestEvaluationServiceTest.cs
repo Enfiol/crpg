@@ -1,5 +1,5 @@
 using Crpg.Application.Quests.Services;
-using Crpg.Domain.Entities.CrpgGameEvents;
+using Crpg.Domain.Entities.GameEvents;
 using Crpg.Domain.Entities.Quests;
 using NUnit.Framework;
 
@@ -16,17 +16,17 @@ public class QuestEvaluationServiceTest : TestBase
             CreatedAt = new DateTime(2026, 04, 10, 15, 00, 00, DateTimeKind.Utc),
             QuestDefinition = new QuestDefinition
             {
-                EventType = CrpgGameEvent.EventType.Kill,
+                EventType = GameEventType.Kill,
                 AggregationType = QuestAggregationType.Count,
             },
         };
 
-        ArrangeDb.CrpgGameEvents.AddRange(
-            new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 10, 00, 00, 00, DateTimeKind.Utc) },
-            new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
-            new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Block, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
-            new CrpgGameEvent { UserId = 11, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
-            new CrpgGameEvent { UserId = 10, Type = CrpgGameEvent.EventType.Kill, CreatedAt = new DateTime(2026, 04, 09, 23, 59, 59, DateTimeKind.Utc) });
+        ArrangeDb.GameEvents.AddRange(
+            new GameEvent { UserId = 10, Type = GameEventType.Kill, CreatedAt = new DateTime(2026, 04, 10, 00, 00, 00, DateTimeKind.Utc) },
+            new GameEvent { UserId = 10, Type = GameEventType.Kill, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
+            new GameEvent { UserId = 10, Type = GameEventType.Block, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
+            new GameEvent { UserId = 11, Type = GameEventType.Kill, CreatedAt = new DateTime(2026, 04, 11, 12, 00, 00, DateTimeKind.Utc) },
+            new GameEvent { UserId = 10, Type = GameEventType.Kill, CreatedAt = new DateTime(2026, 04, 09, 23, 59, 59, DateTimeKind.Utc) });
         await ArrangeDb.SaveChangesAsync();
 
         QuestEvaluationService service = new(ActDb);
@@ -45,7 +45,7 @@ public class QuestEvaluationServiceTest : TestBase
             CreatedAt = new DateTime(2026, 04, 10, 08, 00, 00, DateTimeKind.Utc),
             QuestDefinition = new QuestDefinition
             {
-                EventType = CrpgGameEvent.EventType.Hit,
+                EventType = GameEventType.Hit,
                 AggregationType = QuestAggregationType.Count,
                 EventFiltersJson =
                 [
@@ -62,42 +62,42 @@ public class QuestEvaluationServiceTest : TestBase
             },
         };
 
-        ArrangeDb.CrpgGameEvents.AddRange(
-            new CrpgGameEvent
+        ArrangeDb.GameEvents.AddRange(
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 09, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.WeaponType] = "Sword",
-                    [CrpgGameEvent.EventField.TargetType] = "Player",
+                    [GameEventField.WeaponType] = "Sword",
+                    [GameEventField.TargetType] = "Player",
                 },
             },
-            new CrpgGameEvent
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 10, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.HitType] = "Headshot",
+                    [GameEventField.HitType] = "Headshot",
                 },
             },
-            new CrpgGameEvent
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 11, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.WeaponType] = "Sword",
+                    [GameEventField.WeaponType] = "Sword",
                 },
             },
-            new CrpgGameEvent
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 12, 00, 00, DateTimeKind.Utc),
                 EventData = null,
             });
@@ -119,41 +119,41 @@ public class QuestEvaluationServiceTest : TestBase
             CreatedAt = new DateTime(2026, 04, 10, 08, 00, 00, DateTimeKind.Utc),
             QuestDefinition = new QuestDefinition
             {
-                EventType = CrpgGameEvent.EventType.Hit,
+                EventType = GameEventType.Hit,
                 AggregationType = QuestAggregationType.Sum,
-                SumField = CrpgGameEvent.EventField.Damage,
+                SumField = GameEventField.Damage,
             },
         };
 
-        ArrangeDb.CrpgGameEvents.AddRange(
-            new CrpgGameEvent
+        ArrangeDb.GameEvents.AddRange(
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 09, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.Damage] = "12",
+                    [GameEventField.Damage] = "12",
                 },
             },
-            new CrpgGameEvent
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 10, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.Damage] = "not-an-int",
+                    [GameEventField.Damage] = "not-an-int",
                 },
             },
-            new CrpgGameEvent
+            new GameEvent
             {
                 UserId = 10,
-                Type = CrpgGameEvent.EventType.Hit,
+                Type = GameEventType.Hit,
                 CreatedAt = new DateTime(2026, 04, 10, 11, 00, 00, DateTimeKind.Utc),
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                EventData = new Dictionary<GameEventField, string>
                 {
-                    [CrpgGameEvent.EventField.TargetType] = "Player",
+                    [GameEventField.TargetType] = "Player",
                 },
             });
         await ArrangeDb.SaveChangesAsync();
@@ -174,20 +174,20 @@ public class QuestEvaluationServiceTest : TestBase
             CreatedAt = new DateTime(2026, 04, 10, 08, 00, 00, DateTimeKind.Utc),
             QuestDefinition = new QuestDefinition
             {
-                EventType = CrpgGameEvent.EventType.Hit,
+                EventType = GameEventType.Hit,
                 AggregationType = QuestAggregationType.Sum,
                 SumField = null,
             },
         };
 
-        ArrangeDb.CrpgGameEvents.Add(new CrpgGameEvent
+        ArrangeDb.GameEvents.Add(new GameEvent
         {
             UserId = 10,
-            Type = CrpgGameEvent.EventType.Hit,
+            Type = GameEventType.Hit,
             CreatedAt = new DateTime(2026, 04, 10, 09, 00, 00, DateTimeKind.Utc),
-            EventData = new Dictionary<CrpgGameEvent.EventField, string>
+            EventData = new Dictionary<GameEventField, string>
             {
-                [CrpgGameEvent.EventField.Damage] = "50",
+                [GameEventField.Damage] = "50",
             },
         });
         await ArrangeDb.SaveChangesAsync();

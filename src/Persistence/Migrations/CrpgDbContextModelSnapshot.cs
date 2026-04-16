@@ -172,47 +172,6 @@ namespace Crpg.Persistence.Migrations
                     b.ToTable("activity_log_metadata", (string)null);
                 });
 
-            modelBuilder.Entity("Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<string>("EventData")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("event_data");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_crpg_game_events");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("ix_crpg_game_events_created_at");
-
-                    b.HasIndex("UserId", "Type", "CreatedAt")
-                        .HasDatabaseName("ix_crpg_game_events_user_id_type_created_at");
-
-                    b.ToTable("crpg_game_events", (string)null);
-                });
-
             modelBuilder.Entity("Crpg.Domain.Entities.Battles.Battle", b =>
                 {
                     b.Property<int>("Id")
@@ -747,6 +706,47 @@ namespace Crpg.Persistence.Migrations
                         .HasDatabaseName("ix_clan_members_clan_id");
 
                     b.ToTable("clan_members", (string)null);
+                });
+
+            modelBuilder.Entity("Crpg.Domain.Entities.GameEvents.GameEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("EventData")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("event_data");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_game_events");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_game_events_created_at");
+
+                    b.HasIndex("UserId", "Type", "CreatedAt")
+                        .HasDatabaseName("ix_game_events_user_id_type_created_at");
+
+                    b.ToTable("game_events", (string)null);
                 });
 
             modelBuilder.Entity("Crpg.Domain.Entities.Items.ClanArmoryItem", b =>
@@ -1786,16 +1786,6 @@ namespace Crpg.Persistence.Migrations
                         .HasConstraintName("fk_activity_log_metadata_activity_logs_activity_log_id");
                 });
 
-            modelBuilder.Entity("Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent", b =>
-                {
-                    b.HasOne("Crpg.Domain.Entities.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_crpg_game_events_users_user_id");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Crpg.Domain.Entities.Battles.BattleFighter", b =>
                 {
                     b.HasOne("Crpg.Domain.Entities.Battles.Battle", "Battle")
@@ -2248,6 +2238,16 @@ namespace Crpg.Persistence.Migrations
                         .HasConstraintName("fk_clan_members_users_user_id");
 
                     b.Navigation("Clan");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Crpg.Domain.Entities.GameEvents.GameEvent", b =>
+                {
+                    b.HasOne("Crpg.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_game_events_users_user_id");
 
                     b.Navigation("User");
                 });

@@ -76,9 +76,9 @@ public class GamesController : BaseController
     [HttpPost("game-events")]
     public Task<ActionResult> InsertGameEvents([FromBody] GameEventViewModel[] gameEvents)
     {
-        return ResultToActionAsync(Mediator.Send(new CreateCrpgGameEventsCommand
+        return ResultToActionAsync(Mediator.Send(new CreateGameEventsCommand
         {
-            CrpgGameEvents = gameEvents,
+            GameEvents = gameEvents,
         }, CancellationToken.None));
     }
 

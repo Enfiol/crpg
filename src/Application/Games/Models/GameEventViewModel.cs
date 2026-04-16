@@ -1,11 +1,10 @@
-using Crpg.Domain.Entities.CrpgGameEvents;
-using static Crpg.Domain.Entities.CrpgGameEvents.CrpgGameEvent;
+using Crpg.Domain.Entities.GameEvents;
 
 namespace Crpg.Application.Games.Models;
 
 public record GameEventViewModel
 {
     public int? UserId { get; init; }
-    public EventType Type { get; init; }
-    public Dictionary<EventField, string>? EventData { get; init; }
+    public GameEventType Type { get; init; }
+    public Dictionary<GameEventField, string>? EventData { get; init; }
 }

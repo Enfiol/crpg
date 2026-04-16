@@ -1,5 +1,5 @@
 ﻿using Crpg.Application.Common.Interfaces;
-using Crpg.Domain.Entities.CrpgGameEvents;
+using Crpg.Domain.Entities.GameEvents;
 using Crpg.Domain.Entities.Quests;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +12,7 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
     {
         if (userQuests.Count == 0)
         {
-            return new Dictionary<int, int>();
+            return [];
         }
 
         var results = new Dictionary<int, int>();
@@ -22,7 +22,7 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
         var eventTypes = userQuests.Select(q => q.QuestDefinition!.EventType).Distinct().ToList();
         var earliestDate = userQuests.Min(q => q.CreatedAt.Date);
 
-        var events = await db.CrpgGameEvents
+        var events = await db.GameEvents
             .Where(be => userIds.Contains(be.UserId!.Value)
                          && eventTypes.Contains(be.Type)
                          && be.CreatedAt >= earliestDate)
@@ -39,11 +39,11 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
             // Apply event filters in memory if any
             if (questDefinition.EventFiltersJson != null && questDefinition.EventFiltersJson.Length > 0)
             {
-                questEvents = questEvents.Where(be => be.EventData != null
+                questEvents = [.. questEvents.Where(be => be.EventData != null
                                                       && questDefinition.EventFiltersJson.Any(filter =>
                                                           filter.All(kvp =>
                                                           {
-                                                              if (!Enum.TryParse<CrpgGameEvent.EventField>(kvp.Key,
+                                                              if (!Enum.TryParse<GameEventField>(kvp.Key,
                                                                       out var field))
                                                               {
                                                                   return false;
@@ -52,7 +52,7 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
                                                               return be.EventData!.TryGetValue(field,
                                                                          out string? value) &&
                                                                      value == kvp.Value;
-                                                          }))).ToList();
+                                                          })))];
             }
 
             int value = questDefinition.AggregationType switch

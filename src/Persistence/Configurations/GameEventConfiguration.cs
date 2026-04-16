@@ -1,13 +1,13 @@
-using Crpg.Domain.Entities.CrpgGameEvents;
+using Crpg.Domain.Entities.GameEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 
 namespace Crpg.Persistence.Configurations;
 
-public class CrpgGameEventConfiguration : IEntityTypeConfiguration<CrpgGameEvent>
+public class GameEventConfiguration : IEntityTypeConfiguration<GameEvent>
 {
-    public void Configure(EntityTypeBuilder<CrpgGameEvent> builder)
+    public void Configure(EntityTypeBuilder<GameEvent> builder)
     {
         builder.HasKey(e => e.Id);
 
@@ -23,7 +23,7 @@ public class CrpgGameEventConfiguration : IEntityTypeConfiguration<CrpgGameEvent
         builder.Property(e => e.EventData)
             .HasConversion(
                 v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<Dictionary<CrpgGameEvent.EventField, string>>(v))
+                v => JsonConvert.DeserializeObject<Dictionary<GameEventField, string>>(v))
             .HasColumnType("jsonb");
     }
 }

@@ -5,7 +5,7 @@ using Crpg.Application.Common.Services;
 using Crpg.Application.Items.Models;
 using Crpg.Domain.Entities;
 using Crpg.Domain.Entities.ActivityLogs;
-using Crpg.Domain.Entities.CrpgGameEvents;
+using Crpg.Domain.Entities.GameEvents;
 using Crpg.Domain.Entities.Battles;
 using Crpg.Domain.Entities.Characters;
 using Crpg.Domain.Entities.Clans;
@@ -1862,7 +1862,7 @@ public record SeedDataCommand : IMediatorRequest
             var weeklyQuests = questDefinitions.Where(q => q.Type == QuestType.Weekly).ToArray();
 
             List<UserQuest> orleQuests = new();
-            for (int i = 0; i < 3 && i < dailyQuests.Length; i++)
+            for (int i = 0; i < dailyQuests.Length; i++)
             {
                 orleQuests.Add(new UserQuest
                 {
@@ -1873,7 +1873,7 @@ public record SeedDataCommand : IMediatorRequest
                 });
             }
 
-            for (int i = 0; i < 3 && i < weeklyQuests.Length; i++)
+            for (int i = 0; i < weeklyQuests.Length; i++)
             {
                 orleQuests.Add(new UserQuest
                 {
@@ -1886,194 +1886,194 @@ public record SeedDataCommand : IMediatorRequest
 
             _db.UserQuests.AddRange(orleQuests);
 
-            CrpgGameEvent[] orleCrpgGameEvents =
+            GameEvent[] orleGameEvents =
             [
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedAxe",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Cut",
-                        [CrpgGameEvent.EventField.BodyPart] = "Chest",
-                        [CrpgGameEvent.EventField.Damage] = "60",
+                        [GameEventField.WeaponType] = "OneHandedAxe",
+                        [GameEventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
+                        [GameEventField.HitType] = "Cut",
+                        [GameEventField.BodyPart] = "Chest",
+                        [GameEventField.Damage] = "60",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-1),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedAxe",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Cut",
-                        [CrpgGameEvent.EventField.BodyPart] = "Head",
-                        [CrpgGameEvent.EventField.Damage] = "70",
+                        [GameEventField.WeaponType] = "OneHandedAxe",
+                        [GameEventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
+                        [GameEventField.HitType] = "Cut",
+                        [GameEventField.BodyPart] = "Head",
+                        [GameEventField.Damage] = "70",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-2),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_decorated_scimitar_with_wide_grip_v1_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Cut",
-                        [CrpgGameEvent.EventField.BodyPart] = "Chest",
-                        [CrpgGameEvent.EventField.Damage] = "45",
+                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponId] = "crpg_decorated_scimitar_with_wide_grip_v1_h0",
+                        [GameEventField.HitType] = "Cut",
+                        [GameEventField.BodyPart] = "Chest",
+                        [GameEventField.Damage] = "45",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-3),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_thamaskene_steel_spatha_v1_h2",
-                        [CrpgGameEvent.EventField.HitType] = "Cut",
-                        [CrpgGameEvent.EventField.BodyPart] = "Legs",
-                        [CrpgGameEvent.EventField.Damage] = "35",
+                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponId] = "crpg_thamaskene_steel_spatha_v1_h2",
+                        [GameEventField.HitType] = "Cut",
+                        [GameEventField.BodyPart] = "Legs",
+                        [GameEventField.Damage] = "35",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-4),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "TwoHandedSword",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_scythe_v2_h3",
-                        [CrpgGameEvent.EventField.HitType] = "Cut",
-                        [CrpgGameEvent.EventField.BodyPart] = "Chest",
-                        [CrpgGameEvent.EventField.Damage] = "85",
+                        [GameEventField.WeaponType] = "TwoHandedSword",
+                        [GameEventField.WeaponId] = "crpg_scythe_v2_h3",
+                        [GameEventField.HitType] = "Cut",
+                        [GameEventField.BodyPart] = "Chest",
+                        [GameEventField.Damage] = "85",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-5),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedPolearm",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_short_spear_v1_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Thrust",
-                        [CrpgGameEvent.EventField.BodyPart] = "Chest",
-                        [CrpgGameEvent.EventField.Damage] = "95",
+                        [GameEventField.WeaponType] = "OneHandedPolearm",
+                        [GameEventField.WeaponId] = "crpg_short_spear_v1_h0",
+                        [GameEventField.HitType] = "Thrust",
+                        [GameEventField.BodyPart] = "Chest",
+                        [GameEventField.Damage] = "95",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-6),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "Bow",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Ranged",
-                        [CrpgGameEvent.EventField.BodyPart] = "Head",
-                        [CrpgGameEvent.EventField.Damage] = "80",
+                        [GameEventField.WeaponType] = "Bow",
+                        [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0",
+                        [GameEventField.HitType] = "Ranged",
+                        [GameEventField.BodyPart] = "Head",
+                        [GameEventField.Damage] = "80",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-7),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Hit,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Hit,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "Bow",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Ranged",
-                        [CrpgGameEvent.EventField.BodyPart] = "Legs",
-                        [CrpgGameEvent.EventField.Damage] = "65",
+                        [GameEventField.WeaponType] = "Bow",
+                        [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0",
+                        [GameEventField.HitType] = "Ranged",
+                        [GameEventField.BodyPart] = "Legs",
+                        [GameEventField.Damage] = "65",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-8),
                 },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-20) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Crossbow", [CrpgGameEvent.EventField.WeaponId] = "crpg_light_crossbow_v1_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2).AddMinutes(-30) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Crossbow", [CrpgGameEvent.EventField.WeaponId] = "crpg_light_crossbow_v1_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-20) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Crossbow", [CrpgGameEvent.EventField.WeaponId] = "crpg_light_crossbow_v1_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-40) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-30) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Crossbow", [CrpgGameEvent.EventField.WeaponId] = "crpg_light_crossbow_v1_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6).AddMinutes(-20) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Crossbow", [CrpgGameEvent.EventField.WeaponId] = "crpg_light_crossbow_v1_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7).AddMinutes(-40) },
-                new CrpgGameEvent { User = orle, Type = CrpgGameEvent.EventType.Kill, EventData = new Dictionary<CrpgGameEvent.EventField, string> { [CrpgGameEvent.EventField.WeaponType] = "Bow", [CrpgGameEvent.EventField.WeaponId] = "crpg_hunting_bow_v2_h0", [CrpgGameEvent.EventField.HitType] = "Ranged", [CrpgGameEvent.EventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-8) },
-                new CrpgGameEvent
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2).AddMinutes(-30) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-40) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-30) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7).AddMinutes(-40) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-8) },
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Block,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Block,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "SmallShield",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_small_round_shield_v1_h0",
+                        [GameEventField.WeaponType] = "SmallShield",
+                        [GameEventField.WeaponId] = "crpg_small_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-10),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Block,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Block,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "SmallShield",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_small_round_shield_v1_h0",
-                        [CrpgGameEvent.EventField.HitType] = "Ranged",
+                        [GameEventField.WeaponType] = "SmallShield",
+                        [GameEventField.WeaponId] = "crpg_small_round_shield_v1_h0",
+                        [GameEventField.HitType] = "Ranged",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-2).AddMinutes(-10),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Block,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Block,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "LargeShield",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_large_round_shield_v1_h0",
+                        [GameEventField.WeaponType] = "LargeShield",
+                        [GameEventField.WeaponId] = "crpg_large_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-10),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Block,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Block,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "LargeShield",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_large_round_shield_v1_h0",
+                        [GameEventField.WeaponType] = "LargeShield",
+                        [GameEventField.WeaponId] = "crpg_large_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-10),
                 },
-                new CrpgGameEvent
+                new GameEvent
                 {
                     User = orle,
-                    Type = CrpgGameEvent.EventType.Block,
-                    EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                    Type = GameEventType.Block,
+                    EventData = new Dictionary<GameEventField, string>
                     {
-                        [CrpgGameEvent.EventField.WeaponType] = "OneHandedSword",
-                        [CrpgGameEvent.EventField.WeaponId] = "crpg_rondel_v3_h3",
+                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponId] = "crpg_rondel_v3_h3",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-10),
                 },
             ];
-            _db.CrpgGameEvents.RemoveRange(await _db.CrpgGameEvents.Where(e => e.UserId == orle.Id).ToArrayAsync(cancellationToken));
-            _db.CrpgGameEvents.AddRange(orleCrpgGameEvents);
+            _db.GameEvents.RemoveRange(await _db.GameEvents.Where(e => e.UserId == orle.Id).ToArrayAsync(cancellationToken));
+            _db.GameEvents.AddRange(orleGameEvents);
 
             ClanInvitation[] newClanInvitations =
             {

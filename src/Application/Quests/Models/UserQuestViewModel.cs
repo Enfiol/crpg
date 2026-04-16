@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using AutoMapper;
 using Crpg.Application.Common.Mappings;
 using Crpg.Domain.Entities.Quests;

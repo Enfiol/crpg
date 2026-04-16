@@ -1,4 +1,5 @@
-﻿using Crpg.Domain.Entities.Quests;
+﻿using System;
+using Crpg.Domain.Entities.Quests;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -19,7 +20,7 @@ public partial class AddQuests : Migration
             .OldAnnotation("Npgsql:Enum:activity_log_type", "battle_apply_as_mercenary,battle_mercenary_application_accepted,battle_mercenary_application_declined,battle_participant_kicked,battle_participant_leaved,character_created,character_deleted,character_earned,character_rating_reset,character_respecialized,character_retired,character_rewarded,chat_message_sent,clan_application_accepted,clan_application_created,clan_application_declined,clan_armory_add_item,clan_armory_borrow_item,clan_armory_remove_item,clan_armory_return_item,clan_created,clan_deleted,clan_member_kicked,clan_member_leaved,clan_member_role_edited,item_bought,item_broke,item_reforged,item_repaired,item_returned,item_sold,item_upgraded,server_joined,team_hit,team_hit_reported,team_hit_reported_user_kicked,user_created,user_deleted,user_renamed,user_rewarded");
 
         migrationBuilder.CreateTable(
-            name: "crpg_game_events",
+            name: "game_events",
             columns: table => new
             {
                 id = table.Column<int>(type: "integer", nullable: false)
@@ -32,9 +33,9 @@ public partial class AddQuests : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("pk_crpg_game_events", x => x.id);
+                table.PrimaryKey("pk_game_events", x => x.id);
                 table.ForeignKey(
-                    name: "fk_crpg_game_events_users_user_id",
+                    name: "fk_game_events_users_user_id",
                     column: x => x.user_id,
                     principalTable: "users",
                     principalColumn: "id");
@@ -118,13 +119,13 @@ public partial class AddQuests : Migration
             });
 
         migrationBuilder.CreateIndex(
-            name: "ix_crpg_game_events_created_at",
-            table: "crpg_game_events",
+            name: "ix_game_events_created_at",
+            table: "game_events",
             column: "created_at");
 
         migrationBuilder.CreateIndex(
-            name: "ix_crpg_game_events_user_id_type_created_at",
-            table: "crpg_game_events",
+            name: "ix_game_events_user_id_type_created_at",
+            table: "game_events",
             columns: new[] { "user_id", "type", "created_at" });
 
         migrationBuilder.CreateIndex(

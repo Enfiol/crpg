@@ -1,6 +1,7 @@
-﻿using Crpg.Domain.Entities.CrpgGameEvents;
-using Crpg.Module.Api;
+﻿using Crpg.Module.Api;
 using Crpg.Module.Api.Models.Items;
+using Crpg.Module.Api.Models.GameEvents;
+
 using Crpg.Module.Modes.Warmup;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -113,11 +114,11 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             CrpgGameEvent blockEvt = new()
             {
                 UserId = blockerCrpgPeer.User.Id, // Blocker's user ID, not attacker's
-                Type = CrpgGameEvent.EventType.Block,
-                EventData = new Dictionary<CrpgGameEvent.EventField, string>
+                Type = CrpgGameEventType.Block,
+                EventData = new Dictionary<CrpgGameEventField, string>
                 {
-                    { CrpgGameEvent.EventField.HitType, isRanged ? "Ranged" : "Melee" },
-                    { CrpgGameEvent.EventField.TargetType, targetType },
+                    { CrpgGameEventField.HitType, isRanged ? "Ranged" : "Melee" },
+                    { CrpgGameEventField.TargetType, targetType },
                 },
             };
 
@@ -129,7 +130,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             if (isShieldBlock)
             {
                 // Damage to shield
-                blockEvt.EventData![CrpgGameEvent.EventField.Damage] = attackCollisionData.InflictedDamage.ToString();
+                blockEvt.EventData![CrpgGameEventField.Damage] = attackCollisionData.InflictedDamage.ToString();
                 // Try to find shield item ID from blocker's equipment
                 var possibleShieldSlots = new[]
                 {
@@ -169,12 +170,12 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             // Store blocking item info
             if (blockingItemId != null)
             {
-                blockEvt.EventData![CrpgGameEvent.EventField.WeaponId] = blockingItemId;
+                blockEvt.EventData![CrpgGameEventField.WeaponId] = blockingItemId;
             }
 
             if (blockingWeaponType != null)
             {
-                blockEvt.EventData![CrpgGameEvent.EventField.WeaponType] = blockingWeaponType;
+                blockEvt.EventData![CrpgGameEventField.WeaponType] = blockingWeaponType;
             }
 
             _buffer.Add(blockEvt);
@@ -184,13 +185,13 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         CrpgGameEvent evt = new()
         {
             UserId = affectorCrpgPeer.User.Id,
-            Type = CrpgGameEvent.EventType.Hit,
-            EventData = new Dictionary<CrpgGameEvent.EventField, string>
+            Type = CrpgGameEventType.Hit,
+            EventData = new Dictionary<CrpgGameEventField, string>
             {
-                { CrpgGameEvent.EventField.Damage, attackCollisionData.InflictedDamage.ToString() },
-                { CrpgGameEvent.EventField.HitType, isRanged ? "Ranged" : "Melee" },
-                { CrpgGameEvent.EventField.TargetType, targetType },
-                { CrpgGameEvent.EventField.DamageType, ((DamageTypes)attackCollisionData.DamageType).ToString() },
+                { CrpgGameEventField.Damage, attackCollisionData.InflictedDamage.ToString() },
+                { CrpgGameEventField.HitType, isRanged ? "Ranged" : "Melee" },
+                { CrpgGameEventField.TargetType, targetType },
+                { CrpgGameEventField.DamageType, ((DamageTypes)attackCollisionData.DamageType).ToString() },
             },
         };
 
@@ -198,12 +199,12 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
 
         if (bodyPart != null)
         {
-            evt.EventData![CrpgGameEvent.EventField.BodyPart] = bodyPart;
+            evt.EventData![CrpgGameEventField.BodyPart] = bodyPart;
         }
 
         if (!affectorWeapon.IsEmpty)
         {
-            evt.EventData![CrpgGameEvent.EventField.WeaponType] =
+            evt.EventData![CrpgGameEventField.WeaponType] =
                 affectorWeapon.CurrentUsageItem.WeaponClass.ToString();
             if (affectorWeapon.Item != null)
             {
@@ -219,7 +220,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                 // If we have a weaponId (crpg item ID), add it to event data
                 if (weaponId != null)
                 {
-                    evt.EventData![CrpgGameEvent.EventField.WeaponId] = weaponId;
+                    evt.EventData![CrpgGameEventField.WeaponId] = weaponId;
                 }
             }
         }
@@ -272,11 +273,11 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         CrpgGameEvent evt = new()
         {
             UserId = affectorCrpgPeer.User.Id,
-            Type = CrpgGameEvent.EventType.Kill,
-            EventData = new Dictionary<CrpgGameEvent.EventField, string>
+            Type = CrpgGameEventType.Kill,
+            EventData = new Dictionary<CrpgGameEventField, string>
             {
-                { CrpgGameEvent.EventField.TargetType, targetType },
-                { CrpgGameEvent.EventField.DamageType, blow.DamageType.ToString() },
+                { CrpgGameEventField.TargetType, targetType },
+                { CrpgGameEventField.DamageType, blow.DamageType.ToString() },
             },
         };
 
@@ -289,7 +290,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             string? weaponId = GetCrpgItemIdForWeapon(affectorCrpgPeer, weaponIndex);
             if (weaponId != null)
             {
-                evt.EventData![CrpgGameEvent.EventField.WeaponId] = weaponId;
+                evt.EventData![CrpgGameEventField.WeaponId] = weaponId;
             }
 
             // Get weapon type and determine hit type
@@ -297,12 +298,12 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             if (!weapon.IsEmpty)
             {
                 // Weapon type
-                evt.EventData![CrpgGameEvent.EventField.WeaponType] =
+                evt.EventData![CrpgGameEventField.WeaponType] =
                     weapon.CurrentUsageItem.WeaponClass.ToString();
 
                 // Hit type (ranged or melee)
                 bool isRanged = weapon.CurrentUsageItem.IsRangedWeapon;
-                evt.EventData![CrpgGameEvent.EventField.HitType] = isRanged ? "Ranged" : "Melee";
+                evt.EventData![CrpgGameEventField.HitType] = isRanged ? "Ranged" : "Melee";
             }
         }
 
@@ -310,7 +311,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         string? bodyPart = ToString(blow.VictimBodyPart);
         if (bodyPart != null)
         {
-            evt.EventData![CrpgGameEvent.EventField.BodyPart] = bodyPart;
+            evt.EventData![CrpgGameEventField.BodyPart] = bodyPart;
         }
 
         _buffer.Add(evt);
@@ -331,7 +332,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
     {
         var events = _buffer.ToArray();
         _buffer.Clear();
-        _ = _crpgClient.CreateCrpgGameEventsAsync(events); // Fire and forget
+        _ = _crpgClient.CreateGameEventsAsync(events); // Fire and forget
         Debug.Print($"Sent {events.Length} battle events");
     }
 
