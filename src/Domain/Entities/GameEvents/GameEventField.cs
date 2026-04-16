@@ -3,7 +3,7 @@ namespace Crpg.Domain.Entities.GameEvents;
 public enum GameEventField
 {
     WeaponClass,
-    WeaponId,
+    ItemId,
     HitType,
     Damage,
     TargetType,

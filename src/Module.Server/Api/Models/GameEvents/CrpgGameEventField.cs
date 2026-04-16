@@ -3,7 +3,7 @@
 internal enum CrpgGameEventField
 {
     WeaponClass,
-    WeaponId,
+    ItemId,
     HitType,
     Damage,
     TargetType,

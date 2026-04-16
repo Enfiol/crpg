@@ -170,7 +170,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             // Store blocking item info
             if (blockingItemId != null)
             {
-                blockEvt.EventData![CrpgGameEventField.WeaponId] = blockingItemId;
+                blockEvt.EventData![CrpgGameEventField.ItemId] = blockingItemId;
             }
 
             if (blockingWeaponClass != null)
@@ -208,19 +208,19 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                 affectorWeapon.CurrentUsageItem.WeaponClass.ToString();
             if (affectorWeapon.Item != null)
             {
-                string? weaponId = null;
+                string? ItemId = null;
                 // Try to get crpg item ID first
                 if (attackCollisionData.AffectorWeaponSlotOrMissileIndex >= 0)
                 {
                     EquipmentIndex equipmentIndex =
                         (EquipmentIndex)attackCollisionData.AffectorWeaponSlotOrMissileIndex;
-                    weaponId = GetCrpgItemIdForWeapon(affectorCrpgPeer, equipmentIndex);
+                    ItemId = GetCrpgItemIdForWeapon(affectorCrpgPeer, equipmentIndex);
                 }
 
-                // If we have a weaponId (crpg item ID), add it to event data
-                if (weaponId != null)
+                // If we have a ItemId (crpg item ID), add it to event data
+                if (ItemId != null)
                 {
-                    evt.EventData![CrpgGameEventField.WeaponId] = weaponId;
+                    evt.EventData![CrpgGameEventField.ItemId] = ItemId;
                 }
             }
         }
@@ -287,10 +287,10 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
         if (weaponIndex != EquipmentIndex.None)
         {
             // Get weapon ID
-            string? weaponId = GetCrpgItemIdForWeapon(affectorCrpgPeer, weaponIndex);
-            if (weaponId != null)
+            string? ItemId = GetCrpgItemIdForWeapon(affectorCrpgPeer, weaponIndex);
+            if (ItemId != null)
             {
-                evt.EventData![CrpgGameEventField.WeaponId] = weaponId;
+                evt.EventData![CrpgGameEventField.ItemId] = ItemId;
             }
 
             // Get weapon type and determine hit type

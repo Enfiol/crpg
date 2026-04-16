@@ -533,10 +533,6 @@ export type ErrorSource = {
 
 export type ErrorType = 'InternalError' | 'Forbidden' | 'Conflict' | 'NotFound' | 'Validation';
 
-export type EventField = 'Undefined' | 'WeaponType' | 'WeaponId' | 'HitType' | 'Damage' | 'TargetType' | 'BodyPart' | 'DamageType';
-
-export type EventType = 'Undefined' | 'Hit' | 'Kill' | 'Block';
-
 export type GameCharacterViewModel = {
     id: number;
     name: string;
@@ -560,11 +556,14 @@ export type GameEquippedItemViewModel = {
     userItem: GameUserItemViewModel;
 };
 
+export type GameEventField = 'WeaponType' | 'WeaponId' | 'HitType' | 'Damage' | 'TargetType' | 'BodyPart' | 'DamageType';
+
+export type GameEventType = 'Hit' | 'Kill' | 'Block';
+
 export type GameEventViewModel = {
     userId?: number | null;
-    type: EventType;
+    type: GameEventType;
     eventData?: {
-        Undefined?: string;
         WeaponType?: string;
         WeaponId?: string;
         HitType?: string;
@@ -958,9 +957,9 @@ export type QuestAggregationType = 'Count' | 'Sum';
 export type QuestDefinitionViewModel = {
     id: number;
     type: QuestType;
-    eventType: EventType;
+    eventType: GameEventType;
     aggregationType: QuestAggregationType;
-    sumField: EventField;
+    sumField: GameEventField | null;
     eventFiltersJson: Array<{
         [key: string]: string;
     }>;
