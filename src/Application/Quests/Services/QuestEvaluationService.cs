@@ -23,23 +23,23 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
         var earliestDate = userQuests.Min(q => q.CreatedAt.Date);
 
         var events = await db.GameEvents
-            .Where(be => userIds.Contains(be.UserId!.Value)
-                         && eventTypes.Contains(be.Type)
-                         && be.CreatedAt >= earliestDate)
+            .Where(ge => userIds.Contains(ge.UserId!.Value)
+                         && eventTypes.Contains(ge.Type)
+                         && ge.CreatedAt >= earliestDate)
             .ToListAsync(cancellationToken);
 
         foreach (var userQuest in userQuests)
         {
             var questDefinition = userQuest.QuestDefinition!;
             var questEvents = events
-                .Where(be => be.Type == questDefinition.EventType
-                             && be.CreatedAt >= userQuest.CreatedAt.Date)
+                .Where(ge => ge.Type == questDefinition.EventType
+                             && ge.CreatedAt >= userQuest.CreatedAt.Date)
                 .ToList();
 
             // Apply event filters in memory if any
             if (questDefinition.EventFiltersJson != null && questDefinition.EventFiltersJson.Length > 0)
             {
-                questEvents = [.. questEvents.Where(be => be.EventData != null
+                questEvents = [.. questEvents.Where(ge => ge.EventData != null
                                                       && questDefinition.EventFiltersJson.Any(filter =>
                                                           filter.All(kvp =>
                                                           {
@@ -49,7 +49,7 @@ public class QuestEvaluationService(ICrpgDbContext db) : IQuestEvaluationService
                                                                   return false;
                                                               }
 
-                                                              return be.EventData!.TryGetValue(field,
+                                                              return ge.EventData!.TryGetValue(field,
                                                                          out string? value) &&
                                                                      value == kvp.Value;
                                                           })))];
