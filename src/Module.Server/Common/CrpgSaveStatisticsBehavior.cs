@@ -124,7 +124,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
 
             // Determine block type and find the blocking item
             string? blockingItemId = null;
-            string? blockingWeaponType = null;
+            string? blockingWeaponClass = null;
             bool isShieldBlock = attackCollisionData.AttackBlockedWithShield;
 
             if (isShieldBlock)
@@ -142,7 +142,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                     if (!weapon.IsEmpty && weapon.CurrentUsageItem?.IsShield == true)
                     {
                         blockingItemId = GetCrpgItemIdForWeapon(blockerCrpgPeer, slot);
-                        blockingWeaponType = weapon.CurrentUsageItem.WeaponClass.ToString();
+                        blockingWeaponClass = weapon.CurrentUsageItem.WeaponClass.ToString();
                         break;
                     }
                 }
@@ -162,7 +162,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                     var weapon = affectedAgent.Equipment[wieldedIndex];
                     if (!weapon.IsEmpty)
                     {
-                        blockingWeaponType = weapon.CurrentUsageItem.WeaponClass.ToString();
+                        blockingWeaponClass = weapon.CurrentUsageItem.WeaponClass.ToString();
                     }
                 }
             }
@@ -173,9 +173,9 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
                 blockEvt.EventData![CrpgGameEventField.WeaponId] = blockingItemId;
             }
 
-            if (blockingWeaponType != null)
+            if (blockingWeaponClass != null)
             {
-                blockEvt.EventData![CrpgGameEventField.WeaponType] = blockingWeaponType;
+                blockEvt.EventData![CrpgGameEventField.WeaponClass] = blockingWeaponClass;
             }
 
             _buffer.Add(blockEvt);
@@ -204,7 +204,7 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
 
         if (!affectorWeapon.IsEmpty)
         {
-            evt.EventData![CrpgGameEventField.WeaponType] =
+            evt.EventData![CrpgGameEventField.WeaponClass] =
                 affectorWeapon.CurrentUsageItem.WeaponClass.ToString();
             if (affectorWeapon.Item != null)
             {
@@ -297,8 +297,8 @@ internal class CrpgSaveStatisticsBehavior : MissionBehavior
             var weapon = affectorAgent.Equipment[weaponIndex];
             if (!weapon.IsEmpty)
             {
-                // Weapon type
-                evt.EventData![CrpgGameEventField.WeaponType] =
+                // Weapon class
+                evt.EventData![CrpgGameEventField.WeaponClass] =
                     weapon.CurrentUsageItem.WeaponClass.ToString();
 
                 // Hit type (ranged or melee)

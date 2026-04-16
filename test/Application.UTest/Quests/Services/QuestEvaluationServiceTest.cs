@@ -51,7 +51,7 @@ public class QuestEvaluationServiceTest : TestBase
                 [
                     new Dictionary<string, string>
                     {
-                        ["WeaponType"] = "Sword",
+                        ["WeaponClass"] = "Sword",
                         ["TargetType"] = "Player",
                     },
                     new Dictionary<string, string>
@@ -70,7 +70,7 @@ public class QuestEvaluationServiceTest : TestBase
                 CreatedAt = new DateTime(2026, 04, 10, 09, 00, 00, DateTimeKind.Utc),
                 EventData = new Dictionary<GameEventField, string>
                 {
-                    [GameEventField.WeaponType] = "Sword",
+                    [GameEventField.WeaponClass] = "Sword",
                     [GameEventField.TargetType] = "Player",
                 },
             },
@@ -91,7 +91,7 @@ public class QuestEvaluationServiceTest : TestBase
                 CreatedAt = new DateTime(2026, 04, 10, 11, 00, 00, DateTimeKind.Utc),
                 EventData = new Dictionary<GameEventField, string>
                 {
-                    [GameEventField.WeaponType] = "Sword",
+                    [GameEventField.WeaponClass] = "Sword",
                 },
             },
             new GameEvent

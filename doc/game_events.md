@@ -34,7 +34,7 @@ Triggered when a player successfully hits another player or horse.
 - **TargetType** (Required): "Player" or "Horse"
 - **DamageType** (Required): Damage type as string: "Blunt", "Cut", "Pierce", or "Invalid"
 - **BodyPart** (Optional): Body part hit (see Body Part Values below)
-- **WeaponType** (Optional): Weapon class (see Weapon Class Values below)
+- **WeaponClass** (Optional): Weapon class (see Weapon Class Values below)
 - **WeaponId** (Optional): cRPG item ID of the weapon used
 
 ### 2. Kill Event (`EventType.Kill`)
@@ -47,7 +47,7 @@ Triggered when a player kills another player or horse.
 **Fields:**
 - **TargetType** (Required): "Player" or "Horse"
 - **DamageType** (Required): Damage type of killing blow: "Blunt", "Cut", "Pierce", or "Invalid"
-- **WeaponType** (Optional): Weapon class of killing weapon
+- **WeaponClass** (Optional): Weapon class of killing weapon
 - **WeaponId** (Optional): cRPG item ID of the killing weapon
 - **HitType** (Optional): "Ranged" or "Melee" (determined from weapon)
 - **BodyPart** (Optional): Body part where killing blow landed
@@ -69,7 +69,7 @@ Triggered when a player blocks an attack (with shield or weapon).
 - **HitType** (Required): "Ranged" or "Melee"
 - **TargetType** (Required): "Player" or "Horse"
 - **BodyPart** (Optional): Body part that would have been hit
-- **WeaponType** (Optional): Weapon class of the blocking item
+- **WeaponClass** (Optional): Weapon class of the blocking item
 - **WeaponId** (Optional): cRPG item ID of the blocking item
 
 **Note**: For shield blocks, the system scans the blocker's equipment to find the shield item. For weapon blocks, it uses the currently wielded weapon (primary or offhand). Damage field is only recorded for shield blocks because weapon blocks do not have a damage value in the collision data.
@@ -191,9 +191,9 @@ if (isBlocked && validPlayers && !selfBlock) {
 
 Game events are used by the quests feature to track player achievements and progress. Example quest conditions:
 
-- "Deal 1000 damage with swords" → Filter `Hit` events by `WeaponType` containing "Sword", sum `Damage`
+- "Deal 1000 damage with swords" → Filter `Hit` events by `WeaponClass` containing "Sword", sum `Damage`
 - "Get 10 headshot kills" → Filter `Kill` events by `BodyPart == "Head"`
-- "Block 50 attacks with shield" → Filter `Block` events by `WeaponType` containing "Shield"
+- "Block 50 attacks with shield" → Filter `Block` events by `WeaponClass` containing "Shield"
 - "Kill 20 players with ranged weapons" → Filter `Kill` events by `HitType == "Ranged"`
 - "Deal 500 Pierce damage" → Filter `Hit` events by `DamageType == "Pierce"`, sum `Damage`
 

@@ -1894,7 +1894,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedAxe",
+                        [GameEventField.WeaponClass] = "OneHandedAxe",
                         [GameEventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
                         [GameEventField.HitType] = "Cut",
                         [GameEventField.BodyPart] = "Chest",
@@ -1908,7 +1908,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedAxe",
+                        [GameEventField.WeaponClass] = "OneHandedAxe",
                         [GameEventField.WeaponId] = "crpg_one_handed_axe_v2_h0",
                         [GameEventField.HitType] = "Cut",
                         [GameEventField.BodyPart] = "Head",
@@ -1922,7 +1922,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponClass] = "OneHandedSword",
                         [GameEventField.WeaponId] = "crpg_decorated_scimitar_with_wide_grip_v1_h0",
                         [GameEventField.HitType] = "Cut",
                         [GameEventField.BodyPart] = "Chest",
@@ -1936,7 +1936,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponClass] = "OneHandedSword",
                         [GameEventField.WeaponId] = "crpg_thamaskene_steel_spatha_v1_h2",
                         [GameEventField.HitType] = "Cut",
                         [GameEventField.BodyPart] = "Legs",
@@ -1950,7 +1950,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "TwoHandedSword",
+                        [GameEventField.WeaponClass] = "TwoHandedSword",
                         [GameEventField.WeaponId] = "crpg_scythe_v2_h3",
                         [GameEventField.HitType] = "Cut",
                         [GameEventField.BodyPart] = "Chest",
@@ -1964,7 +1964,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedPolearm",
+                        [GameEventField.WeaponClass] = "OneHandedPolearm",
                         [GameEventField.WeaponId] = "crpg_short_spear_v1_h0",
                         [GameEventField.HitType] = "Thrust",
                         [GameEventField.BodyPart] = "Chest",
@@ -1978,7 +1978,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "Bow",
+                        [GameEventField.WeaponClass] = "Bow",
                         [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0",
                         [GameEventField.HitType] = "Ranged",
                         [GameEventField.BodyPart] = "Head",
@@ -1992,7 +1992,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Hit,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "Bow",
+                        [GameEventField.WeaponClass] = "Bow",
                         [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0",
                         [GameEventField.HitType] = "Ranged",
                         [GameEventField.BodyPart] = "Legs",
@@ -2000,28 +2000,28 @@ public record SeedDataCommand : IMediatorRequest
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-8),
                 },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-20) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2).AddMinutes(-30) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-20) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-40) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-30) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6).AddMinutes(-20) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7).AddMinutes(-40) },
-                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponType] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-8) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-2).AddMinutes(-30) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-40) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-30) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-6).AddMinutes(-20) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Crossbow", [GameEventField.WeaponId] = "crpg_light_crossbow_v1_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-7).AddMinutes(-40) },
+                new GameEvent { User = orle, Type = GameEventType.Kill, EventData = new Dictionary<GameEventField, string> { [GameEventField.WeaponClass] = "Bow", [GameEventField.WeaponId] = "crpg_hunting_bow_v2_h0", [GameEventField.HitType] = "Ranged", [GameEventField.BodyPart] = "Head" }, CreatedAt = DateTime.UtcNow.AddHours(-8) },
                 new GameEvent
                 {
                     User = orle,
                     Type = GameEventType.Block,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "SmallShield",
+                        [GameEventField.WeaponClass] = "SmallShield",
                         [GameEventField.WeaponId] = "crpg_small_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-10),
@@ -2032,7 +2032,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Block,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "SmallShield",
+                        [GameEventField.WeaponClass] = "SmallShield",
                         [GameEventField.WeaponId] = "crpg_small_round_shield_v1_h0",
                         [GameEventField.HitType] = "Ranged",
                     },
@@ -2044,7 +2044,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Block,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "LargeShield",
+                        [GameEventField.WeaponClass] = "LargeShield",
                         [GameEventField.WeaponId] = "crpg_large_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-3).AddMinutes(-10),
@@ -2055,7 +2055,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Block,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "LargeShield",
+                        [GameEventField.WeaponClass] = "LargeShield",
                         [GameEventField.WeaponId] = "crpg_large_round_shield_v1_h0",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-4).AddMinutes(-10),
@@ -2066,7 +2066,7 @@ public record SeedDataCommand : IMediatorRequest
                     Type = GameEventType.Block,
                     EventData = new Dictionary<GameEventField, string>
                     {
-                        [GameEventField.WeaponType] = "OneHandedSword",
+                        [GameEventField.WeaponClass] = "OneHandedSword",
                         [GameEventField.WeaponId] = "crpg_rondel_v3_h3",
                     },
                     CreatedAt = DateTime.UtcNow.AddHours(-5).AddMinutes(-10),
