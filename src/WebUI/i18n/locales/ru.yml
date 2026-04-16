@@ -1009,57 +1009,6 @@ user:
         confirmation: Перебросить задание за {goldCost}?
         notify:
           success: Задание переброшено
-    generate:
-      eventType:
-        Hit: Урон
-        Kill: Убийства
-        Block: Блоки
-      filterTitle:
-        WeaponType:
-          OneHandedSword: 1р. меч
-          TwoHandedSword: 2р. меч
-          OneHandedAxe: 1р. топор
-          OneHandedPolearm: древковое
-          TwoHandedPolearm: древковое
-          Bow: лук
-          Crossbow: арбалет
-          SmallShield: щит
-          LargeShield: щит
-          ThrowingAxe: метательное
-          ThrowingKnife: метательное
-          Javelin: метательное
-          Mace: булава
-        HitType:
-          Ranged: дальнее
-          Melee: ближнее
-        BodyPart:
-          Head: хэдшот
-          Legs: ноги
-      filterDesc:
-        WeaponType:
-          OneHandedSword: одноручным мечом
-          TwoHandedSword: двуручным мечом
-          OneHandedAxe: одноручным топором
-          OneHandedPolearm: древковым оружием
-          TwoHandedPolearm: древковым оружием
-          Bow: луком
-          Crossbow: арбалетом
-          SmallShield: щитом
-          LargeShield: щитом
-          ThrowingAxe: метательным оружием
-          ThrowingKnife: метательным оружием
-          Javelin: метательным оружием
-          Mace: булавой
-        HitType:
-          Ranged: дальним оружием
-          Melee: ближним оружием
-        BodyPart:
-          Head: в голову
-          Legs: по ногам
-      description:
-        Hit_Sum: 'Нанесите {value} урона противникам'
-        Kill_Count: 'Убейте {value} противников'
-        Block_Count: 'Заблокируйте {value} атак'
 
 banned:
   title: Вы забанены

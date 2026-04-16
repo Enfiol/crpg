@@ -20,7 +20,7 @@ export function useQuestDescription(quest: MaybeRefOrGetter<UserQuest>) {
   const { t, n } = useI18n()
   const questRef = toRef(quest)
 
-  function _getQuestName(def: QuestDefinition): string {
+  function _getQuestName(def: QuestDefinition) {
     const base = t(`user.quests.generate.eventType.${def.eventType}`)
     const activeFilters = (def.eventFiltersJson ?? []).filter(f => Object.keys(f).length > 0)
 
@@ -35,7 +35,7 @@ export function useQuestDescription(quest: MaybeRefOrGetter<UserQuest>) {
       const labels = new Set<string>()
       for (const value of values) {
         if (key === 'WeaponType') {
-          console.log({ key, value })
+          // console.log({ key, value })
 
           // weaponClassToIcon
           labels.add(t(`item.weaponClass.${value}`))

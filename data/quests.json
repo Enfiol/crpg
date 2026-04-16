@@ -342,7 +342,7 @@
     "id": 28,
     "type": "Daily",
     "eventType": "Hit",
-    "eventFiltersJson": [{"WeaponClass":"Javelin"},{"BodyPart":"Head"}],
+    "eventFiltersJson": [{"HitType":"Ranged"},{"DamageType":"Cut"},{"WeaponClass":"Javelin"},{"BodyPart":"Head"},{"BodyPart":"Neck"}],
     "aggregationType": "Sum",
     "aggregationField": "Damage",
     "requiredValue": 10,

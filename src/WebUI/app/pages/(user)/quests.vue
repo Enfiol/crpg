@@ -75,7 +75,7 @@ const [onReroll, rerolling] = useAsyncCallback(
     >
       <UiHeading variant="h2" tag="h2" :title="`${type} Quests`" />
 
-      <div class="grid grid-cols-3 gap-5">
+      <div class="grid grid-cols-3 gap-6">
         <QuestCard
           v-for="quest in quests"
           :key="quest.id"

@@ -1045,56 +1045,58 @@ user:
         notify:
           success: Quest rerolled
     generate:
-      eventType:
-        Hit: Damage
-        Kill: Kills
-        Block: Blocks
-      filterTitle:
-        # WeaponType:
-        #   OneHandedSword: 1H sword
-        #   TwoHandedSword: 2H sword
-        #   OneHandedAxe: 1H axe
-        #   OneHandedPolearm: polearm
-        #   TwoHandedPolearm: polearm
-        #   Bow: bow
-        #   Crossbow: crossbow
-        #   SmallShield: shield
-        #   LargeShield: shield
-        #   ThrowingAxe: throwing
-        #   ThrowingKnife: throwing
-        #   Javelin: throwing
-        #   Mace: mace
-        HitType:
-          Ranged: ranged
-          Melee: melee
-        BodyPart:
-          Head: headshot
-          Legs: legs
-      filterDesc:
-        # WeaponType:
-        #   OneHandedSword: with one-handed sword
-        #   TwoHandedSword: with two-handed sword
-        #   OneHandedAxe: with one-handed axe
-        #   OneHandedPolearm: with polearm
-        #   TwoHandedPolearm: with polearm
-        #   Bow: with bow
-        #   Crossbow: with crossbow
-        #   SmallShield: with shield
-        #   LargeShield: with shield
-        #   ThrowingAxe: with throwing weapon
-        #   ThrowingKnife: with throwing weapon
-        #   Javelin: with throwing weapon
-        #   Mace: with mace
-        HitType:
-          Ranged: with ranged weapons
-          Melee: with melee weapons
-        BodyPart:
-          Head: to the head
-          Legs: to the legs
-      description:
-        Hit_Sum: 'Deal {value} damage to enemies'
+      tplByEventTypeAndAggregationType:
+        Hit_Sum: 'Deal {value} damage'
         Kill_Count: 'Kill {value} enemies'
+        Block_Sum: 'Block {value} damage'
         Block_Count: 'Block {value} attacks'
+      tplByEventTypeAndAggregationTypeAndHitType:
+        Hit_Sum:
+          Ranged: 'Deal {value} ranged damage'
+          Melee: 'Deal {value} melee damage'
+        Kill_Count:
+          Ranged: 'Kill {value} enemies with ranged weapons'
+          Melee: 'Kill {value} enemies with melee weapons'
+        Block_Sum:
+          Ranged: 'Block {value} ranged damage'
+          Melee: 'Block {value} melee damage'
+        Block_Count:
+          Ranged: 'Block {value} ranged attacks'
+          Melee: 'Block {value} melee attacks'
+      eventField:
+        ItemId:
+          title: Item ID
+        WeaponClass:
+          title: Weapon class
+          # see values in item.weaponClass
+        HitType:
+          title: Hit type
+          values:
+            Melee: Melee
+            Ranged: Ranged
+        DamageType:
+          title: Damage type
+          # see values in item.damageType
+        Damage:
+          title: Damage
+          # no values
+        TargetType:
+          title: Target type
+          values:
+            Character: Character
+            Mount: Mount
+        BodyPart:
+          title: Body part
+          values:
+            Head: Head
+            Neck: Neck
+            Chest: Chest
+            Abdomen: Abdomen
+            ShoulderLeft: ShoulderLeft
+            ShoulderRight: ShoulderRight
+            ArmLeft: ArmLeft
+            ArmRight: ArmRight
+            Legs: Legs
 
 banned:
   title: You are banned

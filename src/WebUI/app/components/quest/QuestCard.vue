@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { UBadge, UIcon, UiDataMedia } from '#components'
 import { questRerollDailyQuestPrice } from '~root/data/constants.json'
 
+import type { DamageType, WeaponClass } from '~/models/item'
 import type { UserQuest } from '~/models/quest'
 
 import { useQuestDescription } from '~/composables/quest/use-quest-description'
-import { QUEST_TYPE } from '~/models/quest'
+import { GAME_EVENT_FIELD, GAME_EVENT_TYPE, QUEST_TYPE } from '~/models/quest'
+import { damageTypeToIcon, weaponClassToIcon } from '~/services/item-service'
 
 const { quest } = defineProps<{
   quest: UserQuest
@@ -29,6 +32,116 @@ const timeRemaining = computed(() => parseTimestamp((new Date(quest.expiresAt).g
 
 const canReroll = computed(() => !isExpired.value && !quest.isRewardClaimed && quest.questDefinition.type === QUEST_TYPE.Daily)
 const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && isCompleted.value)
+
+//
+//
+//
+//
+
+const { t, n } = useI18n()
+
+function collectFilterValues(filters: Record<string, string>[]): Map<string, Set<string>> {
+  const map = new Map<string, Set<string>>()
+
+  for (const filter of filters) {
+    for (const [key, value] of Object.entries(filter)) {
+      if (!map.has(key)) {
+        map.set(key, new Set())
+      }
+      map.get(key)!.add(value)
+    }
+  }
+  return map
+}
+
+function renderSmth() {
+  const { eventType, aggregationType, aggregationField, eventFiltersJson, requiredValue } = quest.questDefinition
+
+  //
+  const filtersByKey = collectFilterValues(eventFiltersJson)
+
+  let title = ''
+
+  // TODO:
+  if (filtersByKey.has(GAME_EVENT_FIELD.HitType)) {
+    title = t(`user.quests.generate.tplByEventTypeAndAggregationTypeAndHitType.${eventType}_${aggregationType}.${Array.from(filtersByKey.get(GAME_EVENT_FIELD.HitType)!).at(0)}`, { value: n(requiredValue) })
+  }
+  else {
+    title = t(`user.quests.generate.tplByEventTypeAndAggregationType.${eventType}_${aggregationType}`, { value: n(requiredValue) })
+  }
+
+  // console.log(filtersByKey, filtersByKey.entries())
+
+  // TODO: to fn
+  const description = filtersByKey.entries()
+    .map(([key, values], idx) => {
+      //
+      // console.log({ key, values, idx })
+      if (key === GAME_EVENT_FIELD.WeaponClass) {
+        return h('div', {
+          class: 'flex items-center flex-wrap gap-1',
+        }, [
+          h('div', {}, t(`user.quests.generate.eventField.${key}.title`)),
+          h('div', {
+            class: 'flex items-center flex-wrap gap-1',
+          }, Array.from(values).map(value => h(UBadge, {
+            variant: 'subtle',
+            color: 'neutral',
+            icon: `crpg:${weaponClassToIcon[value as WeaponClass]}`,
+            label: t(`item.weaponClass.${value}`),
+          }))),
+        ])
+      }
+
+      if (key === GAME_EVENT_FIELD.DamageType) {
+        return h('div', {
+          class: 'flex items-center flex-wrap gap-1',
+        }, [
+          h('div', {}, t(`user.quests.generate.eventField.${key}.title`)),
+          h('div', {
+            class: 'flex items-center flex-wrap gap-1',
+          }, Array.from(values).map(value => h(UBadge, {
+            variant: 'subtle',
+            color: 'neutral',
+            icon: `crpg:${damageTypeToIcon[value as DamageType]}`,
+            label: t(`item.damageType.${value}.long`),
+          }))),
+        ])
+      }
+
+      // used in title
+      if (key === GAME_EVENT_FIELD.HitType || key === GAME_EVENT_FIELD.Damage) {
+        return null
+      }
+
+      return h('div', {
+        class: 'flex items-center flex-wrap gap-1',
+      }, [
+        h('div', {}, t(`user.quests.generate.eventField.${key}.title`)),
+        h('div', {
+          class: 'flex items-center flex-wrap gap-1',
+        }, Array.from(values).map(value => h(UBadge, { label: value, variant: 'subtle', color: 'neutral' }))),
+      ])
+
+      // return h('div', { class: '' }, `${t(`user.quests.generate.eventField.${key}.title`)}: ${Array.from(values).join(', ')}`)
+
+      //
+      //
+      //
+    })
+    .toArray()
+    .filter(Boolean)
+
+  // console.log(description.toArray().join('; '))
+
+  return {
+    title: () => title,
+    // description: 'wdw',
+    description: () => description,
+  }
+}
+
+const smth = renderSmth()
 </script>
 
 <template>
@@ -41,13 +154,17 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
   >
     <template #header>
       <div class="flex items-start justify-between gap-2">
-        <UiDataContent
-          :caption="questDescription"
-        >
-          <template #default>
-            {{ questName }}
-          </template>
-        </UiDataContent>
+        <div>
+          <UiTextView variant="h5" margin-bottom>
+            {{ smth.title() }}
+          </UiTextView>
+
+          <UiTextView variant="p">
+            <smth.description />
+          </UiTextView>
+        </div>
+        <!-- {{ questName }} -->
+        <!-- {{ questDescription }} -->
 
         <div class="flex shrink-0 items-center gap-2">
           <UTooltip v-if="!isExpired && !quest.isRewardClaimed" :text="$d(quest.expiresAt, 'short')">
@@ -89,6 +206,10 @@ const canClaim = computed(() => !isExpired.value && !quest.isRewardClaimed && is
         {{ percent }}%&nbsp;&nbsp;·&nbsp;&nbsp;{{ $n(quest.currentValue) }}/{{ $n(quest.questDefinition?.requiredValue ?? 0) }}
       </template>
     </UProgress>
+
+    <pre>
+      {{ quest.questDefinition }}
+    </pre>
 
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
