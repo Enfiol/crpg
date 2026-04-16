@@ -38,14 +38,14 @@ Triggered when a player successfully hits another player or horse.
 - **ItemId** (Optional): cRPG item ID of the weapon used
 
 ### 2. Kill Event (`EventType.Kill`)
-Triggered when a player kills another player or horse.
+Triggered when a player kills another player or mount.
 
 **User ID**: The killer's user ID
 **When**: On agent death (agent state = Killed)
 **Not sent for**: Self-kills, team kills, non-player agents
 
 **Fields:**
-- **TargetType** (Required): "Player" or "Horse"
+- **TargetType** (Required): "Character" or "Mount"
 - **DamageType** (Required): Damage type of killing blow: "Blunt", "Cut", "Pierce", or "Invalid"
 - **WeaponClass** (Optional): Weapon class of killing weapon
 - **ItemId** (Optional): cRPG item ID of the killing weapon
@@ -244,6 +244,6 @@ The behavior maps Bannerlord `EquipmentIndex` to cRPG `CrpgItemSlot` for item ID
 
 - `src/Module.Server/Common/CrpgSaveStatisticsBehavior.cs` - Event generation logic
 - `src/Module.Server/Api/Models/CrpgGameEvent.cs` - Event model definition
-- `src/Domain/Entities/CrpgGameEvents/CrpgGameEvent.cs` - Domain event model with DamageType field
-- `src/Application/Games/Commands/CreateCrpgGameEventsCommand.cs` - Backend event processing
+- `src/Domain/Entities/GameEvents/GameEvent.cs` - Domain event model with DamageType field
+- `src/Application/Games/Commands/CreateGameEventsCommand.cs` - Backend event processing
 - `src/Application/Quests/Services/QuestEvaluationService.cs` - Event-based quest evaluation
