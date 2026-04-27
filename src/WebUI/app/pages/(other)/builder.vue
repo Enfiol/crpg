@@ -7,6 +7,7 @@ import type {
   CharacterAttributes,
   CharacterCharacteristics,
   CharacteristicConversion,
+  CharacterPerkType,
   CharacterSkills,
   CharacterWeaponProficiencies,
 } from '~/models/character'
@@ -50,6 +51,7 @@ const {
   onInputWithAutoClamp,
   onFillField,
   onResetField,
+  onTogglePerk,
   reset: resetCharacterBuilderState,
   healthPoints,
 } = useCharacterCharacteristicBuilder(initialCharacteristics)
@@ -74,8 +76,9 @@ watch(level, () => {
 watchDebounced(
   characteristics,
   () => {
+    const { perks: _, ...rest } = characteristics.value
     // @ts-expect-error ///
-    router.replace({ query: { ...route.query, ...characteristics.value } })
+    router.replace({ query: { ...route.query, ...rest } })
   },
   { debounce: 500 },
 )
@@ -217,6 +220,12 @@ const onShare = () => {
               @reset-field="onResetField"
             />
 
+            <CharacterPerksBuilder
+              style="grid-area: perks"
+              :perks="characteristics.perks"
+              @toggle="onTogglePerk"
+            />
+
             <CharacterStats
               style="grid-area: stats"
               :characteristics="characteristics"
@@ -315,8 +324,8 @@ const onShare = () => {
 .statsGrid {
   grid-template-areas:
     'attributes skills stats'
-    'weaponProficiencies skills stats';
+    'weaponProficiencies skills perks';
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto;
 }
 </style>

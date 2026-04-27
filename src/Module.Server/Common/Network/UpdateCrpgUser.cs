@@ -123,11 +123,18 @@ internal sealed class UpdateCrpgUser : GameNetworkMessage
         writer.Write((short)characteristics.WeaponProficiencies.Bow);
         writer.Write((short)characteristics.WeaponProficiencies.Throwing);
         writer.Write((short)characteristics.WeaponProficiencies.Crossbow);
+
+        writer.Write((byte)characteristics.Perks.Points);
+        writer.Write((byte)characteristics.Perks.SelectedPerks.Count);
+        foreach (var perk in characteristics.Perks.SelectedPerks)
+        {
+            writer.Write((byte)perk);
+        }
     }
 
     private CrpgCharacterCharacteristics ReadCharacterCharacteristicsFromPacket(BinaryReader reader)
     {
-        return new CrpgCharacterCharacteristics
+        var characteristics = new CrpgCharacterCharacteristics
         {
             Attributes =
             {
@@ -159,6 +166,17 @@ internal sealed class UpdateCrpgUser : GameNetworkMessage
                 Crossbow = reader.ReadInt16(),
             },
         };
+
+        characteristics.Perks.Points = reader.ReadByte();
+        int perkCount = reader.ReadByte();
+        List<CrpgCharacterPerkType> selectedPerks = new(perkCount);
+        for (int i = 0; i < perkCount; i++)
+        {
+            selectedPerks.Add((CrpgCharacterPerkType)reader.ReadByte());
+        }
+        characteristics.Perks.SelectedPerks = selectedPerks;
+
+        return characteristics;
     }
 
     private void WriteCharacterEquippedItemsToPacket(BinaryWriter writer, IList<CrpgEquippedItem> equippedItems)

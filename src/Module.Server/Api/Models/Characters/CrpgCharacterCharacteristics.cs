@@ -6,4 +6,5 @@ internal class CrpgCharacterCharacteristics
     public CrpgCharacterAttributes Attributes { get; set; } = new();
     public CrpgCharacterSkills Skills { get; set; } = new();
     public CrpgCharacterWeaponProficiencies WeaponProficiencies { get; set; } = new();
+    public CrpgCharacterPerks Perks { get; set; } = new();
 }

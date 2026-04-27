@@ -329,6 +329,12 @@ internal class CrpgRewardServer : MissionLogic
                 SetRewardForConnectedPlayer(userUpdate, crpgPeer, durationRewarded, compensationForCrpgUser, isValorousPlayer,
                     defenderMultiplierGain, attackerMultiplierGain, constantMultiplier);
 
+                if (CrpgPerksApplicationComponent.HasPerk(crpgPeer, CrpgCharacterPerkType.BountyHunter)
+                    && periodStats.TryGetValue(playerId, out var ps))
+                {
+                    userUpdate.Reward.Gold += ps.Kills * CrpgPerksConstants.BountyHunterGoldPerKill;
+                }
+
                 if (brokenItems.TryGetValue(crpgUserId, out var userBrokenItems))
                 {
                     userUpdate.BrokenItems = userBrokenItems;
@@ -336,6 +342,7 @@ internal class CrpgRewardServer : MissionLogic
 
                 // TODO should probably implement compensation for disconnected users here
             }
+
             else if (crpgPeer.LastSpawnInfo != null && isPlayerInSpectator) // update spectators multiplier based on their previous team
             {
                 SetRewardForConnectedPlayer(userUpdate, crpgPeer, 0, 0, false,
@@ -527,10 +534,14 @@ internal class CrpgRewardServer : MissionLogic
     {
         float serverXpMultiplier = CrpgServerConfiguration.ServerExperienceMultiplier;
         serverXpMultiplier *= IsHappyHour() ? 1.5f : 1f;
+
+        // Veteran: +5% experience gain
+        float veteranMultiplier = CrpgPerksApplicationComponent.HasPerk(crpgPeer, CrpgCharacterPerkType.Veteran) ? CrpgPerksConstants.VeteranExperienceMultiplier : 1f;
+
         userUpdate.Reward = new CrpgUserReward
         {
             Experience = (int)(serverXpMultiplier * durationRewarded * (_constants.BaseExperienceGainPerSecond
-                + crpgPeer.RewardMultiplier * _constants.MultipliedExperienceGainPerSecond)),
+                + crpgPeer.RewardMultiplier * _constants.MultipliedExperienceGainPerSecond) * veteranMultiplier),
             Gold = (int)(durationRewarded * (_constants.BaseGoldGainPerSecond
                 + crpgPeer.RewardMultiplier * _constants.MultipliedGoldGainPerSecond)
                 + compensationAmount),

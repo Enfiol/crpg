@@ -50,6 +50,8 @@ public class Constants
     public float CavalryCoverageFactorForShieldCoef { get; set; }
     public float[] MountedRangedSkillInaccuracy { get; set; } = [];
     public float[] ShieldDefendStunMultiplierForSkillRecursiveCoefs { get; set; } = [];
+    public int PerkPointsPerLevel { get; set; }
+    public int DefaultPerkPoints { get; set; }
     public float ArmorSetRequirementPowerMeanPValue { get; set; }
     public float DefaultRating { get; set; }
     public float DefaultRatingDeviation { get; set; }

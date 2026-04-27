@@ -238,10 +238,18 @@ export type CharacterAttributesViewModel = {
 
 export type CharacterCharacteristicConversion = 'AttributesToSkills' | 'SkillsToAttributes';
 
+export type CharacterPerksViewModel = {
+    points: number;
+    selectedPerks: Array<CharacterPerkType>;
+};
+
+export type CharacterPerkType = 'Headhunter' | 'Berserker' | 'Marksman' | 'Tank' | 'FleetFooted' | 'ShieldExpert' | 'HorseArcher' | 'Brusier' | 'QuickHands' | 'Strong' | 'Veteran';
+
 export type CharacterCharacteristicsViewModel = {
     attributes: CharacterAttributesViewModel;
     skills: CharacterSkillsViewModel;
     weaponProficiencies: CharacterWeaponProficienciesViewModel;
+    perks: CharacterPerksViewModel;
 };
 
 export type CharacterCharacteristicsViewModelResult = {

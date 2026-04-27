@@ -57,6 +57,10 @@ const {
       throwing: 0,
       twoHanded: 0,
     },
+    perks: {
+      points: 0,
+      selectedPerks: [],
+    },
   })
 
   return {
@@ -86,6 +90,7 @@ vi.mock('~/services/character-service', () => {
     getCharacteristicCost: mockedGetCharacteristicCost,
     allCharacteristicRequirementSatisfied: mockedAllCharacteristicRequirementSatisfied,
     characteristicRequirementSatisfied: mockedCharacteristicRequirementSatisfied,
+    highLevelCutoff: 30,
   }
 })
 
@@ -606,6 +611,10 @@ describe('useCharacterCharacteristicBuilder', () => {
         polearm: 0,
         throwing: 0,
         twoHanded: 35,
+      },
+      perks: {
+        points: 0,
+        selectedPerks: [],
       },
     })
 

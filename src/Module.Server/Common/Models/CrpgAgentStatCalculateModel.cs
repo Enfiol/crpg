@@ -1,4 +1,5 @@
-﻿using Crpg.Module.Helpers;
+﻿using Crpg.Module.Api.Models.Characters;
+using Crpg.Module.Helpers;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -229,11 +230,21 @@ internal class CrpgAgentStatCalculateModel : AgentStatCalculateModel
         props.ArmorLegs = equipment.GetLegArmorSum();
         props.ArmorArms = equipment.GetArmArmorSum();
 
+        // Armorer: +10% armor rating on all equipped armor pieces
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.Armorer))
+        {
+            props.ArmorHead *= CrpgPerksConstants.ArmorerArmorMultiplier;
+            props.ArmorTorso *= CrpgPerksConstants.ArmorerArmorMultiplier;
+            props.ArmorLegs *= CrpgPerksConstants.ArmorerArmorMultiplier;
+            props.ArmorArms *= CrpgPerksConstants.ArmorerArmorMultiplier;
+        }
+
         int strengthAttribute = GetEffectiveSkill(agent, CrpgSkills.Strength);
         int ironFleshSkill = GetEffectiveSkill(agent, CrpgSkills.IronFlesh);
         agent.BaseHealthLimit = _constants.DefaultHealthPoints
                                 + strengthAttribute * _constants.HealthPointsForStrength
-                                + ironFleshSkill * _constants.HealthPointsForIronFlesh;
+                                + ironFleshSkill * _constants.HealthPointsForIronFlesh
+                                + (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.Tank) ? CrpgPerksConstants.TankBonusHealth : 0);
         agent.HealthLimit = agent.BaseHealthLimit;
         agent.Health = agent.HealthLimit;
     }
@@ -571,6 +582,45 @@ internal class CrpgAgentStatCalculateModel : AgentStatCalculateModel
         props.AttributeRiding = ridingSkill * ridingAttribute;
         // TODO: AttributeHorseArchery doesn't seem to have any effect for now.
         // props.AttributeHorseArchery = Game.Current.BasicModels.StrikeMagnitudeModel.CalculateHorseArcheryFactor(character);
+
+        // Perk effects
+        // FleetFooted: +5% movement speed
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.FleetFooted))
+        {
+            props.MaxSpeedMultiplier *= CrpgPerksConstants.FleetFootedSpeedMultiplier;
+            props.CombatMaxSpeedMultiplier *= CrpgPerksConstants.FleetFootedSpeedMultiplier;
+        }
+
+        // Strong: -15% armor weight penalty
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.Strong))
+        {
+            props.ArmorEncumbrance *= CrpgPerksConstants.StrongEncumbranceMultiplier;
+            props.WeaponsEncumbrance *= CrpgPerksConstants.StrongEncumbranceMultiplier;
+        }
+
+        // Berserker: +5% attack speed
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.Berserker)
+            && (equippedItem?.IsMeleeWeapon == true && equippedItem?.IsRangedWeapon == false))
+        {
+            props.SwingSpeedMultiplier *= CrpgPerksConstants.BerserkerAttackSpeedMultiplier;
+            props.ThrustOrRangedReadySpeedMultiplier *= CrpgPerksConstants.BerserkerAttackSpeedMultiplier;
+        }
+
+        // QuickHands: +10% reload speed
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.QuickHands)
+            && equippedItem?.IsRangedWeapon == true)
+        {
+            props.ReloadSpeed *= CrpgPerksConstants.QuickHandsReloadSpeedMultiplier;
+        }
+
+        // HorseArcher: -25% mounted ranged penalty
+        if (CrpgPerksApplicationComponent.HasPerk(agent, CrpgCharacterPerkType.HorseArcher)
+            && agent.HasMount && equippedItem?.IsRangedWeapon == true)
+        {
+            props.WeaponInaccuracy *= CrpgPerksConstants.HorseArcherAccuracyMultiplier;
+            props.WeaponMaxMovementAccuracyPenalty *= CrpgPerksConstants.HorseArcherAccuracyMultiplier;
+            props.WeaponMaxUnsteadyAccuracyPenalty *= CrpgPerksConstants.HorseArcherAccuracyMultiplier;
+        }
 
         SetAiProperties(agent, props, equippedItem, secondaryItem);
     }

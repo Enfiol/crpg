@@ -329,6 +329,12 @@ internal static class CommonErrors
         Detail = $"{requiredPoints} skill points are required but only {actualPoints} are available",
     };
 
+    public static Error NotEnoughPerkPoints(int requiredPoints, int actualPoints) => new(ErrorType.Validation, ErrorCode.NotEnoughPerkPoints)
+    {
+        Title = "Not enough perk points",
+        Detail = $"{requiredPoints} perk points are required but only {actualPoints} are available",
+    };
+
     public static Error NotEnoughWeaponProficiencyPoints(int requiredPoints, int actualPoints) => new(ErrorType.Validation, ErrorCode.NotEnoughWeaponProficiencyPoints)
     {
         Title = "Not enough weapon proficiency points",

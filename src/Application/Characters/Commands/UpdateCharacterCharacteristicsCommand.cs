@@ -104,6 +104,13 @@ public record UpdateCharacterCharacteristicsCommand : IMediatorRequest<Character
                 return new Result(CommonErrors.NotEnoughWeaponProficiencyPoints(weaponProficienciesDelta, stats.WeaponProficiencies.Points));
             }
 
+            // Validate perks: must have enough points for new selections.
+            int perksDelta = newStats.Perks.SelectedPerks.Count - stats.Perks.SelectedPerks.Count;
+            if (perksDelta > stats.Perks.Points)
+            {
+                return new Result(CommonErrors.NotEnoughPerkPoints(perksDelta, stats.Perks.Points));
+            }
+
             if (!CheckSkillsRequirement(newStats))
             {
                 return new Result(CommonErrors.SkillRequirementNotMet());
@@ -131,6 +138,9 @@ public record UpdateCharacterCharacteristicsCommand : IMediatorRequest<Character
             stats.WeaponProficiencies.Bow = newStats.WeaponProficiencies.Bow;
             stats.WeaponProficiencies.Throwing = newStats.WeaponProficiencies.Throwing;
             stats.WeaponProficiencies.Crossbow = newStats.WeaponProficiencies.Crossbow;
+
+            stats.Perks.Points -= perksDelta;
+            stats.Perks.SelectedPerks = newStats.Perks.SelectedPerks;
 
             return new Result();
         }

@@ -47,6 +47,8 @@
   "cavalryCoverageFactorForShieldCoef": 0.02,
   "mountedRangedSkillInaccuracy": [ 0.1, 0.15, 0.228, 0.334, 0.468, 0.63, 0.82, 1.038 ],
   "shieldDefendStunMultiplierForSkillRecursiveCoefs": [ 0.625, 0.14, 0.15 ],
+  "perkPointsPerLevel": 1,
+  "defaultPerkPoints": 0,
   "armorSetRequirementPowerMeanPValue": 4,
   "defaultRating": 1500.0,
   "defaultRatingDeviation": 350,

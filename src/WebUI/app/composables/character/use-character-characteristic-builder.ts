@@ -6,6 +6,7 @@ import type {
   CharacterCharacteristics,
   CharacteristicKey,
   CharacteristicSectionKey,
+  CharacterPerkType,
 } from '~/models/character'
 import type { CharacteristicState } from '~/services/character-service'
 
@@ -27,16 +28,45 @@ export const useCharacterCharacteristicBuilder = (
   characteristicsInitial: MaybeRefOrGetter<CharacterCharacteristics>,
 ) => {
   const delta = ref<CharacterCharacteristics>(createEmptyCharacteristic())
+  const deltaPerks = ref<CharacterPerkType[]>([])
 
   function reset() {
     delta.value = createEmptyCharacteristic()
+    deltaPerks.value = []
   }
 
-  const isDirty = computed(() => Object.values(delta.value).some(section => section.points !== 0))
+  const isDirty = computed(() =>
+    ['attributes', 'skills', 'weaponProficiencies'].some(
+      key => delta.value[key as keyof typeof delta.value].points !== 0,
+    ) || deltaPerks.value.length > 0
+  )
 
   const characteristics = computed<CharacterCharacteristics>(() => {
-    return objectEntries(toValue(characteristicsInitial)).reduce(
+    const initial = toValue(characteristicsInitial)
+    const base = { ...delta.value }
+
+    // Compute final selectedPerks by applying toggles (deltaPerks) to initial
+    const finalSelectedPerks = [...initial.perks.selectedPerks]
+    for (const perkType of deltaPerks.value) {
+      const idx = finalSelectedPerks.indexOf(perkType)
+      if (idx >= 0) {
+        finalSelectedPerks.splice(idx, 1)
+      } else {
+        finalSelectedPerks.push(perkType)
+      }
+    }
+
+    const merged = objectEntries(initial).reduce(
       (obj, [key, values]) => {
+        if (key === 'perks') {
+          return {
+            ...obj,
+            [key]: {
+              points: initial.perks.points - deltaPerks.value.length,
+              selectedPerks: finalSelectedPerks,
+            },
+          }
+        }
         return {
           ...obj,
           [key]: mergeObjectWithSum(
@@ -45,12 +75,16 @@ export const useCharacterCharacteristicBuilder = (
           ),
         }
       },
-      { ...delta.value },
+      { ...base },
     )
+
+    return merged
   })
 
   const isChangeValid = computed(() =>
-    Object.values(characteristics.value).every(section => section.points >= 0)
+    ['attributes', 'skills', 'weaponProficiencies'].every(
+      key => characteristics.value[key as keyof CharacterCharacteristics].points >= 0,
+    )
     && allCharacteristicRequirementSatisfied(characteristics.value),
   )
 
@@ -82,6 +116,15 @@ export const useCharacterCharacteristicBuilder = (
       max: value + ((costToIncrease <= characteristics.value[section].points && (nextRequirement !== null ? nextRequirement.satisfied : true)) ? 1 : 0),
       requirement,
       costToIncrease,
+    }
+  }
+
+  const onTogglePerk = (perkType: CharacterPerkType): void => {
+    const idx = deltaPerks.value.indexOf(perkType)
+    if (idx >= 0) {
+      deltaPerks.value.splice(idx, 1)
+    } else {
+      deltaPerks.value.push(perkType)
     }
   }
 
@@ -166,6 +209,7 @@ export const useCharacterCharacteristicBuilder = (
     onInputWithAutoClamp,
     onFillField,
     onResetField,
+    onTogglePerk,
     reset,
     isDirty,
     healthPoints,

@@ -82,9 +82,37 @@ internal class CharacterService : ICharacterService
             int points = 0;
             for (int i = 1; i < level; i++)
             {
-                if (i < _constants.HighLevelCutoff)
+                if (i < _constants.HighLevelCutoff) // levels 1-29 (incl. level up to 30)
                 {
                     points += _constants.AttributePointsPerLevel;
+                }
+            }
+
+            return points;
+        }
+
+        int CalculateSkillPoints(int level)
+        {
+            int points = 0;
+            for (int i = 1; i < level; i++)
+            {
+                if (i < _constants.HighLevelCutoff) // levels 1-29 (incl. level up to 30)
+                {
+                    points += _constants.SkillPointsPerLevel;
+                }
+            }
+
+            return points;
+        }
+
+        int CalculatePerkPoints(int level)
+        {
+            int points = 0;
+            for (int i = 1; i < level; i++)
+            {
+                if (i >= _constants.HighLevelCutoff - 1) // levels 29+ (first perk at level 30)
+                {
+                    points += _constants.PerkPointsPerLevel;
                 }
             }
 
@@ -101,11 +129,16 @@ internal class CharacterService : ICharacterService
             },
             Skills = new CharacterSkills
             {
-                Points = _constants.DefaultSkillPoints + (respecialization ? (character.Level - 1) * _constants.SkillPointsPerLevel : 0),
+                Points = _constants.DefaultSkillPoints + (respecialization ? CalculateSkillPoints(character.Level) : 0),
             },
             WeaponProficiencies = new CharacterWeaponProficiencies
             {
                 Points = WeaponProficiencyPointsForLevel(respecialization ? character.Level : 1),
+            },
+            Perks = new CharacterPerks
+            {
+                Points = _constants.DefaultPerkPoints + (respecialization ? CalculatePerkPoints(character.Level) : 0),
+                SelectedPerks = new List<CharacterPerkType>(),
             },
         };
         character.Class = CharacterClass.Peasant;
@@ -203,13 +236,18 @@ internal class CharacterService : ICharacterService
         {
             for (int i = character.Level; i < newLevel; i++)
             {
-                if (i < _constants.HighLevelCutoff) // reward attribute points for lower levels
+                if (i < _constants.HighLevelCutoff) // reward attribute/skill points for levels 1-29 (incl. level up to 30)
                 {
                     character.Characteristics.Attributes.Points += _constants.AttributePointsPerLevel;
+                    character.Characteristics.Skills.Points += _constants.SkillPointsPerLevel;
+                }
+
+                if (i >= _constants.HighLevelCutoff - 1) // reward perk points for levels 29+ (first perk at level 30)
+                {
+                    character.Characteristics.Perks.Points += _constants.PerkPointsPerLevel;
                 }
             }
 
-            character.Characteristics.Skills.Points += levelDiff * _constants.SkillPointsPerLevel;
             character.Characteristics.WeaponProficiencies.Points += WeaponProficiencyPointsForLevel(newLevel) - WeaponProficiencyPointsForLevel(character.Level);
             character.Level = newLevel;
         }

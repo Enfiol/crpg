@@ -188,6 +188,14 @@ export interface CharacterEarnedMetadata {
   [key: string]: string
 }
 
+export const perkPointsForLevel = (level: number): number => {
+  if (level < highLevelCutoff) {
+    return 0
+  }
+
+  return level - highLevelCutoff + 1
+}
+
 export const getCharacterEarningStatistics = async (
   characterId: number,
   from: Date,
@@ -469,7 +477,9 @@ export const characteristicRequirementSatisfied = (
 }
 
 export const allCharacteristicRequirementSatisfied = (characteristics: CharacterCharacteristics): boolean => {
-  for (const [sectionKey, sectionValue] of objectEntries(characteristics)) {
+  const sections: CharacteristicSectionKey[] = ['attributes', 'skills', 'weaponProficiencies']
+  for (const sectionKey of sections) {
+    const sectionValue = characteristics[sectionKey]
     for (const [key, value] of objectEntries(sectionValue)) {
       if (key === 'points') {
         continue
@@ -510,6 +520,10 @@ export const createEmptyCharacteristic = (): CharacterCharacteristics => ({
     throwing: 0,
     twoHanded: 0,
   },
+  perks: {
+    points: 0,
+    selectedPerks: [],
+  },
 })
 
 export const createCharacteristics = (
@@ -528,6 +542,10 @@ export const createDefaultCharacteristic = (level = minimumLevel): CharacterChar
     },
     weaponProficiencies: {
       points: wppForLevel(level),
+    },
+    perks: {
+      points: perkPointsForLevel(level),
+      selectedPerks: [],
     },
   })
 

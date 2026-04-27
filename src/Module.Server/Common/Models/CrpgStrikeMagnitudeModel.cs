@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Core;
+﻿using Crpg.Module.Api.Models.Characters;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace Crpg.Module.Common.Models;
@@ -111,6 +112,13 @@ internal class CrpgStrikeMagnitudeModel : MultiplayerStrikeMagnitudeModel
         if (weaponComponent == null)
         {
             return baseArmor;
+        }
+
+        // ArmorPiercer: ignores 20% of the enemy's armor when dealing damage
+        if (attackInformation.AttackerAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.ArmorPiercer))
+        {
+            baseArmor *= CrpgPerksConstants.ArmorPiercerArmorMultiplier;
         }
 
         return baseArmor * weaponComponent.WeaponClass switch

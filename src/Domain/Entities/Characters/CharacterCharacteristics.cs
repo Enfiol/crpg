@@ -8,4 +8,5 @@ public class CharacterCharacteristics
     public CharacterAttributes Attributes { get; set; } = new();
     public CharacterSkills Skills { get; set; } = new();
     public CharacterWeaponProficiencies WeaponProficiencies { get; set; } = new();
+    public CharacterPerks Perks { get; set; } = new();
 }

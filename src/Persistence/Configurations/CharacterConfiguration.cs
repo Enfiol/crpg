@@ -20,6 +20,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.OwnsOne(cs => cs.Attributes, ConfigureCharacterAttributes);
         builder.OwnsOne(cs => cs.Skills, ConfigureCharacterSkills);
         builder.OwnsOne(cs => cs.WeaponProficiencies, ConfigureCharacterWeaponProficiencies);
+        builder.OwnsOne(cs => cs.Perks, ConfigureCharacterPerks);
     }
 
     private static void ConfigureCharacterAttributes(OwnedNavigationBuilder<CharacterCharacteristics, CharacterAttributes> builder)
@@ -66,6 +67,12 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(s => s.Assists).HasColumnName("assists");
         builder.Property(s => s.PlayTime).HasColumnName("play_time");
         builder.Property(s => s.GameMode).HasColumnName("game_mode");
+    }
+
+    private static void ConfigureCharacterPerks(OwnedNavigationBuilder<CharacterCharacteristics, CharacterPerks> builder)
+    {
+        builder.Property(p => p.Points).HasColumnName("perk_points");
+        builder.Property(p => p.SelectedPerks).HasColumnName("selected_perks");
     }
 
     private static void ConfigureCharacterRating(OwnedNavigationBuilder<CharacterStatistics, CharacterRating> builder)

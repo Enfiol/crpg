@@ -1,8 +1,10 @@
-﻿using NetworkMessages.FromServer;
+﻿using Crpg.Module.Api.Models.Characters;
+using NetworkMessages.FromServer;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
+
 using MathF = TaleWorlds.Library.MathF;
 
 namespace Crpg.Module.Common;
@@ -107,7 +109,9 @@ internal abstract class CrpgSpawningBehaviorBase : SpawningBehaviorBase
             var characterSkills = CrpgCharacterBuilder.CreateCharacterSkills(crpgPeer.User!.Character.Characteristics);
             var characterXml = peerClass.HeroCharacter;
 
+            var selectedPerks = crpgPeer.User!.Character.Characteristics.Perks.SelectedPerks;
             var characterEquipment = CrpgCharacterBuilder.CreateCharacterEquipment(crpgPeer.User.Character.EquippedItems);
+
 
             bool hasMount = characterEquipment[EquipmentIndex.Horse].Item != null;
 
@@ -116,8 +120,11 @@ internal abstract class CrpgSpawningBehaviorBase : SpawningBehaviorBase
             Vec2 initialDirection = spawnFrame.rotation.f.AsVec2.Normalized();
             // Randomize direction so players don't go all straight.
             initialDirection.RotateCCW(MBRandom.RandomFloatRanged(-MathF.PI / 3f, MathF.PI / 3f));
-            var troopOrigin = new CrpgBattleAgentOrigin(characterXml, characterSkills);
+            var troopOrigin = new CrpgBattleAgentOrigin(characterXml, characterSkills, selectedPerks);
+
             CrpgCharacterBuilder.AssignArmorsToTroopOrigin(troopOrigin, crpgPeer.User.Character.EquippedItems.ToList());
+
+
             Formation? formation = CurrentGameMode == MultiplayerGameType.Captain
                 ? missionPeer.ControlledFormation
                     ?? AssignFormation(missionPeer)
@@ -163,7 +170,13 @@ internal abstract class CrpgSpawningBehaviorBase : SpawningBehaviorBase
             CrpgAgentComponent agentComponent = new(agent);
             agent.AddComponent(agentComponent);
 
+            if (selectedPerks.Contains(CrpgCharacterPerkType.QuiverMaster))
+            {
+                CrpgCharacterBuilder.ApplyQuiverMasterToAgent(agent);
+            }
+
             bool hasExtraSlotEquipped = characterEquipment[EquipmentIndex.ExtraWeaponSlot].Item != null;
+
             if (!agent.HasMount || hasExtraSlotEquipped)
             {
                 agent.WieldInitialWeapons();

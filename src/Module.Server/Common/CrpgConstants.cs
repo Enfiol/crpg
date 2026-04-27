@@ -49,6 +49,8 @@ internal class CrpgConstants
     public float CavalryCoverageFactorForShieldCoef { get; set; }
     public float[] MountedRangedSkillInaccuracy { get; set; } = Array.Empty<float>();
     public float[] ShieldDefendStunMultiplierForSkillRecursiveCoefs { get; set; } = Array.Empty<float>();
+    public int PerkPointsPerLevel { get; set; }
+    public int DefaultPerkPoints { get; set; }
     public float ArmorSetRequirementPowerMeanPValue { get; set; }
     public float DefaultRating { get; set; }
     public float DefaultRatingDeviation { get; set; }

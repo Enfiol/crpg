@@ -59,7 +59,11 @@ internal class CrpgSubModule : MBSubModuleBase
     {
         base.OnBeforeMissionBehaviorInitialize(mission);
         Game.Current.GetGameHandler<MapPoolHandler>()?.OnBeforeMissionBehaviorInitialize(mission);
+
+        // Add regeneration behavior to all missions on the server.
+        mission.AddMissionBehavior(new CrpgPerkRegenerationBehavior());
     }
+
 #endif
 
     protected override void OnSubModuleLoad()

@@ -811,6 +811,80 @@ builder:
   mountHarnessWeight:
     title: Mount harness weight
 
+  perks:
+    title: Perks
+    points: Perk points
+    children:
+      Headhunter:
+        title: Headhunter
+        desc: +30% headshot damage
+      Berserker:
+        title: Berserker
+        desc: +5% attack speed
+      Marksman:
+        title: Marksman
+        desc: +10% ranged damage
+      Tank:
+        title: Tank
+        desc: +10 HP
+      FleetFooted:
+        title: Fleet Footed
+        desc: +3% movement speed
+      ShieldExpert:
+        title: Shield Expert
+        desc: +20% shield durability
+      HorseArcher:
+        title: Horse Archer
+        desc: -25% mounted ranged penalty
+      Brusier:
+        title: Brusier
+        desc: +15% melee damage
+      QuickHands:
+        title: Quick Hands
+        desc: +10% reload speed
+      Strong:
+        title: Strong
+        desc: -15% armor weight penalty
+      Veteran:
+        title: Veteran
+        desc: +5% experience gain
+      Hardheaded:
+        title: Hardheaded
+        desc: -20% headshot damage taken
+      Deflector:
+        title: Deflector
+        desc: -20% projectile damage taken
+      Armorer:
+        title: Armorer
+        desc: +10% armor rating on all equipped armor pieces
+      ArmorPiercer:
+        title: Armor Piercer
+        desc: Ignores 20% of the enemy's armor
+      Executioner:
+        title: Executioner
+        desc: Deals up to +30% damage against lightly armored targets
+      BeastSlayer:
+        title: Beast Slayer
+        desc: +25% damage to mounts
+      ShieldBreaker:
+        title: Shield Breaker
+        desc: +25% shield damage
+      Fate:
+        title: Fate
+        desc: 10% chance to avoid all damage on hit
+      QuiverMaster:
+        title: Quiver Master
+        desc: +50% ammo capacity for arrows, bolts, and bullets
+      Regeneration:
+        title: Regeneration
+        desc: Slowly restore 2 HP per second
+      BountyHunter:
+        title: Bounty Hunter
+        desc: +100 gold per kill
+
+
+
+
 shop:
   item:
     buy:

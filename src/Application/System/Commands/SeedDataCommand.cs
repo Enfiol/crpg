@@ -77,6 +77,7 @@ public record SeedDataCommand : IMediatorRequest
 
         private async Task AddDevelopmentData(CancellationToken cancellationToken)
         {
+            return;
             if (!await _db.Settings.AnyAsync())
             {
                 _db.Settings.Add(new()

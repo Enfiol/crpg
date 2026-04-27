@@ -60,7 +60,7 @@ internal class CrpgTrainingGroundSpawningBehavior : CrpgSpawningBehaviorBase
         var characterEquipment = CrpgCharacterBuilder.CreateCharacterEquipment(crpgPeer.User.Character.EquippedItems);
 
         MatrixFrame spawnFrame = controlledAgent.Frame;
-        var troopOrigin = new CrpgBattleAgentOrigin(characterXml, characterSkills);
+        var troopOrigin = new CrpgBattleAgentOrigin(characterXml, characterSkills, crpgPeer.User!.Character.Characteristics.Perks.SelectedPerks);
         CrpgCharacterBuilder.AssignArmorsToTroopOrigin(troopOrigin, crpgPeer.User.Character.EquippedItems.ToList());
         AgentBuildData agentBuildData = new AgentBuildData(characterXml)
             .MissionPeer(missionPeer)

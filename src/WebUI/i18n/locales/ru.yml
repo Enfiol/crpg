@@ -777,6 +777,80 @@ builder:
   mountHarnessWeight:
     title: Вес брони лошади
 
+  perks:
+    title: Перки
+    points: Очки перков
+    children:
+      Headhunter:
+        title: Охотник за головами
+        desc: +30% урона в голову
+      Berserker:
+        title: Берсерк
+        desc: +5% скорости атаки
+      Marksman:
+        title: Снайпер
+        desc: +10% урона из дальнобойного оружия
+      Tank:
+        title: Танк
+        desc: +10 ОЗ
+      FleetFooted:
+        title: Быстроногий
+        desc: +3% скорости передвижения
+      ShieldExpert:
+        title: Мастер щита
+        desc: +20% прочности щита
+      HorseArcher:
+        title: Конный лучник
+        desc: -25% штрафа за стрельбу с коня
+      Brusier:
+        title: Громила
+        desc: +15% урона в ближнем бою
+      QuickHands:
+        title: Быстрые руки
+        desc: +10% скорости перезарядки
+      Strong:
+        title: Силач
+        desc: -15% к штрафу веса брони
+      Veteran:
+        title: Ветеран
+        desc: +5% к опыту
+      Hardheaded:
+        title: Твердолобый
+        desc: -20% урона по голове
+      Deflector:
+        title: Отражение
+        desc: -20% урона от снарядов
+      Armorer:
+        title: Бронник
+        desc: +10% брони на всех экипированных доспехах
+      ArmorPiercer:
+        title: Бронебойщик
+        desc: Игнорирует 20% брони противника
+      Executioner:
+        title: Палач
+        desc: Наносит до +30% урона слабобронированным целям
+      BeastSlayer:
+        title: Зверолов
+        desc: +25% урона по ездовым животным
+      ShieldBreaker:
+        title: Крушитель щитов
+        desc: +25% урона по щиту
+      Fate:
+        title: Судьба
+        desc: 10% шанс избежать весь урон при попадании
+      QuiverMaster:
+        title: Мастер колчанов
+        desc: +50% к вместимости стрел, болтов и пуль
+      Regeneration:
+        title: Регенерация
+        desc: Медленно восстанавливает 2 ОЗ в секунду
+      BountyHunter:
+        title: Охотник за головами
+        desc: +100 золота за убийство
+
+
+
+
 shop:
   item:
     buy:

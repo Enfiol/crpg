@@ -2,6 +2,7 @@
 using Crpg.Module.Api.Models.Items;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
 namespace Crpg.Module.Common;
@@ -107,6 +108,38 @@ internal static class CrpgCharacterBuilder
                 origin.ArmorItems.Add((crpgItemArmorComponent, itemObject.ItemType));
             }
         }
+    }
+
+    /// <summary>
+    /// Applies the QuiverMaster perk to an already-spawned agent: increases ammo of arrows, bolts, and bullets by 50%.
+    /// </summary>
+    public static void ApplyQuiverMasterToAgent(Agent agent)
+    {
+        MissionEquipment equipment = agent.Equipment;
+
+        for (var i = EquipmentIndex.Weapon0; i <= EquipmentIndex.Weapon3; i += 1)
+        {
+            MissionWeapon weapon = equipment[i];
+            if (weapon.IsEmpty || weapon.Item == null)
+            {
+                continue;
+            }
+
+            if (weapon.Item.Type is ItemObject.ItemTypeEnum.Arrows
+                or ItemObject.ItemTypeEnum.Bolts
+                or ItemObject.ItemTypeEnum.Bullets)
+            {
+                int newAmount = (int)(weapon.Amount * CrpgPerksConstants.QuiverMasterAmmoMultiplier);
+                if (newAmount > weapon.Amount)
+                {
+                    weapon.Amount = (short)newAmount;
+
+                    agent.EquipWeaponWithNewEntity(i, ref weapon);
+                }
+            }
+        }
+
+        agent.UpdateWeapons();
     }
 
     private static void AddEquipment(Equipment equipments, EquipmentIndex idx, string itemId)

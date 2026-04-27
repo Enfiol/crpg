@@ -63,10 +63,18 @@ export interface CharacterWeaponProficiencies {
   twoHanded: number
 }
 
+export interface CharacterPerks {
+  points: number
+  selectedPerks: CharacterPerkType[]
+}
+
+export type CharacterPerkType = 'Headhunter' | 'Berserker' | 'Marksman' | 'Tank' | 'FleetFooted' | 'ShieldExpert' | 'HorseArcher' | 'Brusier' | 'QuickHands' | 'Strong' | 'Veteran'
+
 export interface CharacterCharacteristics {
   skills: CharacterSkills
   attributes: CharacterAttributes
   weaponProficiencies: CharacterWeaponProficiencies
+  perks: CharacterPerks
 }
 
 export type CharacteristicSectionKey = keyof CharacterCharacteristics

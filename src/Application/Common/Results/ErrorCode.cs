@@ -49,6 +49,7 @@ public enum ErrorCode
     NotEnoughGold,
     NotEnoughHeirloomPoints,
     NotEnoughSkillPoints,
+    NotEnoughPerkPoints,
     NotEnoughWeaponProficiencyPoints,
     PartyNotEnoughItems,
     SettlementNotEnoughItems,

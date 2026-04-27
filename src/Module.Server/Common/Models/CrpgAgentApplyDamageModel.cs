@@ -1,4 +1,5 @@
-﻿using Crpg.Module.Helpers;
+﻿using Crpg.Module.Api.Models.Characters;
+using Crpg.Module.Helpers;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -151,6 +152,93 @@ internal class CrpgAgentApplyDamageModel : MultiplayerAgentApplyDamageModel
         if (IsSwashbuckler(attackInformation.AttackerWeapon, collisionData, attackInformation.AttackerAgent))
         {
             finalDamage *= 1.10f;
+        }
+
+        // Perk effects
+        if (attackInformation.AttackerAgent != null)
+        {
+            // Headhunter: +30% headshot damage
+            if (CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.Headhunter)
+                && (collisionData.VictimHitBodyPart == BoneBodyPartType.Head || collisionData.VictimHitBodyPart == BoneBodyPartType.Neck))
+            {
+                finalDamage *= CrpgPerksConstants.HeadhunterHeadshotDamageMultiplier;
+            }
+
+            // Marksman: +10% ranged damage
+            if (CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.Marksman)
+                && attackInformation.AttackerWeapon.CurrentUsageItem.IsRangedWeapon)
+            {
+                finalDamage *= CrpgPerksConstants.MarksmanRangedDamageMultiplier;
+            }
+
+            // Brusier: +8% melee damage
+            if (CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.Brusier)
+                && !attackInformation.AttackerWeapon.IsEmpty
+                && attackInformation.AttackerWeapon.CurrentUsageItem.IsMeleeWeapon)
+            {
+                finalDamage *= CrpgPerksConstants.BrusierMeleeDamageMultiplier;
+            }
+
+            // Executioner: deals up to +30% damage the less armor the victim has on the hit body part
+            if (CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.Executioner)
+                && attackInformation.VictimAgent != null)
+            {
+                float victimArmor = GetVictimHitArmor(attackInformation.VictimAgent, collisionData.VictimHitBodyPart);
+                float t = Math.Min(victimArmor, CrpgPerksConstants.ExecutionerMaxArmorThreshold) / CrpgPerksConstants.ExecutionerMaxArmorThreshold;
+                float executionerMultiplier = 1f + (CrpgPerksConstants.ExecutionerMaxDamageMultiplier - 1f) * (1f - t);
+                finalDamage *= executionerMultiplier;
+            }
+
+            // BeastSlayer: +25% damage to mounts
+            if (CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.BeastSlayer)
+                && !attackInformation.IsVictimAgentHuman
+                && attackInformation.VictimAgent != null)
+            {
+                finalDamage *= CrpgPerksConstants.BeastSlayerMountDamageMultiplier;
+            }
+        }
+
+        // ShieldExpert: -20% shield damage taken
+        if (collisionData.AttackBlockedWithShield
+            && attackInformation.VictimAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.VictimAgent, CrpgCharacterPerkType.ShieldExpert))
+        {
+            finalDamage *= CrpgPerksConstants.ShieldExpertShieldDamageMultiplier;
+        }
+
+        // ShieldBreaker: +25% shield damage
+        if (collisionData.AttackBlockedWithShield
+            && attackInformation.AttackerAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.AttackerAgent, CrpgCharacterPerkType.ShieldBreaker))
+        {
+            finalDamage *= CrpgPerksConstants.ShieldBreakerShieldDamageMultiplier;
+        }
+
+        // Hardheaded: -20% headshot damage taken
+        if (attackInformation.VictimAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.VictimAgent, CrpgCharacterPerkType.Hardheaded)
+            && (collisionData.VictimHitBodyPart == BoneBodyPartType.Head || collisionData.VictimHitBodyPart == BoneBodyPartType.Neck))
+        {
+            finalDamage *= CrpgPerksConstants.HardheadedHeadshotDamageMultiplier;
+        }
+
+        // Deflector: -20% projectile damage taken
+        if (attackInformation.VictimAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.VictimAgent, CrpgCharacterPerkType.Deflector)
+            && !attackInformation.AttackerWeapon.IsEmpty
+            && attackInformation.AttackerWeapon.CurrentUsageItem.IsRangedWeapon)
+        {
+            finalDamage *= CrpgPerksConstants.DeflectorProjectileDamageMultiplier;
+        }
+
+        // Fate: 10% chance to avoid all damage when hit
+        if (attackInformation.VictimAgent != null
+            && CrpgPerksApplicationComponent.HasPerk(attackInformation.VictimAgent, CrpgCharacterPerkType.Fate))
+        {
+            if (MBRandom.RandomFloat < CrpgPerksConstants.FateAvoidChance)
+            {
+                finalDamage = 0f;
+            }
         }
 
         return finalDamage;
@@ -545,5 +633,47 @@ internal class CrpgAgentApplyDamageModel : MultiplayerAgentApplyDamageModel
         }
 
         return 0;
+    }
+
+    private static float GetVictimHitArmor(Agent victimAgent, BoneBodyPartType hitBodyPart)
+    {
+        float armor = 0;
+        switch (hitBodyPart)
+        {
+            case BoneBodyPartType.Head:
+            case BoneBodyPartType.Neck:
+            {
+                var element = victimAgent.SpawnEquipment[EquipmentIndex.NumAllWeaponSlots];
+                armor = element.Item?.ArmorComponent?.HeadArmor ?? 0;
+                break;
+            }
+
+            case BoneBodyPartType.Chest:
+            case BoneBodyPartType.Abdomen:
+            case BoneBodyPartType.ShoulderLeft:
+            case BoneBodyPartType.ShoulderRight:
+            {
+                var element = victimAgent.SpawnEquipment[EquipmentIndex.Body];
+                armor = element.Item?.ArmorComponent?.BodyArmor ?? 0;
+                break;
+            }
+
+            case BoneBodyPartType.ArmLeft:
+            case BoneBodyPartType.ArmRight:
+            {
+                var element = victimAgent.SpawnEquipment[EquipmentIndex.Gloves];
+                armor = element.Item?.ArmorComponent?.ArmArmor ?? 0;
+                break;
+            }
+
+            case BoneBodyPartType.Legs:
+            {
+                var element = victimAgent.SpawnEquipment[EquipmentIndex.Leg];
+                armor = element.Item?.ArmorComponent?.LegArmor ?? 0;
+                break;
+            }
+        }
+
+        return armor;
     }
 }

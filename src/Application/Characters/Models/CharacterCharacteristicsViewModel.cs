@@ -8,4 +8,5 @@ public record CharacterCharacteristicsViewModel : IMapFrom<CharacterCharacterist
     public CharacterAttributesViewModel Attributes { get; init; } = new();
     public CharacterSkillsViewModel Skills { get; init; } = new();
     public CharacterWeaponProficienciesViewModel WeaponProficiencies { get; init; } = new();
+    public CharacterPerksViewModel Perks { get; init; } = new();
 }

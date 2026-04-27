@@ -33,6 +33,7 @@ const {
   onInputWithAutoClamp,
   onFillField,
   onResetField,
+  onTogglePerk,
   reset: resetCharacterCharacteristicBuilder,
   healthPoints,
 } = useCharacterCharacteristicBuilder(characterCharacteristics)
@@ -83,6 +84,12 @@ const [onRespecializeCharacter] = useAsyncCallback(
         @convert-skills-to-attributes="onConvertCharacterCharacteristics(CHARACTERISTIC_CONVERSION.SkillsToAttributes)"
         @fill-field="onFillField"
         @reset-field="onResetField"
+      />
+
+      <CharacterPerksBuilder
+        style="grid-area: perks"
+        :perks="characteristics.perks"
+        @toggle="onTogglePerk"
       />
 
       <CharacterStats
@@ -138,7 +145,7 @@ const [onRespecializeCharacter] = useAsyncCallback(
 .statsGrid {
   grid-template-areas:
     'attributes skills stats'
-    'weaponProficiencies skills stats';
+    'weaponProficiencies skills perks';
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto auto;
 }
