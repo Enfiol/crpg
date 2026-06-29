@@ -1,4 +1,5 @@
 # cRPG
+A persistent multiplayer mod for Mount & Blade II: Bannerlord
 
 [cRPG](https://c-rpg.eu) is a mod for [Mount & Blade II: Bannerlord](https://store.steampowered.com/app/261550/Mount__Blade_II_Bannerlord)
 that adds persistence (xp, gold, items, stats) to the multiplayer.
